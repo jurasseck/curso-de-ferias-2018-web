@@ -5,6 +5,7 @@ import { MainRouting } from './main.routing';
 import { RouterModule } from "@angular/router";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatIconModule, MatSidenavModule, MatCardModule, MatListModule, MatToolbarModule, MatButtonModule } from '@angular/material';
+import { UsuarioModule } from './usuario/usuario.module';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { MatIconModule, MatSidenavModule, MatCardModule, MatListModule, MatToolb
     MatCardModule,
     MatListModule,
     MatToolbarModule,
-    MatButtonModule
+    MatButtonModule,
+    UsuarioModule
   ],
   declarations: [MainComponent]
 })
