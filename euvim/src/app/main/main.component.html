@@ -1,0 +1,38 @@
+<mat-sidenav-container>
+  <mat-sidenav #sidenav>
+    <mat-nav-list>
+      <mat-list-item>
+        <a mdLine href="#/main">Usuários</a>
+        <button mat-icon-button >
+            <mat-icon>info</mat-icon>
+        </button>
+      </mat-list-item>
+      <mat-list-item>
+        <a mdLine href="#/main">Disciplinas</a>
+        <button mat-icon-button >
+            <mat-icon>info</mat-icon>
+        </button>
+      </mat-list-item>
+      <mat-list-item>
+        <a mdLine href="#/main">Relatório</a>
+        <button mat-icon-button >
+            <mat-icon>info</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-toolbar color="primary">
+    <span class="navSpan">
+      <button mat-icon-button (click)="sidenav.open()">
+          <mat-icon>menu</mat-icon>
+      </button>
+      <span>Eu vim</span>
+      <button mat-icon-button (click)="sidenav.open()" class="user">
+          <mat-icon>info</mat-icon>
+      </button>
+    </span>
+  </mat-toolbar>
+  <mat-card id="content">
+    <router-outlet></router-outlet>
+  </mat-card>
+</mat-sidenav-container>
