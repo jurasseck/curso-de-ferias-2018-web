@@ -1,0 +1,356 @@
+Aula 01
+
+https://nodejs.org/en/download/
+
+https://angular.io/guide/quickstart
+
+npm install -g @angular/cli
+
+ng new euvim --style=scss 
+
+ng serve
+
+ng serve --open
+
+https://material.angular.io/guide/getting-started
+
+https://github.com/angular/material2
+
+npm install --save @angular/material
+
+npm install --save @angular/cdk
+
+npm install --save @angular/animations
+
+npm install --save hammerjs
+
+code .
+
+import { MaterialModule } from '@angular/material' (não é mais usado geral);
+
+ModuleApp:
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
+Index.html adicionar:
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+src/main.ts
+import 'hammerjs';
+
+styles.scss
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+Aula 02
+
+cd src/app/
+
+https://github.com/angular/angular-cli
+
+ng g module main
+ng g component main
+
+touch app.routing.ts
+
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot([
+      { path: '', redirectTo: '/main', pathMatch: 'full' }
+    ], {useHash:true})
+  ]
+})
+export class AppRoutingModule { }
+
+touch main/main.routing.ts
+
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+import { MainComponent } from './main.component';
+
+@NgModule({
+  imports: [
+    RouterModule.forChild([
+      { path: 'main', 
+        component: MainComponent
+      }
+    ])
+  ]
+})
+export class MainRouting { }
+
+Importar em app.module.ts
+import { RouterModule } from '@angular/router';
+import { MainModule } from "./main/main.module";
+import { AppRoutingModule } from "./app.routing";
+
+Importar em main.module.ts
+import { MainRouting } from './main.routing'; imports
+import { RouterModule } from "@angular/router";imports
+import { MainComponent } from './main.component'; [declarations]
+
+Adicionar em app.component.html
+<router-outlet></router-outlet>
+
+Adicionar em main.component.html
+<router-outlet></router-outlet>
+
+Instal flex
+npm install --save @angular/flex-layout
+
+Import FlexLayoutModule em main
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatIconModule, MatSidenavModule, MatCardModule, MatListModule, MatToolbarModule, MatButtonModule } from '@angular/material';
+FlexLayoutModule,
+MatIconModule,
+MatSidenavModule,
+MatCardModule,
+MatListModule,
+MatToolbarModule,
+MatButtonModule
+
+Adicionar no main.component.html
+<mat-sidenav-container>
+  <mat-sidenav #sidenav>
+    <mat-nav-list>
+      <mat-list-item>
+        <a mdLine href="#/main">Usuários</a>
+        <button mat-icon-button >
+            <mat-icon>info</mat-icon>
+        </button>
+      </mat-list-item>
+      <mat-list-item>
+        <a mdLine href="#/main">Disciplinas</a>
+        <button mat-icon-button >
+            <mat-icon>info</mat-icon>
+        </button>
+      </mat-list-item>
+      <mat-list-item>
+        <a mdLine href="#/main">Relatório</a>
+        <button mat-icon-button >
+            <mat-icon>info</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-toolbar color="primary">
+    <span class="navSpan">
+      <button mat-icon-button (click)="sidenav.open()">
+          <mat-icon>menu</mat-icon>
+      </button>
+      <span>Eu vim</span>
+      <button mat-icon-button (click)="sidenav.open()" class="user">
+          <mat-icon>info</mat-icon>
+      </button>
+    </span>
+  </mat-toolbar>
+  <mat-card id="content">
+    <router-outlet></router-outlet>
+  </mat-card>
+</mat-sidenav-container>
+
+Adicionar em main.component.css
+.navSpan {
+    width: 100%;
+}
+button.user {
+    float:right;
+}
+.mat-drawer-container{
+    position: fixed;
+    margin: 0px;
+    height: 100%;
+}
+#content{
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    top: 65px;
+    z-index: -1;
+    overflow-x: auto;
+}
+
+Aula 03
+
+Ir até o site de components https://material.angular.io/components
+
+dentro da pasta main/
+ng g module usuario
+cd usuario
+ng g component consulta
+ng g component formulario
+
+Importar UsuarioModule em main.module.ts
+import { UsuarioModule } from './usuario/usuario.module';
+
+Adicionar no main.routing.ts
+
+children: [
+          {
+            path: 'usuario/consulta',
+            component: ConsultaComponent
+          }
+        ]
+
+Alterar o menu main.component.html
+
+de href="/main" para routerLink="/main/usuario/consulta"
+
+Adicionar (click)="sidenav.close()"
+
+Adicionar em usuário module a importação da table
+import { MatTableModule, MatIconModule, MatButtonModule } from '@angular/material';
+
+Adicionar em consulta.component.html
+<div class="example-container mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource">
+    <ng-container matColumnDef="position">
+      <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="weight">
+      <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="symbol">
+      <mat-header-cell *matHeaderCellDef> Symbol </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.symbol}} </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>
+
+Importar em consulta.component.ts
+import { DataSource } from '@angular/cdk/collections';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+
+Adicionar variaveis
+
+public displayedColumns = ['position', 'name', 'weight', 'symbol'];
+public dataSource = new UsuarioDataSource();
+
+Adicionar interface e classes de dataSource
+
+export interface Element {
+  name: string;
+  position: number;
+  weight: number;
+  symbol: string;
+}
+
+export class UsuarioDataSource extends DataSource<any> {
+  /** Connect function called by the table to retrieve one stream containing the data to render. */
+  connect(): Observable<Element[]> {
+    return Observable.of([
+      {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
+      {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
+      {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
+      {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
+      {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
+      {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
+      {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
+      {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
+      {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
+      {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
+      {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
+      {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
+      {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
+      {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
+      {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
+      {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
+      {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
+      {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
+      {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
+      {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
+    ]);
+  }
+
+  disconnect() {}
+}
+
+Atualização dos dados, para corresponder as informações usuario
+
+<div class="mat-elevation-z8">
+  <md-table #table [dataSource]="dataSource">
+
+    <ng-container mdColumnDef="position">
+      <md-header-cell *mdHeaderCellDef  fxFlex="5"> Ações </md-header-cell>
+      <md-cell *mdCellDef="let element" fxFlex="5" class="buttons">
+         <button md-icon-button color="primary"  mdTooltip="Editar">
+            <md-icon class="md-24" aria-label="Editar">edit</md-icon>
+          </button>
+          <button md-icon-button color="danger" mdTooltip="Remover">
+              <md-icon class="md-24" aria-label="Remover">delete</md-icon>
+          </button>
+      </md-cell>
+    </ng-container>
+
+    <ng-container mdColumnDef="nome">
+      <md-header-cell *mdHeaderCellDef> Nome </md-header-cell>
+      <md-cell *mdCellDef="let element"> {{element.nome}} </md-cell>
+    </ng-container>
+
+    <ng-container mdColumnDef="login">
+        <md-header-cell *mdHeaderCellDef> Login </md-header-cell>
+        <md-cell *mdCellDef="let element"> {{element.login}} </md-cell>
+    </ng-container>
+
+    <ng-container mdColumnDef="email">
+      <md-header-cell *mdHeaderCellDef> E-mail </md-header-cell>
+      <md-cell *mdCellDef="let element"> {{element.email}} </md-cell>
+    </ng-container>
+
+    <ng-container mdColumnDef="perfil">
+      <md-header-cell *mdHeaderCellDef> Perfil </md-header-cell>
+      <md-cell *mdCellDef="let element"> {{element.perfil}} </md-cell>
+    </ng-container>
+
+    <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+    <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+  </md-table>
+  <button md-fab color="primary">
+    <md-icon class="md-24" aria-label="Adicionar">add</md-icon>
+  </button> 
+</div>
+
+Inclusão do css para espaçamento do md-fab
+.mat-fab{
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+}
+   
+No consulta.componente.ts atualizar os dados
+public displayedColumns = ['position', 'nome', 'login', 'email', 'perfil'];
+connect(): Observable<any[]> {
+    return Observable.of([
+      {position: 1, nome: 'José da Silva', login: "jose", email: 'jose@ponto.com.br', perfil:"Aluno"},
+      {position: 2, nome: 'Mariano das Neves', login: "mariano", email: 'marino@ponto.com.br', perfil:"Aluno"},
+      {position: 3, nome: 'Magyver da Silva', login: "magyver", email: 'magyver@ponto.com.br', perfil:"Aluno"},
+      {position: 4, nome: 'Irineu Nunes', login: "irineu", email: 'irineu@ponto.com.br', perfil:"Aluno"},
+      {position: 5, nome: 'Carlos Silva', login: "carlos", email: 'carlos@ponto.com.br', perfil:"Aluno"},
+      {position: 5, nome: 'Carlos Silva', login: "carlos", email: 'carlos@ponto.com.br', perfil:"Aluno"},
+      {position: 5, nome: 'Carlos Silva', login: "carlos", email: 'carlos@ponto.com.br', perfil:"Aluno"}
+    ]);
+  }
+
+Inicio da criação do formulário de cadastrar usuario
+
+Adicionar no main.routing.ts
+
+children: [
+          {
+            path: 'usuario/adicionar',
+            component: FormularioComponent
+          }
+        ]
+
