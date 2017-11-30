@@ -1,16 +1,5 @@
 <div class="mat-elevation-z8">
   <mat-table #table [dataSource]="dataSource">
-    <ng-container matColumnDef="position">
-      <mat-header-cell *matHeaderCellDef  fxFlex="5"> Ações </mat-header-cell>
-      <mat-cell *matCellDef="let element" fxFlex="5" class="buttons">
-         <button mat-icon-button color="primary"  mdTooltip="Editar">
-            <mat-icon class="mat-24" aria-label="Editar">edit</mat-icon>
-          </button>
-          <button mat-icon-button color="danger" mdTooltip="Remover">
-              <mat-icon class="mat-24" aria-label="Remover">delete</mat-icon>
-          </button>
-      </mat-cell>
-    </ng-container>
     <ng-container matColumnDef="nome">
       <mat-header-cell *matHeaderCellDef> Nome </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.nome}} </mat-cell>
@@ -27,10 +16,22 @@
       <mat-header-cell *matHeaderCellDef> Perfil </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.perfil}} </mat-cell>
     </ng-container>
+    <ng-container matColumnDef="identifier">
+      <mat-header-cell *matHeaderCellDef  fxFlex="10"> Ações </mat-header-cell>
+      <mat-cell *matCellDef="let element" fxFlex="10" class="buttons">
+         <button mat-icon-button color="primary"  matTooltip="Editar">
+            <mat-icon class="md-24"  (click)="editar(element.identifier)" aria-label="Editar">edit</mat-icon>
+          </button>
+          <button mat-icon-button color="danger" matTooltip="Remover">
+              <mat-icon class="md-24" (click)="remover(element.identifier)" aria-label="Remover">delete</mat-icon>
+          </button>
+      </mat-cell>
+    </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
+  <div *ngIf="noResults$" class="noResult">Nenhum resultado</div>
   <button mat-fab color="primary">
-    <mat-icon class="mat-24" aria-label="Adicionar">add</mat-icon>
+    <mat-icon class="mat-24" routerLink="/main/usuario/adicionar" aria-label="Adicionar">add</mat-icon>
   </button> 
 </div>

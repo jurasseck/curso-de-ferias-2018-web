@@ -278,47 +278,40 @@ export class UsuarioDataSource extends DataSource<any> {
 }
 
 Atualização dos dados, para corresponder as informações usuario
-
 <div class="mat-elevation-z8">
-  <md-table #table [dataSource]="dataSource">
-
-    <ng-container mdColumnDef="position">
-      <md-header-cell *mdHeaderCellDef  fxFlex="5"> Ações </md-header-cell>
-      <md-cell *mdCellDef="let element" fxFlex="5" class="buttons">
-         <button md-icon-button color="primary"  mdTooltip="Editar">
-            <md-icon class="md-24" aria-label="Editar">edit</md-icon>
+  <mat-table #table [dataSource]="dataSource">
+    <ng-container matColumnDef="position">
+      <mat-header-cell *matHeaderCellDef  fxFlex="5"> Ações </mat-header-cell>
+      <mat-cell *matCellDef="let element" fxFlex="5" class="buttons">
+         <button mat-icon-button color="primary"  mdTooltip="Editar">
+            <mat-icon class="mat-24" aria-label="Editar">edit</mat-icon>
           </button>
-          <button md-icon-button color="danger" mdTooltip="Remover">
-              <md-icon class="md-24" aria-label="Remover">delete</md-icon>
+          <button mat-icon-button color="danger" mdTooltip="Remover">
+              <mat-icon class="mat-24" aria-label="Remover">delete</mat-icon>
           </button>
-      </md-cell>
+      </mat-cell>
     </ng-container>
-
-    <ng-container mdColumnDef="nome">
-      <md-header-cell *mdHeaderCellDef> Nome </md-header-cell>
-      <md-cell *mdCellDef="let element"> {{element.nome}} </md-cell>
+    <ng-container matColumnDef="nome">
+      <mat-header-cell *matHeaderCellDef> Nome </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.nome}} </mat-cell>
     </ng-container>
-
-    <ng-container mdColumnDef="login">
-        <md-header-cell *mdHeaderCellDef> Login </md-header-cell>
-        <md-cell *mdCellDef="let element"> {{element.login}} </md-cell>
+    <ng-container matColumnDef="login">
+        <mat-header-cell *matHeaderCellDef> Login </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.login}} </mat-cell>
     </ng-container>
-
-    <ng-container mdColumnDef="email">
-      <md-header-cell *mdHeaderCellDef> E-mail </md-header-cell>
-      <md-cell *mdCellDef="let element"> {{element.email}} </md-cell>
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef> E-mail </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
     </ng-container>
-
-    <ng-container mdColumnDef="perfil">
-      <md-header-cell *mdHeaderCellDef> Perfil </md-header-cell>
-      <md-cell *mdCellDef="let element"> {{element.perfil}} </md-cell>
+    <ng-container matColumnDef="perfil">
+      <mat-header-cell *matHeaderCellDef> Perfil </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.perfil}} </mat-cell>
     </ng-container>
-
-    <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
-    <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
-  </md-table>
-  <button md-fab color="primary">
-    <md-icon class="md-24" aria-label="Adicionar">add</md-icon>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <button mat-fab color="primary">
+    <mat-icon class="mat-24" aria-label="Adicionar">add</mat-icon>
   </button> 
 </div>
 
@@ -343,10 +336,10 @@ connect(): Observable<any[]> {
     ]);
   }
 
-Inicio da criação do formulário de cadastrar usuario
+
+Aula 04
 
 Adicionar no main.routing.ts
-
 children: [
           {
             path: 'usuario/adicionar',
@@ -354,3 +347,158 @@ children: [
           }
         ]
 
+Adicionar importacao MainRouting em UsuarioModule;
+import { MainRouting } from '../main.routing';
+
+Incluir a rota no botão adicionar fab-button da listagem
+routerLink="/main/usuario/adicionar"
+
+Vamos criar um serviço que será responsável pelas request do usuario,
+Dentro da pasta usuario 
+ng g service usuario
+vamos adicionar o seguinte código no Usuario.service.ts
+  private listUsers = [
+    {identifier: 1, nome: 'José da Silva', login: "jose", email: 'jose@ponto.com.br', perfil:"Aluno"},
+    {identifier: 2, nome: 'Mariano das Neves', login: "mariano", email: 'marino@ponto.com.br', perfil:"Aluno"},
+    {identifier: 3, nome: 'Magyver da Silva', login: "magyver", email: 'magyver@ponto.com.br', perfil:"Aluno"},
+    {identifier: 4, nome: 'Irineu Nunes', login: "irineu", email: 'irineu@ponto.com.br', perfil:"Aluno"},
+    {identifier: 5, nome: 'Carlos Silva', login: "carlos1", email: 'carlos@ponto.com.br', perfil:"Aluno"},
+    {identifier: 6, nome: 'Carlos Silva', login: "carlos2", email: 'carlos@ponto.com.br', perfil:"Aluno"},
+    {identifier: 7, nome: 'Carlos Silva', login: "carlos3", email: 'carlos@ponto.com.br', perfil:"Aluno"}
+  ];
+  adicionar(item){
+    let maxIdentifier = 0;
+    this.listUsers.forEach(item=>{
+      maxIdentifier < item.identifier ? maxIdentifier = item.identifier : maxIdentifier = maxIdentifier;
+    })
+    item.identifier = maxIdentifier + 1;
+    this.listUsers.push(item);
+  }
+  excluir(identifier){
+    let index = this.listUsers.findIndex(item=> item.identifier == identifier);
+    if(index > -1){
+      this.listUsers.splice(index,1);
+    }
+  }
+  editar(editItem){
+    var item = this.listUsers.find(item=> item.identifier == editItem.identifer)
+    item = editItem;
+  }
+  listar(){
+    return this.listUsers;
+  }
+
+No consulta.component.ts iremos remover, o mock pois agora estará no serviço, e iremos injetar o serviço:
+ public displayedColumns = ['nome', 'login', 'email', 'perfil', 'identifier'];
+ public dataSource;
+ public noResults$ = false;
+ constructor(private usuarioService:UsuarioService) { }
+ ngOnInit() {
+   this.getListUsers();
+ }
+ remover(identifer){
+   this.usuarioService.excluir(identifer);
+   this.getListUsers();
+ }
+ private getListUsers(){
+   var items = this.usuarioService.listar();
+   this.noResults$ = items.length == 0;
+   this.dataSource = new MatTableDataSource(items);
+ }
+
+Agora no html iremos adicionar nos botões de editar e excluir a chamada das funções, e iremos incluir um no result para ficar mais amigável a tela:
+<mat-icon class="md-24"  (click)="editar(element.identifier)" aria-label="Editar">edit</mat-icon>
+<mat-icon class="md-24" (click)="remover(element.identifier)" aria-label="Remover">delete</mat-icon>
+</mat-table>
+  <div *ngIf="noResults$" class="noResult">Nenhum resultado</div>
+
+Antes de criamos o formBUilder precisamos importálo no módulo, no campo de providers
+FormBuilder
+E iremos adicionais os seguintes modulos:
+ReactiveFormsModule,
+FormsModule
+
+Agora vamos criar um formBuilder, no formulario.component.ts que será responsável para inclusão do usuário.
+form : FormGroup;
+  constructor(private usuarioService:UsuarioService, fb:FormBuilder) {
+    this.form = fb.group({
+        nome : Validators.required,
+        email: Validators.compose([Validators.required, Validators.email]),
+        login: Validators.required,
+        profile: Validators.required,
+        senha: Validators.required,
+        confirmacao: Validators.required
+    })
+   }
+
+Agora vamos adicionar o vinculo deste formulário ao HTML, para que possamos manipular os dados.
+<form [formGroup]="form" fxLayout="column">
+em, cada field iremos adicionaro o bind do campo e adicionar o required, para melhorar a interface
+<input matInput formControlName="nome" placeholder="Nome" value="" required>
+
+e depois para cada campo do formulário iremos adicionar a linha abaixo para mensagem de erro
+<mat-error *ngIf="form.controls['nome'].hasError('required')">
+  Campo obrigatório
+</mat-error>
+
+e por fim no botão salvar vamos colocar o disabled caso o form seja inválido:
+<button mat-raised-button color="primary"  [disabled]="!form.valid" (click)="salvar()">Cadastrar</button>
+
+O html ficará desta forma:
+<form [formGroup]="form" fxLayout="column">
+  <mat-form-field fxFlex="100"> 
+    <input matInput formControlName="nome" placeholder="Nome" value="" required>
+    <mat-error *ngIf="form.controls['nome'].hasError('required')">
+      Campo obrigatório
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field fxFlex="100"> 
+    <input matInput formControlName="email" placeholder="E-mail" value="" required>
+    <mat-error *ngIf="form.controls['email'].hasError('email') && !form.controls['email'].hasError('required')">
+      E-mail inválido
+    </mat-error>
+    <mat-error *ngIf="form.controls['email'].hasError('required')">
+      Campo obrigatório
+    </mat-error>
+  </mat-form-field>
+  <div fxFlex="100" fxLayout="row">
+    <mat-form-field fxFlex="47"> 
+      <input matInput formControlName="login" placeholder="Login" value="" required>
+      <mat-error *ngIf="form.controls['login'].hasError('required')">
+        Campo obrigatório
+      </mat-error>
+    </mat-form-field>
+    <span fxFlex="5"></span>
+    <mat-form-field fxFlex="47"> 
+      <mat-select formControlName="profile" placeholder="Perfil" required>
+          <mat-option *ngFor="let profile of profiles" [value]="profile.value">
+            {{ profile.description }}
+          </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.controls['profile'].hasError('required')">
+        Campo obrigatório
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxFlex="100" fxLayout="row">
+    <mat-form-field fxFlex="47"> 
+      <input matInput formControlName="senha" placeholder="Senha" type="password" value="" required>
+      <mat-error *ngIf="form.controls['senha'].hasError('required')">
+        Campo obrigatório
+      </mat-error>
+    </mat-form-field>
+    <span fxFlex="5"></span>
+    <mat-form-field fxFlex="47"> 
+      <input matInput formControlName="confirmacao" placeholder="Confirmação" type="password" value="" required>
+      <mat-error *ngIf="form.controls['confirmacao'].hasError('required')">
+        Campo obrigatório
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
+      <button mat-raised-button color="primary"  [disabled]="!form.valid" (click)="salvar()">Cadastrar</button>
+      <button mat-raised-button color="warn" routerLink="/main/usuario/consulta">Cancelar</button>
+  </div>
+</form>
+
+Porém nestas validações não tem a validação da confirmação de senha, podemos criar um validator para esta operação:
