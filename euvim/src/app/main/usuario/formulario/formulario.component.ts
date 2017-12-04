@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation, Inject } from '@angular/core';
 import { UsuarioService } from '../usuario.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EqualPasswordsValidator } from '../../../validators/equalPasswords.validator';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-formulario',
@@ -13,17 +13,19 @@ import { Router } from '@angular/router';
 export class FormularioComponent implements OnInit {
 
   public profiles = [
-    { value: "PROFESSOR", description: 'Professor' },
-    { value: "ADMINISTRADOR", description: 'Administrador' },
-    { value: "ALUNO", description: 'Aluno' },
+    { value: "Professor", description: 'Professor' },
+    { value: "Administrador", description: 'Administrador' },
+    { value: "Aluno", description: 'Aluno' },
   ];
 
 
   form: FormGroup;
+  identifier = null;
 
-  constructor(private _usuarioService: UsuarioService,fb: FormBuilder, private _router: Router) {
+  constructor(private _usuarioService: UsuarioService, fb: FormBuilder, private _router: Router,private _activateRoute: ActivatedRoute) {
 
     this.form = fb.group({
+      identifier: [null],
       nome: [null, Validators.required],
       email: [null, Validators.compose([Validators.required, Validators.email])],
       login: [null, Validators.required],
@@ -37,11 +39,27 @@ export class FormularioComponent implements OnInit {
   
 
   ngOnInit() {
+    this.identifier = null;    
+    this._activateRoute.params.subscribe(params=>{
+      this.identifier = params['id'];
+    })
+    if(this.identifier){
+      var item = <any> this._usuarioService.getItem(this.identifier);
+      item.senha = null;
+      item.confirmacao = null;
+      this.form.setValue(item);
+      this.form.get("senha").setValidators(null);
+      this.form.get("confirmacao").setValidators(null);
+    }
   }
 
   salvar() {
     if(this.form.valid){
-      this._usuarioService.adicionar(this.form.value);
+      if(this.identifier){
+        this._usuarioService.editar(this.form.value);
+      } else {
+        this._usuarioService.adicionar(this.form.value);
+      }
       this.form.reset();
       this._router.navigate(['/main/usuario/consulta']);
     }

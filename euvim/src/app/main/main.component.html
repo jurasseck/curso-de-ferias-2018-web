@@ -2,22 +2,22 @@
   <mat-sidenav #sidenav>
     <mat-nav-list>
       <mat-list-item>
+        <button mat-icon-button >
+            <mat-icon>info</mat-icon>
+        </button>
         <a mdLine routerLink="/main/usuario/consulta" (click)="sidenav.close()">Usuários</a>
+      </mat-list-item>
+      <mat-list-item>
         <button mat-icon-button >
             <mat-icon>info</mat-icon>
         </button>
-      </mat-list-item>
-      <mat-list-item>
         <a mdLine href="#/main">Disciplinas</a>
-        <button mat-icon-button >
-            <mat-icon>info</mat-icon>
-        </button>
       </mat-list-item>
       <mat-list-item>
+          <button mat-icon-button >
+              <mat-icon>info</mat-icon>
+          </button>
         <a mdLine href="#/main">Relatório</a>
-        <button mat-icon-button >
-            <mat-icon>info</mat-icon>
-        </button>
       </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>

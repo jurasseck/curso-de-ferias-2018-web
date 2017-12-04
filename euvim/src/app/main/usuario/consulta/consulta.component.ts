@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { MatTableDataSource } from '@angular/material';
 import { UsuarioService } from '../usuario.service';
+import { Router } from '@angular/router';
+import { Navigation } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-consulta',
@@ -18,7 +20,7 @@ export class ConsultaComponent implements OnInit {
   public dataSource;
   public noResults$ = false;
 
-  constructor(private usuarioService:UsuarioService) { }
+  constructor(private usuarioService:UsuarioService, private _router: Router) { }
 
   ngOnInit() {
     this.getListUsers();
@@ -34,5 +36,10 @@ export class ConsultaComponent implements OnInit {
     this.noResults$ = items.length == 0;
     this.dataSource = new MatTableDataSource(items);
   }
+
+  editar(identifier){
+    this._router.navigate(["/main/usuario/editar", identifier]);
+  }
+
 
 }

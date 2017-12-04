@@ -116,22 +116,22 @@ Adicionar no main.component.html
   <mat-sidenav #sidenav>
     <mat-nav-list>
       <mat-list-item>
+        <button mat-icon-button >
+            <mat-icon>info</mat-icon>
+        </button>
         <a mdLine href="#/main">Usuários</a>
+      </mat-list-item>
+      <mat-list-item>
         <button mat-icon-button >
             <mat-icon>info</mat-icon>
         </button>
-      </mat-list-item>
-      <mat-list-item>
         <a mdLine href="#/main">Disciplinas</a>
-        <button mat-icon-button >
-            <mat-icon>info</mat-icon>
-        </button>
       </mat-list-item>
       <mat-list-item>
-        <a mdLine href="#/main">Relatório</a>
         <button mat-icon-button >
             <mat-icon>info</mat-icon>
         </button>
+        <a mdLine href="#/main">Relatório</a>
       </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
@@ -381,8 +381,10 @@ vamos adicionar o seguinte código no Usuario.service.ts
     }
   }
   editar(editItem){
-    var item = this.listUsers.find(item=> item.identifier == editItem.identifer)
-    item = editItem;
+    let index = this.listUsers.findIndex(item=> item.identifier == editItem.identifier);
+    if(index > -1){
+      this.listUsers[index] = editItem;
+    }
   }
   listar(){
     return this.listUsers;
@@ -412,13 +414,14 @@ Agora no html iremos adicionar nos botões de editar e excluir a chamada das fun
 </mat-table>
   <div *ngIf="noResults$" class="noResult">Nenhum resultado</div>
 
-Antes de criamos o formBUilder precisamos importálo no módulo, no campo de providers
+
+Antes de criamos o formBUilder precisamos importálo no módulo, no campo de providers (UsuarioModule)
 FormBuilder
-E iremos adicionais os seguintes modulos:
+E iremos adicionais os seguintes modulos (UsuarioModule):
 ReactiveFormsModule,
 FormsModule
 
-Agora vamos criar um formBuilder, no formulario.component.ts que será responsável para inclusão do usuário.
+Agora vamos injetar o serviço de usuário e criar um formBuilder, no formulario.component.ts que será responsável para inclusão do usuário.
 form : FormGroup;
   constructor(private usuarioService:UsuarioService, fb:FormBuilder) {
     this.form = fb.group({
@@ -430,11 +433,30 @@ form : FormGroup;
         confirmacao: Validators.required
     })
    }
+  
+Porém no nosso formulário ele irá conter, uma listagem de perfils, para isto vamos por hora deixar um array:
+  public profiles = [
+    { value: "Professor", description: 'Professor' },
+    { value: "Administrador", description: 'Administrador' },
+    { value: "Aluno", description: 'Aluno' },
+  ];
+
+Depois disto podemos já criar nossa função de salvar, para utilizarmos o router, precisaremos injetar o mesmo:
+constructor(private _usuarioService: UsuarioService,fb: FormBuilder, private _router: Router)
+....
+  salvar() {
+    if(this.form.valid){
+      this._usuarioService.adicionar(this.form.value);
+      this.form.reset();
+      this._router.navigate(['/main/usuario/consulta']);
+    }
+  }
+....
 
 Agora vamos adicionar o vinculo deste formulário ao HTML, para que possamos manipular os dados.
 <form [formGroup]="form" fxLayout="column">
 em, cada field iremos adicionaro o bind do campo e adicionar o required, para melhorar a interface
-<input matInput formControlName="nome" placeholder="Nome" value="" required>
+<input matInput formControlName="nome" placeholder="Nome">
 
 e depois para cada campo do formulário iremos adicionar a linha abaixo para mensagem de erro
 <mat-error *ngIf="form.controls['nome'].hasError('required')">
@@ -447,13 +469,13 @@ e por fim no botão salvar vamos colocar o disabled caso o form seja inválido:
 O html ficará desta forma:
 <form [formGroup]="form" fxLayout="column">
   <mat-form-field fxFlex="100"> 
-    <input matInput formControlName="nome" placeholder="Nome" value="" required>
+    <input matInput formControlName="nome" placeholder="Nome">
     <mat-error *ngIf="form.controls['nome'].hasError('required')">
       Campo obrigatório
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex="100"> 
-    <input matInput formControlName="email" placeholder="E-mail" value="" required>
+    <input matInput formControlName="email" placeholder="E-mail">
     <mat-error *ngIf="form.controls['email'].hasError('email') && !form.controls['email'].hasError('required')">
       E-mail inválido
     </mat-error>
@@ -463,14 +485,14 @@ O html ficará desta forma:
   </mat-form-field>
   <div fxFlex="100" fxLayout="row">
     <mat-form-field fxFlex="47"> 
-      <input matInput formControlName="login" placeholder="Login" value="" required>
+      <input matInput formControlName="login" placeholder="Login">
       <mat-error *ngIf="form.controls['login'].hasError('required')">
         Campo obrigatório
       </mat-error>
     </mat-form-field>
     <span fxFlex="5"></span>
     <mat-form-field fxFlex="47"> 
-      <mat-select formControlName="profile" placeholder="Perfil" required>
+      <mat-select formControlName="profile" placeholder="Perfil">
           <mat-option *ngFor="let profile of profiles" [value]="profile.value">
             {{ profile.description }}
           </mat-option>
@@ -482,14 +504,14 @@ O html ficará desta forma:
   </div>
   <div fxFlex="100" fxLayout="row">
     <mat-form-field fxFlex="47"> 
-      <input matInput formControlName="senha" placeholder="Senha" type="password" value="" required>
+      <input matInput formControlName="senha" placeholder="Senha" type="password">
       <mat-error *ngIf="form.controls['senha'].hasError('required')">
         Campo obrigatório
       </mat-error>
     </mat-form-field>
     <span fxFlex="5"></span>
     <mat-form-field fxFlex="47"> 
-      <input matInput formControlName="confirmacao" placeholder="Confirmação" type="password" value="" required>
+      <input matInput formControlName="confirmacao" placeholder="Confirmação" type="password">
       <mat-error *ngIf="form.controls['confirmacao'].hasError('required')">
         Campo obrigatório
       </mat-error>
@@ -501,4 +523,89 @@ O html ficará desta forma:
   </div>
 </form>
 
+
 Porém nestas validações não tem a validação da confirmação de senha, podemos criar um validator para esta operação:
+src/app/validators/equalPasswordsValidator.ts
+import {FormGroup} from '@angular/forms';
+export class EqualPasswordsValidator {
+  public static validate(firstField, secondField) {
+    return (c:FormGroup) => {       
+    (c.controls && c.controls[firstField].value == c.controls[secondField].value) 
+        ? c.controls[secondField].setErrors(c.controls[secondField].getError('required') ? {required: {valid:false}} : null) :
+          c.controls[secondField].setErrors({passwordsEqual: {valid: false}});
+    }
+  }
+}
+
+E depois disto iremos informar, para o formGroup para que utilize a validação da senha, e quais campos serão:
+this.form = fb.group({
+      identifier: [null],
+      nome: [null, Validators.required],
+      email: [null, Validators.compose([Validators.required, Validators.email])],
+      login: [null, Validators.required],
+      perfil: [null, Validators.required],
+      senha: [null, Validators.required],
+      confirmacao: [null, Validators.required]
+}, {validator: EqualPasswordsValidator.validate("senha","confirmacao")});
+
+
+Aula 5
+Vamos criar a edição utilizando do mesmo formulário, para isto vamos atualizar nosso router (main.routing.ts), incluiremos
+{
+  path: 'usuario/editar/:id',
+  component: FormularioComponent
+}
+
+Vamos alterar/incluir o comportamento de edição no arquivo usuario/consulta/consulta.component.ts
+Injetamos o Router do angular para que possamos redirecionar para o formulário e vamos criar a função editar:
+constructor(private usuarioService:UsuarioService, private _router: Router) { }
+editar(identifier){
+    this._router.navigate(["/main/usuario/editar", identifier]);
+  }
+
+
+
+porém no nosso serviço ainda  não temos a consulta por ID, então iremos adicionar, no usuarioService.ts
+getItem(identifier){
+  return this.listUsers.find(item=> item.identifier == identifier);
+}
+
+Agora vamos fazer que na inicialização do formulário caso haja id, realizar a consulta dos dados:
+para obter o parametro que iremos receber pela URL, precisamos do ActivatedRouter, para isso vamos injetalo.
+constructor(private _usuarioService: UsuarioService, fb: FormBuilder, private _router: Router,private _activateRoute: ActivatedRoute)
+
+Após isto iremos ajustar o init para que caso haja o parametro, realizemos a consulta dos dados, e setamos o componente como edição:
+Variável para sabermos se estamos editando:
+identifier = null;
+
+Depois vamos atualizar o ngOnInit 
+ngOnInit() {
+  this.identifier = null;    
+  this._activateRoute.params.subscribe(params=>{
+    this.identifier = params['id'];
+  })
+  if(this.identifier){
+    var item = <any> this._usuarioService.getItem(this.identifier);
+    item.senha = null;
+    item.confirmacao = null;
+    this.form.setValue(item);
+    this.form.get("senha").setValidators(null);
+    this.form.get("confirmacao").setValidators(null);
+  }
+}
+
+E vamos atualizar o método de salvar:
+ salvar() {
+  if(this.form.valid){
+    if(this.identifier){
+      this._usuarioService.editar(this.form.value);
+    } else {
+      this._usuarioService.adicionar(this.form.value);
+    }
+    this.form.reset();
+    this._router.navigate(['/main/usuario/consulta']);
+  }
+}
+
+Agora vamos mudar o nome do botão conforme a ação do formulário
+<button mat-raised-button color="primary"  [disabled]="!form.valid" (click)="salvar()">{{ identifier ? 'Salvar' : 'Cadastrar'}}</button>

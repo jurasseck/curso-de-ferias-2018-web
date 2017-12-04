@@ -32,8 +32,14 @@ export class UsuarioService {
   }
 
   editar(editItem){
-    var item = this.listUsers.find(item=> item.identifier == editItem.identifer)
-    item = editItem;
+    let index = this.listUsers.findIndex(item=> item.identifier == editItem.identifier);
+    if(index > -1){
+      this.listUsers[index] = editItem;
+    }
+  }
+
+  getItem(identifier){
+    return this.listUsers.find(item=> item.identifier == identifier);
   }
 
   listar(){
