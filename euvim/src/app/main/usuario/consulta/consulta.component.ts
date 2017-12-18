@@ -15,7 +15,7 @@ import { Navigation } from 'selenium-webdriver';
 })
 export class ConsultaComponent implements OnInit {
 
-  public displayedColumns = ['nome', 'login', 'email', 'perfil', 'identifier'];
+  public displayedColumns = ['nome', 'login', 'email', 'perfil', 'id'];
   
   public dataSource;
   public noResults$ = false;
@@ -27,14 +27,18 @@ export class ConsultaComponent implements OnInit {
   }
 
   remover(identifer){
-    this.usuarioService.excluir(identifer);
-    this.getListUsers();
+    this.usuarioService.excluir(identifer).subscribe(suc=>{
+      this.getListUsers();
+    });
+    
   }
 
   private getListUsers(){
-    var items = this.usuarioService.listar();
-    this.noResults$ = items.length == 0;
-    this.dataSource = new MatTableDataSource(items);
+    this.usuarioService.listar().subscribe(suc => {
+        this.noResults$ = suc.length == 0;
+        this.dataSource = new MatTableDataSource(suc);
+      }
+    );
   }
 
   editar(identifier){

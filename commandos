@@ -609,3 +609,131 @@ E vamos atualizar o método de salvar:
 
 Agora vamos mudar o nome do botão conforme a ação do formulário
 <button mat-raised-button color="primary"  [disabled]="!form.valid" (click)="salvar()">{{ identifier ? 'Salvar' : 'Cadastrar'}}</button>
+
+
+Vamos agora iniciar a inclusão do módulo http client, e end point para as chamadas do nosso mock.
+- Primeiro vamos ajustar nossos envioroments para apontar para nosso end point.
+  export const environment = {
+    production: true,
+    URL:"http://localhost:3000/api/v1/"
+  };
+
+Agora vamos no módulo de usuário incluir as dependencias necessárias para o HttpClient (usuario.module.ts)
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+modules [
+  HttpClientModule ...
+]
+providers [
+  HttpClient ...
+]
+
+Agora iremos conectar nosso usuario.service.ts ao mock/servidor (usuario.service.ts)
+constructor(private _httpClient:HttpClient ) { }
+
+private _urlUser = environment.URL+"usuarios";
+
+Vamos mudar inicialmente o comando de listagem (usuario.service.ts)
+listar(){
+  return this._httpClient.get<Array<Object>>(this._urlUser);
+}
+Agora precisamos ajustar (consulta.component.ts) para que realizar o subscribe
+private getListUsers(){
+  this.usuarioService.listar().subscribe(suc => {
+      this.noResults$ = suc.length == 0;
+      this.dataSource = new MatTableDataSource(suc);
+    }
+  );
+}
+Porém agora não é mais identifier e sim id temos que mudar no consulta.component.ts
+public displayedColumns = ['nome', 'login', 'email', 'perfil', 'id'];
+e no consulta.component.hmtl
+<ng-container matColumnDef="id">
+  <mat-header-cell *matHeaderCellDef  fxFlex="10"> Ações </mat-header-cell>
+  <mat-cell *matCellDef="let element" fxFlex="10" class="buttons">
+      <button mat-icon-button color="primary"  matTooltip="Editar">
+        <mat-icon class="md-24"  (click)="editar(element.id)" aria-label="Editar">edit</mat-icon>
+      </button>
+      <button mat-icon-button color="danger" matTooltip="Remover">
+          <mat-icon class="md-24" (click)="remover(element.id)" aria-label="Remover">delete</mat-icon>
+      </button>
+  </mat-cell>
+</ng-container>
+
+Vamos agora mudar o método de exclusão (usuario.service.ts)
+excluir(identifier){
+    return this._httpClient.delete(this._urlUser+"/"+identifier, {responseType: 'text'})
+}
+Agora precisamos ajustar (consulta.component.ts) para que realizar a exclusão
+remover(identifer){
+  this.usuarioService.excluir(identifer).subscribe(suc=>{
+      this.getListUsers();
+  });
+}
+
+Vamos realizar o ajuste de consulta especifica  (usuario.service.ts)
+getItem(identifier){
+  return this._httpClient.get(this._urlUser+"/"+identifier);
+}
+
+Agora vamos ajustar o formulário, quando é passado o ID para realizar a consulta, e ajustarmos o form (formulario.component.ts)
+this.form = fb.group({
+      id: [null],
+      nome: [null, Validators.required],
+      email: [null, Validators.compose([Validators.required, Validators.email])],
+      login: [null, Validators.required],
+      perfil: [null, Validators.required],
+      senha: [null, Validators.required],
+      confirmacao: [null, Validators.required],
+      urlFoto: [null],
+    }, {validator: EqualPasswordsValidator.validate("senha","confirmacao")})
+
+ngOnInit() {
+    this.identifier = null;    
+    this._activateRoute.params.subscribe(params=>{
+      this.identifier = params['id'];
+    })
+    if(this.identifier){
+      this._usuarioService.getItem(this.identifier).subscribe(suc=>{
+        var item = Object(suc);
+        item.senha = null;
+        item.confirmacao = null;
+        this.form.setValue(item);
+        this.form.get("senha").setValidators(null);
+        this.form.get("confirmacao").setValidators(null);
+      });
+      
+    }
+  }
+
+Vamos mudar agora o método de inclusão e edição (usuario.service.ts)
+adicionar(item){
+  return this._httpClient.post(this._urlUser, item, {responseType: 'text'});
+}
+editar(editItem){
+  return this._httpClient.put(this._urlUser+"/"+editItem.id, editItem, {responseType: 'text'});
+}
+Agora vamos mudar o método de inclusão e edição para ter o subscribe, e ajustarmos os profiles.
+public profiles = [
+  { value: "PROFESSOR", description: 'Professor' },
+  { value: "ADMINISTRADOR", description: 'Administrador' },
+  { value: "ALUNO", description: 'Aluno' },
+];
+salvar() {
+  if(this.form.valid){
+    if(this.identifier){
+      this._usuarioService.editar(this.form.value).subscribe(suc=>{
+        this.form.reset();
+        this._router.navigate(['/main/usuario/consulta']);
+      })
+    } else {
+      this._usuarioService.adicionar(this.form.value).subscribe(suc=>{
+          this.form.reset();
+          this._router.navigate(['/main/usuario/consulta']);
+        }
+      )
+    }
+  }
+}
+
+Agora sim nosso crud está conectado ao servidor/mock.
+

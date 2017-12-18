@@ -13,9 +13,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class FormularioComponent implements OnInit {
 
   public profiles = [
-    { value: "Professor", description: 'Professor' },
-    { value: "Administrador", description: 'Administrador' },
-    { value: "Aluno", description: 'Aluno' },
+    { value: "PROFESSOR", description: 'Professor' },
+    { value: "ADMINISTRADOR", description: 'Administrador' },
+    { value: "ALUNO", description: 'Aluno' },
   ];
 
 
@@ -25,13 +25,14 @@ export class FormularioComponent implements OnInit {
   constructor(private _usuarioService: UsuarioService, fb: FormBuilder, private _router: Router,private _activateRoute: ActivatedRoute) {
 
     this.form = fb.group({
-      identifier: [null],
+      id: [null],
       nome: [null, Validators.required],
       email: [null, Validators.compose([Validators.required, Validators.email])],
       login: [null, Validators.required],
       perfil: [null, Validators.required],
       senha: [null, Validators.required],
-      confirmacao: [null, Validators.required]
+      confirmacao: [null, Validators.required],
+      urlFoto: [null],
     }, {validator: EqualPasswordsValidator.validate("senha","confirmacao")})
     //this.email = this.form.controls['email'];
   }
@@ -44,24 +45,32 @@ export class FormularioComponent implements OnInit {
       this.identifier = params['id'];
     })
     if(this.identifier){
-      var item = <any> this._usuarioService.getItem(this.identifier);
-      item.senha = null;
-      item.confirmacao = null;
-      this.form.setValue(item);
-      this.form.get("senha").setValidators(null);
-      this.form.get("confirmacao").setValidators(null);
+      this._usuarioService.getItem(this.identifier).subscribe(suc=>{
+        var item = Object(suc);
+        item.senha = null;
+        item.confirmacao = null;
+        this.form.setValue(item);
+        this.form.get("senha").setValidators(null);
+        this.form.get("confirmacao").setValidators(null);
+      });
+      
     }
   }
 
   salvar() {
     if(this.form.valid){
       if(this.identifier){
-        this._usuarioService.editar(this.form.value);
+        this._usuarioService.editar(this.form.value).subscribe(suc=>{
+          this.form.reset();
+          this._router.navigate(['/main/usuario/consulta']);
+        })
       } else {
-        this._usuarioService.adicionar(this.form.value);
+        this._usuarioService.adicionar(this.form.value).subscribe(suc=>{
+            this.form.reset();
+            this._router.navigate(['/main/usuario/consulta']);
+          }
+        )
       }
-      this.form.reset();
-      this._router.navigate(['/main/usuario/consulta']);
     }
   }
 

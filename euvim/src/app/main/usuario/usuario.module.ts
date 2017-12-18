@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { UsuarioService } from './usuario.service';
 import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -22,9 +23,10 @@ import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
     MatSelectModule, 
     MatOptionModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   declarations: [ConsultaComponent, FormularioComponent],
-  providers: [UsuarioService, FormBuilder]
+  providers: [HttpClient,UsuarioService, FormBuilder]
 })
 export class UsuarioModule { }

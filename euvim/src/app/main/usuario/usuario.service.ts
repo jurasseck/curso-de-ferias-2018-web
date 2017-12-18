@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class UsuarioService {
 
-  constructor() { }
+  constructor(private _httpClient:HttpClient ) { }
+
+  private _urlUser = environment.URL+"usuarios";
 
   private listUsers = [
     {identifier: 1, nome: 'José da Silva', login: "jose", email: 'jose@ponto.com.br', perfil:"Aluno"},
@@ -16,33 +21,22 @@ export class UsuarioService {
   ];
 
   adicionar(item){
-    let maxIdentifier = 0;
-    this.listUsers.forEach(item=>{
-      maxIdentifier < item.identifier ? maxIdentifier = item.identifier : maxIdentifier = maxIdentifier;
-    })
-    item.identifier = maxIdentifier + 1;
-    this.listUsers.push(item);
+    return this._httpClient.post(this._urlUser, item, {responseType: 'text'});
   }
 
   excluir(identifier){
-    let index = this.listUsers.findIndex(item=> item.identifier == identifier);
-    if(index > -1){
-      this.listUsers.splice(index,1);
-    }
+    return this._httpClient.delete(this._urlUser+"/"+identifier, {responseType: 'text'})
   }
 
   editar(editItem){
-    let index = this.listUsers.findIndex(item=> item.identifier == editItem.identifier);
-    if(index > -1){
-      this.listUsers[index] = editItem;
-    }
+    return this._httpClient.put(this._urlUser+"/"+editItem.id, editItem, {responseType: 'text'});
   }
 
   getItem(identifier){
-    return this.listUsers.find(item=> item.identifier == identifier);
+    return this._httpClient.get(this._urlUser+"/"+identifier);
   }
 
   listar(){
-    return this.listUsers;
+    return this._httpClient.get<Array<Object>>(this._urlUser);
   }
 }
