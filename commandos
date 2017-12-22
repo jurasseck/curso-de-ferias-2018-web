@@ -114,6 +114,7 @@ MatButtonModule
 Adicionar no main.component.html
 <mat-sidenav-container>
   <mat-sidenav #sidenav>
+  <a mat-button style="height: 0; position: absolute;"> <!-- 'absorbs' the behavior --></a>  
     <mat-nav-list>
       <mat-list-item>
         <button mat-icon-button >
@@ -136,15 +137,10 @@ Adicionar no main.component.html
     </mat-nav-list>
   </mat-sidenav>
   <mat-toolbar color="primary">
-    <span class="navSpan">
       <button mat-icon-button (click)="sidenav.open()">
           <mat-icon>menu</mat-icon>
       </button>
       <span>Eu vim</span>
-      <button mat-icon-button (click)="sidenav.open()" class="user">
-          <mat-icon>info</mat-icon>
-      </button>
-    </span>
   </mat-toolbar>
   <mat-card id="content">
     <router-outlet></router-outlet>
@@ -735,5 +731,288 @@ salvar() {
   }
 }
 
-Agora sim nosso crud está conectado ao servidor/mock.
+Agora sim nosso crud está conectado ao servidor/mock e com isso não precisamos mais do array de usuarios do arquivo usuario.service.ts
+podemos remover o array: listUsers 
+
+Aula 06
+Agora precisamos replicar todo esse comportamento, para disciplinas, porém nossas rotas ainda não estão muito amigáveis
+ou seja, nossa rota está sendo definida ao componente importado, e não ao módulo, vamos ajustar isto?
+Para isto vamos criar uma arquivo de rotas no nosso módulo, como não utilizamos na criação --routing vamos criar na mão.
+Na pasta usuario vamos criar o arquivo abaixo com nome usuario.routing.ts: 
+
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+import { ConsultaComponent } from './consulta/consulta.component';
+import { FormularioComponent } from './formulario/formulario.component';
+
+@NgModule({
+  imports: [
+    RouterModule.forChild([
+      {
+        path: 'consulta',
+        component: ConsultaComponent
+      },
+      {
+        path: 'adicionar',
+        component: FormularioComponent
+      },
+      {
+        path: 'editar/:id',
+        component: FormularioComponent
+      }
+    ])
+  ]
+})
+export class UsuarioRouting { }
+
+Após isto iremos importar no "usuario.module.ts" esse mapeamento
+import { UsuarioRouting } from './usuario.routing';
+
+imports: [
+    ...
+    UsuarioRouting,
+    RouterModule,
+    ...
+],
+
+Agora vamos mudar nossa main.routing.ts pois o mapeamento do usuário está no módulo e não mais nela.
+@NgModule({
+  imports: [
+    RouterModule.forChild([
+      { path: 'main', 
+        component: MainComponent,
+        children: [
+          {
+            path: 'usuario',
+            loadChildren: './usuario/usuario.module#UsuarioModule'
+          }
+        ]
+      }
+    ])
+  ]
+})
+export class MainRouting { }
+
+E olha que legal usando módulos com rotas, não precisamos mais carregar o módulo usuário, no "main.module.ts" assim fazemos um lazyLoad nos módulos
+@NgModule({
+  imports: [
+    CommonModule,
+    MainRouting,
+    RouterModule,
+    FlexLayoutModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatCardModule,
+    MatListModule,
+    MatToolbarModule,
+    MatButtonModule
+  ],
+  declarations: [MainComponent]
+})
+export class MainModule { }
+
+Agora que temos um módulo isolado do usuário, podemos replicálo para as disciplinas, então para termos um ganho de tempo 
+vamos Copiar a pasta usuário e colar a mesma como disciplinas.
+Vamos renomear todos nossos ts de usuario -> disciplinas
+usuario.module.ts -> disciplina.module.ts (Lembrese mudar internamente o nome da classe também)
+usuario.routing.ts -> disciplina.routing.ts (Lembrese mudar internamente o nome da classe também)
+usuario.service.spec.ts -> disciplina.service.spec.ts (Lembrese mudar internamente o nome da classe também)
+usuario.service.ts -> disciplina.service.ts (Lembrese mudar internamente o nome da classe também)
+
+Então nossos arquivos terão os seguintes conteúdos:
+- disciplina.module.ts
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ConsultaComponent } from './consulta/consulta.component';
+import { FormularioComponent } from './formulario/formulario.component';
+import { MatTableModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatTooltipModule, MatSelectModule, MatOptionModule } from '@angular/material';
+import { RouterModule } from '@angular/router';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { DisciplinaService } from './disciplina.service';
+import { DisciplinaRouting } from './disciplina.routing';
+import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatIconModule,
+    MatButtonModule,
+    DisciplinaRouting,
+    RouterModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FlexLayoutModule,
+    MatTooltipModule,
+    MatSelectModule, 
+    MatOptionModule,
+    ReactiveFormsModule,
+    FormsModule,
+    HttpClientModule
+  ],
+  declarations: [ConsultaComponent, FormularioComponent],
+  providers: [HttpClient,DisciplinaService, FormBuilder]
+})
+export class DisciplinaModule { }
+
+-disciplina.routing.ts
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+import { ConsultaComponent } from './consulta/consulta.component';
+import { FormularioComponent } from './formulario/formulario.component';
+
+@NgModule({
+  imports: [
+    RouterModule.forChild([
+      {
+        path: 'consulta',
+        component: ConsultaComponent
+      },
+      {
+        path: 'adicionar',
+        component: FormularioComponent
+      },
+      {
+        path: 'editar/:id',
+        component: FormularioComponent
+      }
+    ])
+  ]
+})
+export class DisciplinaRouting { }
+
+- disciplina.service.spec.ts
+import { TestBed, inject } from '@angular/core/testing';
+
+import { DisciplinaService } from './disciplina.service';
+
+describe('DisciplinaService', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [DisciplinaService]
+    });
+  });
+
+  it('should be created', inject([DisciplinaService], (service: DisciplinaService) => {
+    expect(service).toBeTruthy();
+  }));
+});
+
+- disciplina.service.ts
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs/Observable';
+
+@Injectable()
+export class DisciplinaService {
+
+  constructor(private _httpClient:HttpClient ) { }
+
+  private _urlDisciplina = environment.URL+"disciplinas";
+
+  adicionar(item){
+    return this._httpClient.post(this._urlDisciplina, item, {responseType: 'text'});
+  }
+
+  excluir(identifier){
+    return this._httpClient.delete(this._urlDisciplina+"/"+identifier, {responseType: 'text'})
+  }
+
+  editar(editItem){
+    return this._httpClient.put(this._urlDisciplina+"/"+editItem.id, editItem, {responseType: 'text'});
+  }
+
+  getItem(identifier){
+    return this._httpClient.get(this._urlDisciplina+"/"+identifier);
+  }
+
+  listar(){
+    return this._httpClient.get<Array<Object>>(this._urlDisciplina);
+  }
+}
+
+Primeiramente vamos ajustar o "disciplina/consulta.component.ts" para que chame o novo serviço, para listagem de disciplinas, e vamos ajustar os campos da tabela.
+Vamos mudar a importação
+ - import { UsuarioService } from '../usuario.service'; -> import { DisciplinaService } from '../disciplina.service';
+após isto vamos renomear a injeção do serviço e renomear todas as chamadas.
+ - constructor(private _disciplinaService:DisciplinaService, private _router: Router) { }
+Agora vamos mudar o redirecionamento caso clicar para edição de uma disciplina:
+ - this._router.navigate(["/main/usuario/editar", identifier]); -> this._router.navigate(["/main/disciplina/editar", identifier]);
+Vamos ajustar as colunas que teremos em nosso HTML, conforme swagger
+public displayedColumns = ['nome', 'login', 'email', 'perfil', 'id']; -> public displayedColumns = ['segmento', 'descricao', 'dataInicio', 'dataTermino','instrutores', 'id'];
+Agora vamos ajustar a table para mostrar as informações que iremos receber em "disciplina/consulta.component.html"  ficando da seguinte forma:
+<div class="mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource">
+    <ng-container matColumnDef="segmento">
+      <mat-header-cell *matHeaderCellDef> Segmento </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.segmento}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="descricao">
+        <mat-header-cell *matHeaderCellDef> Descrição </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.descricao}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="dataInicio">
+      <mat-header-cell *matHeaderCellDef> Início </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.dataInicio | date:'d/M/yyy'}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="dataTermino">
+      <mat-header-cell *matHeaderCellDef> Término </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.dataTermino  | date:'d/M/yyy'}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="instrutores">
+      <mat-header-cell *matHeaderCellDef> Instrutores </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.instrutores.length}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef  fxFlex="10"> Ações </mat-header-cell>
+      <mat-cell *matCellDef="let element" fxFlex="10" class="buttons">
+         <button mat-icon-button color="primary"  matTooltip="Editar">
+            <mat-icon class="md-24"  (click)="editar(element.id)" aria-label="Editar">edit</mat-icon>
+          </button>
+          <button mat-icon-button color="danger" matTooltip="Remover">
+              <mat-icon class="md-24" (click)="remover(element.id)" aria-label="Remover">delete</mat-icon>
+          </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <div *ngIf="noResults$" class="noResult">Nenhum resultado</div>
+  <button mat-fab color="primary">
+    <mat-icon class="mat-24" routerLink="/main/disciplina/adicionar" aria-label="Adicionar">add</mat-icon>
+  </button> 
+</div>
+
+
+Agora vamos só mudar as chamadas do "disciplinas/formulario.service.ts" para usar DisciplinaService ao invés de UserService;
+
+Após isto para testarmos vamos incluir o novo módulo a rota principal do projeto em "main.routing.ts"
+children: [
+  {
+    path: 'usuario',
+    loadChildren: './usuario/usuario.module#UsuarioModule'
+  },
+  {
+    path: 'disciplina',
+    loadChildren: './disciplinas/disciplina.module#DisciplinaModule'
+  }
+]
+
+Despois vamos adicionar a rota ao menu principal, em main.component.html
+<mat-list-item>
+  <button mat-icon-button >
+      <mat-icon>account_circle</mat-icon>
+  </button>
+  <a mdLine routerLink="/main/usuario/consulta" (click)="sidenav.close()">Usuários</a>
+</mat-list-item>
+<mat-list-item>
+  <button mat-icon-button >
+      <mat-icon>list</mat-icon>
+  </button>
+  <a mdLine routerLink="/main/disciplina/consulta" (click)="sidenav.close()">Disciplinas</a>
+</mat-list-item>
 

@@ -5,8 +5,8 @@ import { FormularioComponent } from './formulario/formulario.component';
 import { MatTableModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatTooltipModule, MatSelectModule, MatOptionModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { UsuarioService } from './usuario.service';
-import { UsuarioRouting } from './usuario.routing';
+import { DisciplinaService } from './disciplina.service';
+import { DisciplinaRouting } from './disciplina.routing';
 import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 
@@ -16,7 +16,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
     MatTableModule,
     MatIconModule,
     MatButtonModule,
-    UsuarioRouting,
+    DisciplinaRouting,
     RouterModule,
     MatFormFieldModule,
     MatInputModule,
@@ -29,6 +29,6 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
     HttpClientModule
   ],
   declarations: [ConsultaComponent, FormularioComponent],
-  providers: [HttpClient,UsuarioService, FormBuilder]
+  providers: [HttpClient,DisciplinaService, FormBuilder]
 })
-export class UsuarioModule { }
+export class DisciplinaModule { }

@@ -10,16 +10,6 @@ export class UsuarioService {
 
   private _urlUser = environment.URL+"usuarios";
 
-  private listUsers = [
-    {identifier: 1, nome: 'José da Silva', login: "jose", email: 'jose@ponto.com.br', perfil:"Aluno"},
-    {identifier: 2, nome: 'Mariano das Neves', login: "mariano", email: 'marino@ponto.com.br', perfil:"Aluno"},
-    {identifier: 3, nome: 'Magyver da Silva', login: "magyver", email: 'magyver@ponto.com.br', perfil:"Aluno"},
-    {identifier: 4, nome: 'Irineu Nunes', login: "irineu", email: 'irineu@ponto.com.br', perfil:"Aluno"},
-    {identifier: 5, nome: 'Carlos Silva', login: "carlos", email: 'carlos@ponto.com.br', perfil:"Aluno"},
-    {identifier: 6, nome: 'Carlos Silva', login: "carlos", email: 'carlos@ponto.com.br', perfil:"Aluno"},
-    {identifier: 7, nome: 'Carlos Silva', login: "carlos", email: 'carlos@ponto.com.br', perfil:"Aluno"}
-  ];
-
   adicionar(item){
     return this._httpClient.post(this._urlUser, item, {responseType: 'text'});
   }
