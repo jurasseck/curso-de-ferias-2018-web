@@ -12,28 +12,27 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class FormularioComponent implements OnInit {
 
-  public profiles = [
-    { value: "PROFESSOR", description: 'Professor' },
-    { value: "ADMINISTRADOR", description: 'Administrador' },
-    { value: "ALUNO", description: 'Aluno' },
+  public segmentos = [
+    { value: "Backend", description: 'Back-end' },
+    { value: "Front-end", description: 'Front-end' },
+    { value: "Mobile", description: 'Mobile' }
   ];
 
 
   form: FormGroup;
   identifier = null;
+  professor = null;
 
   constructor(private _disciplinaService: DisciplinaService, fb: FormBuilder, private _router: Router,private _activateRoute: ActivatedRoute) {
 
     this.form = fb.group({
       id: [null],
-      nome: [null, Validators.required],
-      email: [null, Validators.compose([Validators.required, Validators.email])],
-      login: [null, Validators.required],
-      perfil: [null, Validators.required],
-      senha: [null, Validators.required],
-      confirmacao: [null, Validators.required],
-      urlFoto: [null],
-    }, {validator: EqualPasswordsValidator.validate("senha","confirmacao")})
+      descricao: [null, Validators.required],
+      segmento: [null, Validators.required],
+      dataInicio: [null, Validators.required],
+      dataTermino: [null, Validators.required],
+      urlLogo: [null],
+    })
     //this.email = this.form.controls['email'];
   }
   
@@ -74,6 +73,9 @@ export class FormularioComponent implements OnInit {
     }
   }
 
+  failLoad(event){
+    event.target.src = "https://d30y9cdsu7xlg0.cloudfront.net/png/20804-200.png";
+  }
 
 
 }

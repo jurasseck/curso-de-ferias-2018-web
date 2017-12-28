@@ -1,59 +1,67 @@
-<form [formGroup]="form" fxLayout="column">
-  <mat-form-field fxFlex="100"> 
-    <input matInput formControlName="nome" placeholder="Nome" >
-    <mat-error *ngIf="form.controls['nome'].hasError('required')">
-      Campo obrigatório
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field fxFlex="100"> 
-    <input matInput formControlName="email" placeholder="E-mail" >
-    <mat-error *ngIf="form.controls['email'].hasError('email') && !form.controls['email'].hasError('required')">
-      E-mail inválido
-    </mat-error>
-    <mat-error *ngIf="form.controls['email'].hasError('required')">
-      Campo obrigatório
-    </mat-error>
-  </mat-form-field>
+<div  fxLayout="column">
+  <form [formGroup]="form"  fxLayout="column">
+    <div fxFlex="100" fxLayout="row">  
+      <mat-form-field fxFlex="47"> 
+        <mat-select formControlName="segmento" placeholder="Segmento" >
+            <mat-option *ngFor="let seg of segmentos" [value]="seg.value">
+              {{ seg.description }}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls['segmento'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+      <span fxFlex="5"></span>
+      <mat-form-field fxFlex="47"> 
+        <input matInput formControlName="descricao" placeholder="Descrição" >
+        <mat-error *ngIf="form.controls['descricao'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex="100" fxLayout="row">
+      <mat-form-field fxFlex="47"> 
+        <input matInput formControlName="dataInicio" placeholder="Data Início" >
+        <mat-error *ngIf="form.controls['dataInicio'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+      <span fxFlex="5"></span>
+      <mat-form-field fxFlex="47"> 
+        <input matInput formControlName="dataTermino" placeholder="Data Início" >
+        <mat-error *ngIf="form.controls['dataTermino'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex="100" fxLayout="row">
+      <mat-form-field fxFlex="75"> 
+          <input matInput formControlName="urlLogo" placeholder="Url Logo" >
+          <mat-error *ngIf="form.controls['urlLogo'].hasError('required')">
+            Campo obrigatório
+          </mat-error>
+      </mat-form-field>
+      <span fxFlex="5"></span>
+      <img class="urlLogo" [src]="form.controls['urlLogo'].value" (error)="failLoad($event)"/>
+    </div>
+  </form>
   <div fxFlex="100" fxLayout="row">
-    <mat-form-field fxFlex="47"> 
-      <input matInput formControlName="login" placeholder="Login" >
-      <mat-error *ngIf="form.controls['login'].hasError('required')">
-        Campo obrigatório
-      </mat-error>
-    </mat-form-field>
-    <span fxFlex="5"></span>
-    <mat-form-field fxFlex="47"> 
-      <mat-select formControlName="perfil" placeholder="Perfil" >
-          <mat-option *ngFor="let profile of profiles" [value]="profile.value">
-            {{ profile.description }}
+    <mat-form-field fxFlex="75"> 
+      <mat-select [(ngModel)]="professor" placeholder="Professores" >
+          <mat-option *ngFor="let seg of segmentos" [value]="seg.value">
+            {{ seg.description }}
           </mat-option>
       </mat-select>
-      <mat-error *ngIf="form.controls['perfil'].hasError('required')">
-        Campo obrigatório
-      </mat-error>
-    </mat-form-field>
-  </div>
-  <div fxFlex="100" fxLayout="row">
-    <mat-form-field fxFlex="47"> 
-      <input matInput formControlName="senha" placeholder="Senha" type="password"  >
-      <mat-error *ngIf="form.controls['senha'].hasError('required')">
-        Campo obrigatório
-      </mat-error>
     </mat-form-field>
     <span fxFlex="5"></span>
-    <mat-form-field fxFlex="47"> 
-      <input matInput formControlName="confirmacao" placeholder="Confirmação" type="password"  >
-      <mat-error *ngIf="form.controls['confirmacao'].hasError('required')">
-        Campo obrigatório
-      </mat-error>
-      <mat-error *ngIf="form.controls['confirmacao'].hasError('passwordsEqual')">
-        Confirmação inválida
-      </mat-error>
-    </mat-form-field>
+    <button mat-raised-button  mat-icon-button color="primary"  [disabled]="professor == null" (click)="addProfessor()">
+        <mat-icon>add</mat-icon>
+    </button>
   </div>
   <br/>
   <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
       <button mat-raised-button color="primary"  [disabled]="!form.valid" (click)="salvar()">{{ identifier ? 'Salvar' : 'Cadastrar'}}</button>
-      <button mat-raised-button color="warn" routerLink="/main/usuario/consulta">Cancelar</button>
+      <button mat-raised-button color="warn" routerLink="/main/disciplina/consulta">Cancelar</button>
   </div>
-</form>
+
+</div>
