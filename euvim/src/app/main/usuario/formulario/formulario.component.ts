@@ -31,8 +31,7 @@ export class FormularioComponent implements OnInit {
       login: [null, Validators.required],
       perfil: [null, Validators.required],
       senha: [null, Validators.required],
-      confirmacao: [null, Validators.required],
-      urlFoto: [null],
+      confirmacao: [null, Validators.required]
     }, {validator: EqualPasswordsValidator.validate("senha","confirmacao")})
     //this.email = this.form.controls['email'];
   }
@@ -47,13 +46,13 @@ export class FormularioComponent implements OnInit {
     if(this.identifier){
       this._usuarioService.getItem(this.identifier).subscribe(suc=>{
         var item = Object(suc);
+        delete item.urlFoto;
         item.senha = null;
         item.confirmacao = null;
-        this.form.setValue(item);
         this.form.get("senha").setValidators(null);
         this.form.get("confirmacao").setValidators(null);
+        this.form.setValue(item);
       });
-      
     }
   }
 
