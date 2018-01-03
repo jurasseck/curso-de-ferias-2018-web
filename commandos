@@ -1017,5 +1017,262 @@ Despois vamos adicionar a rota ao menu principal, em main.component.html
 </mat-list-item>
 
 Após isto precisamos ajustar o layout do nosso formulário, pois os campos estão correpondento ao usuário e não a disciplinas,
-Então vamos editar o "disciplinas/formulario/formulario.componente.html"
+Porém vamos precisar neste novo layout a listagem de professores, e um DatePicker, para isto vamos iniciar importando as classes do date picker.
+No arquivo disciplina.module.ts, vamos importar os seguintes módulos:
+modules:[
+	...
+	MatDatepickerModule,
+	MatNativeDateModule,
+	...
+]
+E vamos definir para nosso provider das datas, que nosso idioma é pt-br:
+providers: [... {provide: MAT_DATE_LOCALE, useValue: 'pt-br'}]
+
+Vamos aproveitar antes de ajustarmos nosso html, criar um service responsável pela busca de professores, podendo ser criado pelo ng -g ou podemos copiar o disciplina.service.ts e renomealo para professores.service.ts dentro da pasta /disciplinas/
+Nosso professor.service.ts ficará desta forma:
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs/Observable';
+import { HttpParams } from '@angular/common/http';
+
+@Injectable()
+export class ProfessorService {
+
+  constructor(private _httpClient:HttpClient ) { }
+
+  private _urlDisciplina = environment.URL+"usuarios";
+
+  listarProfessores(){
+    let httpParams = new HttpParams().set("tipo","PROFESSOR")
+    return this._httpClient.get<Array<Object>>(this._urlDisciplina, {params:httpParams});
+  }
+}
+
+Porém para utilizarmos no formulário precisamos incluir a dependencia no módulo então na disciplina.module.ts, vamos colocar a importação no providers.
+import { ProfessorService } from './professor.service';
+providers: [HttpClient,DisciplinaService,ProfessorService, FormBuilder, {provide: MAT_DATE_LOCALE, useValue: 'pt-br'}]
+
+
+Então agora vamos editar o "disciplinas/formulario/formulario.componente.ts" para corresponder ao conteudo da disciplina ao invés do usuário, porém ainda sem o evento da listagem do professor:
+então mudaremos public profiles para  public segmentos = [
+	{ value: "Backend", description: 'Back-end' },
+	{ value: "Front-end", description: 'Front-end' },
+	{ value: "Mobile", description: 'Mobile' }
+]
+Logo após o item do identifier, vamos criar um public de professores um array vazio: [], que iremos popular no ngOnINit.
+Em nosso construtor, temores um serviço a mais que será o de professores: private _professorService: ProfessorService
+
+O formulário, que é criado no contrutor por hora não vamos incluir o array de professores:
+this.form = fb.group({
+	id: [null],
+	descricao: [null, Validators.required],
+	segmento: [null, Validators.required],
+	dataInicio: [null, Validators.required],
+	dataTermino: [null, Validators.required],
+	urlLogo: [null]
+})
+
+vamos incluir a chamada dos professores, em nosso ngOnInit, e vamos excluir as modificações de campos do alterar do usuário:
+this._professorService.listarProfessores().subscribe(suc=>{
+	this.professores = suc;
+})
+
+Iremos atualizar as rotas da nossa função salvar();
+
+Nosso ts, irá conter 2 novas funções, para atualizarmos o html a função de abertura do calendário, e outra caso não carregue a imagem pela url, que o usuário informar:
+failLoad(event){
+    event.target.src = "https://d30y9cdsu7xlg0.cloudfront.net/png/20804-200.png";
+}
+openCalendar(item){
+item.open();
+}
+
+Nosso formulario.componente.ts ficará da seguinte forma:
+import { Component, OnInit, ViewEncapsulation, Inject } from '@angular/core';
+import { DisciplinaService } from '../disciplina.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { EqualPasswordsValidator } from '../../../validators/equalPasswords.validator';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ProfessorService } from '../professor.service';
+
+@Component({
+  selector: 'app-formulario',
+  templateUrl: './formulario.component.html',
+  styleUrls: ['./formulario.component.scss'],
+  encapsulation: ViewEncapsulation.None
+})
+export class FormularioComponent implements OnInit {
+
+  public segmentos = [
+    { value: "Backend", description: 'Back-end' },
+    { value: "Front-end", description: 'Front-end' },
+    { value: "Mobile", description: 'Mobile' }
+  ];
+
+
+  form: FormGroup;
+  identifier = null;
+  professores = [];
+
+  constructor(private _disciplinaService: DisciplinaService, 
+              private fb: FormBuilder, 
+              private _router: Router,
+              private _activateRoute: ActivatedRoute,
+              private _professorService: ProfessorService  
+            ) {
+
+    this.form = fb.group({
+      id: [null],
+      descricao: [null, Validators.required],
+      segmento: [null, Validators.required],
+      dataInicio: [null, Validators.required],
+      dataTermino: [null, Validators.required],
+      urlLogo: [null]
+    })
+  }
+  
+  ngOnInit() {
+    this.identifier = null;    
+    this._activateRoute.params.subscribe(params=>{
+      this.identifier = params['id'];
+    })
+    this._professorService.listarProfessores().subscribe(suc=>{
+      this.professores = suc;
+    })
+    if(this.identifier){
+      this._disciplinaService.getItem(this.identifier).subscribe(suc=>{
+        var item = Object(suc);
+        this.form.setValue(item);
+      });
+    }
+  }
+
+  salvar() {
+    if(this.form.valid){
+      if(this.identifier){
+        this._disciplinaService.editar(this.form.value).subscribe(suc=>{
+          this.form.reset();
+          this._router.navigate(['/main/disciplina/consulta']);
+        })
+      } else {
+        this._disciplinaService.adicionar(this.form.value).subscribe(suc=>{
+            this.form.reset();
+            this._router.navigate(['/main/disciplina/consulta']);
+          }
+        )
+      }
+    }
+  }
+
+  failLoad(event){
+    event.target.src = "https://d30y9cdsu7xlg0.cloudfront.net/png/20804-200.png";
+  }
+
+  openCalendar(item){
+    item.open();
+  }
+}
+
+Agora vamos iniciar os ajustes necessários, no disciplinas/formulario/formulario.componente.html, removendo os campos que não pertencem, ao usuário e incluindo o de disciplinas, layout que vamos seguir é este:
+http://storage1.static.itmages.com/i/18/0103/h_1515014969_6724336_d90204510f.png
+O que temos de diferente do usuário, são os date picker que iremos utilizar a seguinte abordagem conforme documentação do angular:
+<mat-form-field fxFlex="47"> 
+	<input matInput (keypress)="openCalendar(dtInicio);" formControlName="dataInicio" [matDatepicker]="dtInicio" placeholder="Data Início">
+	<mat-datepicker-toggle matSuffix [for]="dtInicio"></mat-datepicker-toggle>
+	<mat-datepicker #dtInicio touchUi="true"></mat-datepicker>
+	<mat-error *ngIf="form.controls['dataInicio'].hasError('required')">
+	  Campo obrigatório
+	</mat-error>
+</mat-form-field>
+Sendo que o keypress, estou utilizando para forçar a abertura do datePicker, para o usuário não informar letras, documentação do datepicker, caso queira mudar os comportamentos:
+https://material.angular.io/components/datepicker/overview
+
+E temos de diferente, o comportamento do field da urlLogo, onde iremos carregar uma imagem, caso ocorra um erro, vamos deixar uma imagem default:
+<div fxFlex="100" fxLayout="row">
+	<mat-form-field fxFlex="75"> 
+	  <input matInput formControlName="urlLogo" placeholder="Url Logo" >
+	  <mat-error *ngIf="form.controls['urlLogo'].hasError('required')">
+	    Campo obrigatório
+	  </mat-error>
+	</mat-form-field>
+	<span fxFlex="5"></span>
+	<img class="urlLogo" [src]="form.controls['urlLogo'].value" (error)="failLoad($event)"/>
+</div>
+
+Então no nosso start, sem o ajuste dos professores, nosso disciplinas/formulario/formulario.componente.html ficará da seguinte forma:
+<div  fxLayout="column">
+  <form [formGroup]="form"  fxLayout="column">
+    <div fxFlex="100" fxLayout="row">  
+      <mat-form-field fxFlex="47"> 
+        <mat-select formControlName="segmento" placeholder="Segmento" >
+            <mat-option *ngFor="let seg of segmentos" [value]="seg.value">
+              {{ seg.description }}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls['segmento'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+      <span fxFlex="5"></span>
+      <mat-form-field fxFlex="47"> 
+        <input matInput formControlName="descricao" placeholder="Descrição" >
+        <mat-error *ngIf="form.controls['descricao'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex="100" fxLayout="row">
+      <mat-form-field fxFlex="47"> 
+        <input matInput (keypress)="openCalendar(dtInicio);" formControlName="dataInicio" [matDatepicker]="dtInicio" placeholder="Data Início">
+        <mat-datepicker-toggle matSuffix [for]="dtInicio"></mat-datepicker-toggle>
+        <mat-datepicker #dtInicio touchUi="true"></mat-datepicker>
+        <mat-error *ngIf="form.controls['dataInicio'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+      <span fxFlex="5"></span>
+      <mat-form-field fxFlex="47"> 
+        <input matInput (keypress)="openCalendar(dtTermino);" formControlName="dataTermino" [matDatepicker]="dtTermino" placeholder="Data Término">
+        <mat-datepicker-toggle matSuffix [for]="dtTermino"></mat-datepicker-toggle>
+        <mat-datepicker #dtTermino touchUi="true"></mat-datepicker>
+        <mat-error *ngIf="form.controls['dataTermino'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex="100" fxLayout="row">
+      <mat-form-field fxFlex="75"> 
+          <input matInput formControlName="urlLogo" placeholder="Url Logo" >
+          <mat-error *ngIf="form.controls['urlLogo'].hasError('required')">
+            Campo obrigatório
+          </mat-error>
+      </mat-form-field>
+      <span fxFlex="5"></span>
+      <img class="urlLogo" [src]="form.controls['urlLogo'].value" (error)="failLoad($event)"/>
+    </div>
+  </form>
+  <div fxFlex="100" fxLayout="row">
+    <mat-form-field fxFlex="75"> 
+      <mat-select  placeholder="Professores" >
+          <mat-option *ngFor="let seg of segmentos" [value]="seg.value">
+            {{ seg.description }}
+          </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <span fxFlex="5"></span>
+    <button mat-raised-button  mat-icon-button color="primary"  (click)="addProfessor()">
+        <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <br/>
+  <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
+      <button mat-raised-button color="primary"  [disabled]="!form.valid" (click)="salvar()">{{ identifier ? 'Salvar' : 'Cadastrar'}}</button>
+      <button mat-raised-button color="warn" routerLink="/main/disciplina/consulta">Cancelar</button>
+  </div>
+</div>
+
+
+Agora, iremos realizar os ajustes necessários tanto no html quanto no ts, para que conseguimos, fazer a listagem de professores.
+
 

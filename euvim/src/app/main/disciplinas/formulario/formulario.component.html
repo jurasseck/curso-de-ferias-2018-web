@@ -21,14 +21,18 @@
     </div>
     <div fxFlex="100" fxLayout="row">
       <mat-form-field fxFlex="47"> 
-        <input matInput formControlName="dataInicio" placeholder="Data Início" >
+        <input matInput (keypress)="openCalendar(dtInicio);" formControlName="dataInicio" [matDatepicker]="dtInicio" placeholder="Data Início">
+        <mat-datepicker-toggle matSuffix [for]="dtInicio"></mat-datepicker-toggle>
+        <mat-datepicker #dtInicio touchUi="true"></mat-datepicker>
         <mat-error *ngIf="form.controls['dataInicio'].hasError('required')">
           Campo obrigatório
         </mat-error>
       </mat-form-field>
       <span fxFlex="5"></span>
       <mat-form-field fxFlex="47"> 
-        <input matInput formControlName="dataTermino" placeholder="Data Início" >
+        <input matInput (keypress)="openCalendar(dtTermino);" formControlName="dataTermino" [matDatepicker]="dtTermino" placeholder="Data Término">
+        <mat-datepicker-toggle matSuffix [for]="dtTermino"></mat-datepicker-toggle>
+        <mat-datepicker #dtTermino touchUi="true"></mat-datepicker>
         <mat-error *ngIf="form.controls['dataTermino'].hasError('required')">
           Campo obrigatório
         </mat-error>
@@ -47,14 +51,14 @@
   </form>
   <div fxFlex="100" fxLayout="row">
     <mat-form-field fxFlex="75"> 
-      <mat-select [(ngModel)]="professor" placeholder="Professores" >
+      <mat-select  placeholder="Professores" >
           <mat-option *ngFor="let seg of segmentos" [value]="seg.value">
             {{ seg.description }}
           </mat-option>
       </mat-select>
     </mat-form-field>
     <span fxFlex="5"></span>
-    <button mat-raised-button  mat-icon-button color="primary"  [disabled]="professor == null" (click)="addProfessor()">
+    <button mat-raised-button  mat-icon-button color="primary"  (click)="addProfessor()">
         <mat-icon>add</mat-icon>
     </button>
   </div>

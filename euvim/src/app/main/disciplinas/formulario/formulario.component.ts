@@ -3,6 +3,7 @@ import { DisciplinaService } from '../disciplina.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EqualPasswordsValidator } from '../../../validators/equalPasswords.validator';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ProfessorService } from '../professor.service';
 
 @Component({
   selector: 'app-formulario',
@@ -21,9 +22,14 @@ export class FormularioComponent implements OnInit {
 
   form: FormGroup;
   identifier = null;
-  professor = null;
+  professores = [];
 
-  constructor(private _disciplinaService: DisciplinaService, fb: FormBuilder, private _router: Router,private _activateRoute: ActivatedRoute) {
+  constructor(private _disciplinaService: DisciplinaService, 
+              private fb: FormBuilder, 
+              private _router: Router,
+              private _activateRoute: ActivatedRoute,
+              private _professorService: ProfessorService  
+            ) {
 
     this.form = fb.group({
       id: [null],
@@ -31,28 +37,23 @@ export class FormularioComponent implements OnInit {
       segmento: [null, Validators.required],
       dataInicio: [null, Validators.required],
       dataTermino: [null, Validators.required],
-      urlLogo: [null],
+      urlLogo: [null]
     })
-    //this.email = this.form.controls['email'];
   }
   
-  
-
   ngOnInit() {
     this.identifier = null;    
     this._activateRoute.params.subscribe(params=>{
       this.identifier = params['id'];
     })
+    this._professorService.listarProfessores().subscribe(suc=>{
+      this.professores = suc;
+    })
     if(this.identifier){
       this._disciplinaService.getItem(this.identifier).subscribe(suc=>{
         var item = Object(suc);
-        item.senha = null;
-        item.confirmacao = null;
         this.form.setValue(item);
-        this.form.get("senha").setValidators(null);
-        this.form.get("confirmacao").setValidators(null);
       });
-      
     }
   }
 
@@ -61,12 +62,12 @@ export class FormularioComponent implements OnInit {
       if(this.identifier){
         this._disciplinaService.editar(this.form.value).subscribe(suc=>{
           this.form.reset();
-          this._router.navigate(['/main/usuario/consulta']);
+          this._router.navigate(['/main/disciplina/consulta']);
         })
       } else {
         this._disciplinaService.adicionar(this.form.value).subscribe(suc=>{
             this.form.reset();
-            this._router.navigate(['/main/usuario/consulta']);
+            this._router.navigate(['/main/disciplina/consulta']);
           }
         )
       }
@@ -77,5 +78,7 @@ export class FormularioComponent implements OnInit {
     event.target.src = "https://d30y9cdsu7xlg0.cloudfront.net/png/20804-200.png";
   }
 
-
+  openCalendar(item){
+    item.open();
+  }
 }
