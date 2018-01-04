@@ -48,24 +48,42 @@
       <span fxFlex="5"></span>
       <img class="urlLogo" [src]="form.controls['urlLogo'].value" (error)="failLoad($event)"/>
     </div>
+    <div fxFlex="100" fxLayout="row">
+      <mat-form-field fxFlex="75"> 
+        <mat-select [(ngModel)]="selectProf" [ngModelOptions]="{standalone: true}" placeholder="Professores" >
+            <ng-container *ngFor="let prof of professores">
+              <mat-option *ngIf="!prof.selected" [value]="prof">
+                {{ prof.nome }}
+              </mat-option>
+            </ng-container>
+        </mat-select>
+        <mat-hint>
+            Necessário pelo menos 2 professores cadastrados
+        </mat-hint>
+      </mat-form-field>
+      <span fxFlex="5"></span>
+      <button mat-raised-button  mat-icon-button color="primary" type="button" [disabled]="selectProf == null" (click)="addProfessor()">
+          <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    <mat-list *ngIf="form.get('instrutores').value.length > 0">
+        <h3 mat-subheader>Professores selecionados</h3>
+        <ng-container *ngFor="let id of form.get('instrutores').value">
+          <mat-list-item>
+              <button mat-mini-fab type="button" color="warn" (click)="removerProfessor(id)">
+                  <mat-icon>delete</mat-icon>
+              </button>
+              <p fxFlexOffset="10px">
+                {{nomeProfessor(id)}}
+              </p>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+        </ng-container>
+    </mat-list>
+    <br/>
+    <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
+        <button mat-raised-button color="primary"  [disabled]="!form.valid || form.get('instrutores').value.length < 2" (click)="salvar()">{{ identifier ? 'Salvar' : 'Cadastrar'}}</button>
+        <button mat-raised-button color="warn" routerLink="/main/disciplina/consulta">Cancelar</button>
+    </div>
   </form>
-  <div fxFlex="100" fxLayout="row">
-    <mat-form-field fxFlex="75"> 
-      <mat-select  placeholder="Professores" >
-          <mat-option *ngFor="let seg of segmentos" [value]="seg.value">
-            {{ seg.description }}
-          </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <span fxFlex="5"></span>
-    <button mat-raised-button  mat-icon-button color="primary"  (click)="addProfessor()">
-        <mat-icon>add</mat-icon>
-    </button>
-  </div>
-  <br/>
-  <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
-      <button mat-raised-button color="primary"  [disabled]="!form.valid" (click)="salvar()">{{ identifier ? 'Salvar' : 'Cadastrar'}}</button>
-      <button mat-raised-button color="warn" routerLink="/main/disciplina/consulta">Cancelar</button>
-  </div>
-
 </div>

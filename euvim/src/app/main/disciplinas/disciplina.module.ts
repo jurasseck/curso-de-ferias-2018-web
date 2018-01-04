@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ConsultaComponent } from './consulta/consulta.component';
 import { FormularioComponent } from './formulario/formulario.component';
-import { MatTableModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatTooltipModule, MatSelectModule, MatOptionModule, MatDatepickerModule, MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material';
+import { MatTableModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatTooltipModule, MatSelectModule, MatOptionModule, MatDatepickerModule, MatNativeDateModule, MAT_DATE_LOCALE, MatListModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DisciplinaService } from './disciplina.service';
@@ -29,9 +29,10 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
     FormsModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatListModule,
     HttpClientModule
   ],
   declarations: [ConsultaComponent, FormularioComponent],
-  providers: [HttpClient,DisciplinaService,ProfessorService, FormBuilder, {provide: MAT_DATE_LOCALE, useValue: 'pt-br'},]
+  providers: [HttpClient,DisciplinaService,ProfessorService, FormBuilder, {provide: MAT_DATE_LOCALE, useValue: 'pt-br'}]
 })
 export class DisciplinaModule { }

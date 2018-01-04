@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewEncapsulation, Inject } from '@angular/core';
 import { DisciplinaService } from '../disciplina.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EqualPasswordsValidator } from '../../../validators/equalPasswords.validator';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProfessorService } from '../professor.service';
+import { FormArray } from '@angular/forms/src/model';
+import { MinLengthValidator } from '@angular/forms/src/directives/validators';
 
 @Component({
   selector: 'app-formulario',
@@ -23,6 +24,7 @@ export class FormularioComponent implements OnInit {
   form: FormGroup;
   identifier = null;
   professores = [];
+  selectProf=null;
 
   constructor(private _disciplinaService: DisciplinaService, 
               private fb: FormBuilder, 
@@ -37,7 +39,8 @@ export class FormularioComponent implements OnInit {
       segmento: [null, Validators.required],
       dataInicio: [null, Validators.required],
       dataTermino: [null, Validators.required],
-      urlLogo: [null]
+      urlLogo: [null],
+      instrutores : fb.array([])
     })
   }
   
@@ -51,8 +54,23 @@ export class FormularioComponent implements OnInit {
     })
     if(this.identifier){
       this._disciplinaService.getItem(this.identifier).subscribe(suc=>{
-        var item = Object(suc);
-        this.form.setValue(item);
+        var item = suc;
+        this.form.setValue({
+          id: suc.id,
+          descricao: suc.descricao,
+          segmento: suc.segmento,
+          dataInicio: suc.dataInicio,
+          dataTermino: suc.dataTermino,
+          urlLogo: suc.urlLogo,
+          instrutores:[]
+        });
+        suc.instrutores.forEach(element => {
+          let item = this.professores.find(item=>{ return item.id == element});
+          if(item){
+            this.selectProf = item;
+            this.addProfessor();
+          }
+        });
       });
     }
   }
@@ -81,4 +99,29 @@ export class FormularioComponent implements OnInit {
   openCalendar(item){
     item.open();
   }
+
+  addProfessor(){
+    let arrayProf = (<FormArray>this.form.get("instrutores"));
+    if(!arrayProf.value.includes(this.selectProf.id)){
+      arrayProf.value.push(this.selectProf.id);
+    }
+    this.selectProf.selected = true;
+    delete this.selectProf;
+  }
+
+  nomeProfessor(id){
+    let item = this.professores.find(item=>{ return item.id == id});
+    return item ? item.nome : "Professor indisponível";
+  }
+
+  removerProfessor(id){
+    let arrayProf = (<FormArray>this.form.get("instrutores"));
+    let index = arrayProf.value.findIndex(item=>{return item == id});
+    if(index > -1){
+      arrayProf.value.splice(index,1);
+    }
+    let item = this.professores.find(item=>{ return item.id == id});
+    item.selected = false;
+  }
+
 }

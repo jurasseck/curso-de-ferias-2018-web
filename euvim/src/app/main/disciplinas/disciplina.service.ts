@@ -23,7 +23,7 @@ export class DisciplinaService {
   }
 
   getItem(identifier){
-    return this._httpClient.get(this._urlDisciplina+"/"+identifier);
+    return this._httpClient.get<any>(this._urlDisciplina+"/"+identifier);
   }
 
   listar(){

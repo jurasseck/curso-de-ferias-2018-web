@@ -927,7 +927,7 @@ export class DisciplinaService {
   }
 
   getItem(identifier){
-    return this._httpClient.get(this._urlDisciplina+"/"+identifier);
+    return this._httpClient.get<any>(this._urlDisciplina+"/"+identifier);
   }
 
   listar(){
@@ -1251,28 +1251,260 @@ Então no nosso start, sem o ajuste dos professores, nosso disciplinas/formulari
       <span fxFlex="5"></span>
       <img class="urlLogo" [src]="form.controls['urlLogo'].value" (error)="failLoad($event)"/>
     </div>
+    <div fxFlex="100" fxLayout="row">
+      <mat-form-field fxFlex="75"> 
+        <mat-select  placeholder="Professores" >
+            <mat-option *ngFor="let seg of segmentos" [value]="seg.value">
+              {{ seg.description }}
+            </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <span fxFlex="5"></span>
+      <button mat-raised-button  mat-icon-button color="primary"  (click)="addProfessor()">
+          <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    <br/>
+    <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
+        <button mat-raised-button color="primary"  [disabled]="!form.valid" (click)="salvar()">{{ identifier ? 'Salvar' : 'Cadastrar'}}</button>
+        <button mat-raised-button color="warn" routerLink="/main/disciplina/consulta">Cancelar</button>
+    </div>
   </form>
-  <div fxFlex="100" fxLayout="row">
-    <mat-form-field fxFlex="75"> 
-      <mat-select  placeholder="Professores" >
-          <mat-option *ngFor="let seg of segmentos" [value]="seg.value">
-            {{ seg.description }}
-          </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <span fxFlex="5"></span>
-    <button mat-raised-button  mat-icon-button color="primary"  (click)="addProfessor()">
-        <mat-icon>add</mat-icon>
-    </button>
-  </div>
-  <br/>
-  <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
-      <button mat-raised-button color="primary"  [disabled]="!form.valid" (click)="salvar()">{{ identifier ? 'Salvar' : 'Cadastrar'}}</button>
-      <button mat-raised-button color="warn" routerLink="/main/disciplina/consulta">Cancelar</button>
-  </div>
 </div>
 
 
-Agora, iremos realizar os ajustes necessários tanto no html quanto no ts, para que conseguimos, fazer a listagem de professores.
+Agora, iremos realizar os ajustes necessários tanto no html quanto no ts, para que conseguimos, fazer a listagem de professores:
+Primeiro vamos ajustar a listagem de professores, no html "disciplinas/formulario/formulario.component.html", ficando nosso select da seguinte forma:
+<mat-select [(ngModel)]="selectProf" [ngModelOptions]="{standalone: true}" placeholder="Professores" >
+    <mat-option *ngFor="let prof of professores" [value]="prof">
+      {{ prof.nome }}
+    </mat-option>
+</mat-select>
+No caso informamos: ngModelOptions como standalone, para informar que realmente vamos fazer um bind com ts sem vinculo com nosso formulário.
+E no botão, de inclusão de professor, vamos inserir o (click)="addProfessor()" e desabilitarmos caso não tenha um professor selecionado.
+<button mat-raised-button  mat-icon-button color="primary" [disabled]="selectProf == null" (click)="addProfessor()">
+    <mat-icon>add</mat-icon>
+</button>
+
+Agora vamos ajustar nosso ts "disciplinas/formulario/formulario.component.ts", para que haja a propriedade selectProf, e criarmos a o array de professores no formulário:
+Primeiro vamos incluir um array em nosso formulário, chamado instrutores:
+this.form = fb.group({
+  id: [null],
+  descricao: [null, Validators.required],
+  segmento: [null, Validators.required],
+  dataInicio: [null, Validators.required],
+  dataTermino: [null, Validators.required],
+  urlLogo: [null],
+  instrutores : fb.array([])
+})
+
+Agora vamos criar a variavel public selectProf.
+
+Agora vamos criar a função addProfessor(), esta função, será responsável por obter o id, e marcar como já selecionado, e incluir o id no arrayForm.
+addProfessor(){
+  let arrayProf = (<FormArray>this.form.get("instrutores"));
+  if(!arrayProf.value.includes(this.selectProf.id)){
+    arrayProf.value.push(this.selectProf.id);
+  }
+  this.selectProf.selected = true;
+  delete this.selectProf;
+}
+
+Agora vamos fazer com que nossa listagem html, remova o professor do select, e vamos criar uma listagem abaixo com opção de eclusão dos selecionados:
+Vamos umsar o ng-container pois como precisamos de 2 funções do angular em DOM.
+<ng-container *ngFor="let prof of professores">
+  <mat-option *ngIf="!prof.selected" [value]="prof">
+    {{ prof.nome }}
+  </mat-option>
+</ng-container>
+
+Agora vamos criar nossa listagem, vamos usar MatListModule, para criarmos a listagem de professores, para isto precisamos primeiramente incluir essa importação em disciplinas.module.ts.
+import { MatTableModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatTooltipModule, MatSelectModule, MatOptionModule, MatDatepickerModule, MatNativeDateModule, MAT_DATE_LOCALE, MatListModule } from '@angular/material';
+modules [
+  ...
+  MatListModule
+  ...
+]
+
+Agora vamos ajustar nosso html "disciplinas/formulario/formulario.component.html", e incluirmos a listagem
+https://material.angular.io/components/list/examples
+<mat-list *ngIf="form.get('instrutores').value.length > 0">
+    <h3 mat-subheader>Professores selecionados</h3>
+    <ng-container *ngFor="let id of form.get('instrutores').value">
+      <mat-list-item>
+          <button mat-mini-fab type="button" color="warn" (click)="removerProfessor(id)">
+              <mat-icon>delete</mat-icon>
+          </button>
+          <p fxFlexOffset="10px">
+            {{nomeProfessor(id)}}
+          </p>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </ng-container>
+</mat-list>
+<br/>
+
+Para melhor visualização coloquei essa propertie a mais no scss:
+img.urlLogo{
+    height: 50px;
+}
+mat-divider{
+    margin: 10px!important;
+}
+
+Porém como nosso array de professor só há o ID, precisamos criar a função no TS que será responsável por retornar o nome do professor, que denominamos no html acima como nomeProfessor();
+A função ficaria dessa forma em "disciplicas/formulario/formulario.component.ts"
+nomeProfessor(id){
+  let item = this.professores.find(item=>{ return item.id == id});
+  return item ? item.nome : "Professor indisponível";
+}
+
+E também precisamos fazer a função responsável por remover um professor que denominamos como removerProfessor, então no TS "disciplicas/formulario/formulario.component.ts" vamos fazer a seguinte função.
+removerProfessor(id){
+  let arrayProf = (<FormArray>this.form.get("instrutores"));
+  let index = arrayProf.value.findIndex(item=>{return item == id});
+  if(index > -1){
+    arrayProf.value.splice(index,1);
+  }
+  let item = this.professores.find(item=>{ return item.id == id});
+  item.selected = false;
+}
+
+Agora, sabemos que precisamos de um número mínimo de professores para uma aula, vamos ajustar nosso html vamos editar para exibir a mensagem informativa sobre o minimo de professores e desabilitando o botão caso não haja.
+"disciplinas/formulario/formulario.componente.html"
+<mat-hint>
+    Necessário pelo menos 2 professores cadastrados
+</mat-hint>
+[disabled]="!form.valid || form.get('instrutores').value.length < 2"
+
+Nosso html final ficará desta forma: 
+<div  fxLayout="column">
+  <form [formGroup]="form"  fxLayout="column">
+    <div fxFlex="100" fxLayout="row">  
+      <mat-form-field fxFlex="47"> 
+        <mat-select formControlName="segmento" placeholder="Segmento" >
+            <mat-option *ngFor="let seg of segmentos" [value]="seg.value">
+              {{ seg.description }}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls['segmento'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+      <span fxFlex="5"></span>
+      <mat-form-field fxFlex="47"> 
+        <input matInput formControlName="descricao" placeholder="Descrição" >
+        <mat-error *ngIf="form.controls['descricao'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex="100" fxLayout="row">
+      <mat-form-field fxFlex="47"> 
+        <input matInput (keypress)="openCalendar(dtInicio);" formControlName="dataInicio" [matDatepicker]="dtInicio" placeholder="Data Início">
+        <mat-datepicker-toggle matSuffix [for]="dtInicio"></mat-datepicker-toggle>
+        <mat-datepicker #dtInicio touchUi="true"></mat-datepicker>
+        <mat-error *ngIf="form.controls['dataInicio'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+      <span fxFlex="5"></span>
+      <mat-form-field fxFlex="47"> 
+        <input matInput (keypress)="openCalendar(dtTermino);" formControlName="dataTermino" [matDatepicker]="dtTermino" placeholder="Data Término">
+        <mat-datepicker-toggle matSuffix [for]="dtTermino"></mat-datepicker-toggle>
+        <mat-datepicker #dtTermino touchUi="true"></mat-datepicker>
+        <mat-error *ngIf="form.controls['dataTermino'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex="100" fxLayout="row">
+      <mat-form-field fxFlex="75"> 
+          <input matInput formControlName="urlLogo" placeholder="Url Logo" >
+          <mat-error *ngIf="form.controls['urlLogo'].hasError('required')">
+            Campo obrigatório
+          </mat-error>
+      </mat-form-field>
+      <span fxFlex="5"></span>
+      <img class="urlLogo" [src]="form.controls['urlLogo'].value" (error)="failLoad($event)"/>
+    </div>
+    <div fxFlex="100" fxLayout="row">
+      <mat-form-field fxFlex="75"> 
+        <mat-select [(ngModel)]="selectProf" [ngModelOptions]="{standalone: true}" placeholder="Professores" >
+            <ng-container *ngFor="let prof of professores">
+              <mat-option *ngIf="!prof.selected" [value]="prof">
+                {{ prof.nome }}
+              </mat-option>
+            </ng-container>
+        </mat-select>
+        <mat-hint>
+            Necessário pelo menos 2 professores cadastrados
+        </mat-hint>
+      </mat-form-field>
+      <span fxFlex="5"></span>
+      <button mat-raised-button  mat-icon-button color="primary" type="button" [disabled]="selectProf == null" (click)="addProfessor()">
+          <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    <mat-list *ngIf="form.get('instrutores').value.length > 0">
+        <h3 mat-subheader>Professores selecionados</h3>
+        <ng-container *ngFor="let id of form.get('instrutores').value">
+          <mat-list-item>
+              <button mat-mini-fab type="button" color="warn" (click)="removerProfessor(id)">
+                  <mat-icon>delete</mat-icon>
+              </button>
+              <p fxFlexOffset="10px">
+                {{nomeProfessor(id)}}
+              </p>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+        </ng-container>
+    </mat-list>
+    <br/>
+    <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
+        <button mat-raised-button color="primary"  [disabled]="!form.valid || form.get('instrutores').value.length < 2" (click)="salvar()">{{ identifier ? 'Salvar' : 'Cadastrar'}}</button>
+        <button mat-raised-button color="warn" routerLink="/main/disciplina/consulta">Cancelar</button>
+    </div>
+  </form>
+</div>
+
+Vamos iniciar as alterações do comportamento do onInit para que atenda agora a atualização dos dados.
+Primeiro vamos verficiar se o disciplina.service.ts o método getItem está como <any>
+return this._httpClient.get<any>(this._urlDisciplina+"/"+identifier);
+
+Após isto vamos alterar, o NgOnit para atribuir os valores, por parametro, para que possamos percorrer e tratar nossa combobox referente aos professores que já vierem selecionados.
+ngOnInit() {
+    this.identifier = null;    
+    this._activateRoute.params.subscribe(params=>{
+      this.identifier = params['id'];
+    })
+    this._professorService.listarProfessores().subscribe(suc=>{
+      this.professores = suc;
+    })
+    if(this.identifier){
+      this._disciplinaService.getItem(this.identifier).subscribe(suc=>{
+        var item = suc;
+        this.form.setValue({
+          id: suc.id,
+          descricao: suc.descricao,
+          segmento: suc.segmento,
+          dataInicio: suc.dataInicio,
+          dataTermino: suc.dataTermino,
+          urlLogo: suc.urlLogo,
+          instrutores:[]
+        });
+        suc.instrutores.forEach(element => {
+          let item = this.professores.find(item=>{ return item.id == element});
+          if(item){
+            this.selectProf = item;
+            this.addProfessor();
+          }
+        });
+      });
+    }
+  }
+
+
+
 
 
