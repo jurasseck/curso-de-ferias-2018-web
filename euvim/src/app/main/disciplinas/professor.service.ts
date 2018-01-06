@@ -9,10 +9,15 @@ export class ProfessorService {
 
   constructor(private _httpClient:HttpClient ) { }
 
-  private _urlDisciplina = environment.URL+"usuarios";
+  private _urlProfessores = environment.URL+"usuarios";
 
   listarProfessores(){
     let httpParams = new HttpParams().set("tipo","PROFESSOR")
-    return this._httpClient.get<Array<Object>>(this._urlDisciplina, {params:httpParams});
+    return this._httpClient.get<Array<Object>>(this._urlProfessores, {params:httpParams});
+  }
+
+  getItem(id){
+    let httpParams = new HttpParams().set("tipo","PROFESSOR")
+    return this._httpClient.get<any>(this._urlProfessores+"/"+id, {params:httpParams});
   }
 }

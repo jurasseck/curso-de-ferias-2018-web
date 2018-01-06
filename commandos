@@ -1041,11 +1041,11 @@ export class ProfessorService {
 
   constructor(private _httpClient:HttpClient ) { }
 
-  private _urlDisciplina = environment.URL+"usuarios";
+  private _urlProfessores = environment.URL+"usuarios";
 
   listarProfessores(){
     let httpParams = new HttpParams().set("tipo","PROFESSOR")
-    return this._httpClient.get<Array<Object>>(this._urlDisciplina, {params:httpParams});
+    return this._httpClient.get<Array<Object>>(this._urlProfessores, {params:httpParams});
   }
 }
 
@@ -1063,7 +1063,7 @@ então mudaremos public profiles para  public segmentos = [
 Logo após o item do identifier, vamos criar um public de professores um array vazio: [], que iremos popular no ngOnINit.
 Em nosso construtor, temores um serviço a mais que será o de professores: private _professorService: ProfessorService
 
-O formulário, que é criado no contrutor por hora não vamos incluir o array de professores:
+O formulário, que é criado no construtor por hora não vamos incluir o array de professores:
 this.form = fb.group({
 	id: [null],
 	descricao: [null, Validators.required],
@@ -1273,6 +1273,12 @@ Então no nosso start, sem o ajuste dos professores, nosso disciplinas/formulari
 </div>
 
 
+Para melhor visualização da imagem coloquei essa propertie a mais no (disciplinas/formulario/formulario.component.scss) scss:
+img.urlLogo{
+    height: 50px;
+}
+
+
 Agora, iremos realizar os ajustes necessários tanto no html quanto no ts, para que conseguimos, fazer a listagem de professores:
 Primeiro vamos ajustar a listagem de professores, no html "disciplinas/formulario/formulario.component.html", ficando nosso select da seguinte forma:
 <mat-select [(ngModel)]="selectProf" [ngModelOptions]="{standalone: true}" placeholder="Professores" >
@@ -1343,14 +1349,6 @@ https://material.angular.io/components/list/examples
     </ng-container>
 </mat-list>
 <br/>
-
-Para melhor visualização coloquei essa propertie a mais no scss:
-img.urlLogo{
-    height: 50px;
-}
-mat-divider{
-    margin: 10px!important;
-}
 
 Porém como nosso array de professor só há o ID, precisamos criar a função no TS que será responsável por retornar o nome do professor, que denominamos no html acima como nomeProfessor();
 A função ficaria dessa forma em "disciplicas/formulario/formulario.component.ts"
@@ -1505,6 +1503,203 @@ ngOnInit() {
   }
 
 
+Com isto finalizamos nossos crud de Usuários e Disciplinas.
+
+Aula 07 - Geração de QRCode, e exibição dos nomes dos professores, na listagem de disciplinas, e se der início do relatório.
+
+Link documentação sobre dialog:
+https://material.angular.io/components/dialog/examples
+
+Vamos iniciar com a exibição dos nomes dos professores, então vamos criar um componente que será nosso dialog, para que possamos colocar o icone no nosso formulário chamando este pop-up.
+Para isto vamos na pasta "euvim\src\app\main\disciplinas\consulta" e vamos pedir para o angular cli gerar nosso componente.
+ng g component professor-dialog
+
+Com isso ele já inseriu algumas entradas em disciplinas.module.ts porém não inseriu a entrada do component de dialog, então inserimos no NgModule
+entryComponents: [ProfessorDialogComponent],
+
+Agora dentro de "professor-dialog.component.ts" vamos remover o ngOnInit pois não iremos utilizar.
+Vamos ajustar seu construtor para injeção dos dados que iremos preencher nosso dialog.
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
+ constructor(
+    public dialogRef: MatDialogRef<ProfessorDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
+
+Referente a utilização do @Inject 
+https://angular-2-training-book.rangle.io/handout/di/angular2/inject_and_injectable.html
 
 
+Agora precisamos ir no modulo de disciplinas.module.ts e importarmos o MatDialogModule
+import { MatTableModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatTooltipModule, MatSelectModule, MatOptionModule, MatDatepickerModule, MatNativeDateModule, MAT_DATE_LOCALE, MatListModule, MatDialogModule } from '@angular/material';
+ imports: [
+   ...
+   MatDialogModule,
+   ...
+ ]
+
+Vamos modificar nossa listagem de disciplinas para que ele chame nossa dialog, passando o seu array de id's de professores, para que possamos iniciar as modificações necessárias.
+então em "main/disciplina/consulta.component.html"
+<button mat-icon-button (click)="dialogProfessores(element.instrutores)" matTooltip="Visualizar">
+    {{element.instrutores.length}} 
+</button>
+
+agora em "main/disciplina/consulta.component.ts" vamos criar a função dialogProfessores para chamarmos nosso card;
+vamos injetar MatDialog em nosso construtor
+import { MatTableDataSource, MatDialog } from '@angular/material';
+constructor(private _disciplinaService:DisciplinaService, private _router: Router, public dialog: MatDialog) { }
+
+Agora vamos criar nossa função dialogProfessores(), 
+dialogProfessores(listProf){
+    let dialogRef = this.dialog.open(ProfessorDialogComponent, {
+    width: '250px',
+    data: { professores: listProf }
+  });
+}
+
+Com isto já conseguimos visualizar nosso pop-up porém está com um HTML, informando que o component está funcionando, irei colocar a consulta dos dados, no pop-up,
+Poderiamos fazer isto na camada da consulta, e já passar a listagem dos nomes tratados, porém isso pode ficar a encargo de vocês.
+Para isto irei em disciplinas/professor.service.ts e criarei o método de consulta por id de professor:
+getItem(id){
+  let httpParams = new HttpParams().set("tipo","PROFESSOR")
+  return this._httpClient.get<any>(this._urlProfessores+"/"+id, {params:httpParams});
+}
+
+Agora em professor-dialog.component.ts irei faver a injeção do professor.service.ts e realizar a chamada para ter a listagem de nomes de professores:
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
+import { ProfessorService } from "../../professor.service";
+@Component({
+  selector: 'professor-dialog',
+  templateUrl: './professor-dialog.component.html',
+  styleUrls: ['./professor-dialog.component.scss']
+})
+export class ProfessorDialogComponent {
+ public nomeProfessores = [];
+ constructor(
+    public dialogRef: MatDialogRef<ProfessorDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private ProfessorService : ProfessorService
+  ) {
+      data.professores.forEach(element => {
+        this.ProfessorService.getItem(element).subscribe((suc)=>{
+          this.nomeProfessores.push(suc);
+        })
+      });
+     }
+}
+
+Agora vamos ajustar nosso HTML para que realize o ngFor com os nomes dos professores, e tenha um título, então em professor-dialog.component.html
+<h1 mat-dialog-title>Instrutores</h1>
+<div *ngFor="let item of nomeProfessores">
+  <p>{{item.nome}} <br/> {{item.email}}</p>
+</div>
+
+Com isso finalizamos nosso card para listagem dos professores, e iremos iniciar a criação do QrCode para realizar a presença dos alunos, para não precisarmos codificar um qr code podemos utilizar de uma api do google sendo ela:
+https://developers.google.com/chart/infographics/docs/qr_codes
+Um exemplo:
+https://chart.googleapis.com/chart?cht=qr&choe=UTF-8&chs=207x207&chl=mensagem
+
+
+Então vamos replicar nossa dialog, ou criarmos um com ng g component. o nome dessa nova dialog será qr-code-dialog.
+Irei criar pelo ng g component - :
+Para isto vamos na pasta "euvim\src\app\main\disciplinas\consulta" e vamos pedir para o angular cli gerar nosso componente.
+ng g component qr-code-dialog
+
+Com isso ele já inseriu algumas entradas em disciplinas.module.ts porém não inseriu a entrada do component de dialog, então inserimos no NgModule
+entryComponents: [ProfessorDialogComponent, QrCodeDialogComponent],
+
+Agora dentro de "qr-code-dialog.component.ts" vamos remover o ngOnInit pois não iremos utilizar.
+Vamos ajustar seu construtor para injeção dos dados que iremos preencher nosso dialog.
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
+ constructor(
+    public dialogRef: MatDialogRef<QrCodeDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
+
+Referente a utilização do @Inject 
+https://angular-2-training-book.rangle.io/handout/di/angular2/inject_and_injectable.html
+
+Vamos modificar nossa listagem de disciplinas para que ele chame nossa dialog, passando o id da disciplina, para que possamos gerar nosso qrCode.
+então em "main/disciplina/consulta.component.html", vamos adicionar mais um função chamada qrCode:
+<mat-header-cell *matHeaderCellDef  fxFlex="15"> Ações </mat-header-cell>
+<mat-cell *matCellDef="let element" fxFlex="15" class="buttons">
+    <button mat-icon-button matTooltip="QrCode">
+        <mat-icon class="md-24" (click)="qrCode(element)" aria-label="QrCode">screen_lock_portrait</mat-icon>
+    </button>
+    <button mat-icon-button color="primary"  matTooltip="Editar">
+      <mat-icon class="md-24"  (click)="editar(element.id)" aria-label="Editar">edit</mat-icon>
+    </button>
+    <button mat-icon-button color="warn" matTooltip="Remover">
+        <mat-icon class="md-24" (click)="remover(element.id)" aria-label="Remover">delete</mat-icon>
+    </button>
+</mat-cell>
+
+
+agora em "main/disciplina/consulta.component.ts" vamos criar a função qrCode() para chamarmos nosso card;
+qrCode(item){
+  let dialogRef = this.dialog.open(QrCodeDialogComponent, {
+    width: '250px',
+    data: { idCurso: item.id, descricao:item.descricao }
+  });
+}
+
+Agora vamos ajustar nosso construtor, do qr-code-dialog.component.ts para que ele crie um link, para mostrarmos a imagem no html:
+Para nosso qr code iremos atribuir, a data em ISO em um parametro do objeto e o transformalo em string de base 64;
+public urlQrCode = null;
+constructor(
+  public dialogRef: MatDialogRef<QrCodeDialogComponent>,
+  @Inject(MAT_DIALOG_DATA) public data: any) {
+    data.time = new Date().toISOString()
+    this.urlQrCode = "https://chart.googleapis.com/chart?cht=qr&choe=UTF-8&chs=207x207&chl="+btoa(JSON.stringify(data));
+}
+
+agora em qr-code-dialog.component.html vamos ajustar para que ele exiba a imagem do qrCode
+<h1 mat-dialog-title>Presença {{data.descricao}}</h1>
+<p align="center">
+  <img [src]="urlQrCode" >
+</p>
+
+
+Pronto, agora ja temos um qrCode para presença, e a listagem de professores, agora iremos iniciar, a parte do relatório de presenças.
+Para isto vamos na pasta main "euvim\src\app\main" e vamos criar o módulo de relatório
+ng g module relatorio
+dentro da pasta "euvim\src\app\main\relatorio" vamos criar um componente chamado presenca
+ng g component presenca
+
+agora vamos criar um arquivo na pasta "euvim\src\app\main\relatorio" chamado relatorio.routing.ts onde iremos redirecional qualquer end-point para este componente.
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { PresencaComponent } from "./presenca/presenca.component";
+@NgModule({
+  imports: [
+    RouterModule.forChild([
+      {
+        path: '**',
+        component: PresencaComponent
+      }
+    ])
+  ]
+})
+export class RelatorioRouting { }
+
+E vamos atribuilo ao nosso módulo.
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { PresencaComponent } from './presenca/presenca.component';
+import { RelatorioRouting } from "./relatorio.routing";
+
+@NgModule({
+  imports: [
+    CommonModule,
+    RouterModule,
+    RelatorioRouting
+  ],
+  declarations: [PresencaComponent]
+})
+export class RelatorioModule { }
+
+Agora vamos informar para o módulo main, que para todo end-point /relatorio carregue esse nosso módulo "main.routing.ts"
+{
+  path: 'relatorio',
+  loadChildren: './relatorio/relatorio.module#RelatorioModule'
+}
 

@@ -16,6 +16,10 @@ import { MainComponent } from './main.component';
           {
             path: 'disciplina',
             loadChildren: './disciplinas/disciplina.module#DisciplinaModule'
+          },
+          {
+            path: 'relatorio',
+            loadChildren: './relatorio/relatorio.module#RelatorioModule'
           }
         ]
       }
