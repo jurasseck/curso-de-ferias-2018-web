@@ -18,6 +18,7 @@ Sumário
 * [Hands-on](#hands-on)
   * [Node](#node)
   * [NPM](#npm)
+  * [NVM](#nvm)
   * [Angular CLI](#angular-cli)
 
 Conceitos
@@ -208,12 +209,15 @@ NPM
   NPM vem de Node Package Manager ou gerenciador de pacotes do Node. O NPM é distribuído juntamente com a plataforma do node e é por meio dele que iremos instalar todas nossas dependências de desenvolvimento e bibliotecas.
   
   * Instalando a versão do NPM
+  
   `npm install npm@latest -g`
   
   * Verificando a versão do NPM
+  
   `npm -v`
   
   * Atualizando a versão do NPM
+  
   `npm install npm@8.9.1 -g`
   
 NVM
@@ -222,10 +226,13 @@ NVM
   NVM vem de Node Version Manager ou gerenciador de versões do Node.
   
   * Verificando a versão do NVM
+  
   `nvm --version`
   
   * Instalando ou atualizando Node
+  
   `nvm install node`
+  
 Angular CLI
 -----------
   
