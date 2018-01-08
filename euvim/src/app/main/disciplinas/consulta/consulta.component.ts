@@ -3,11 +3,11 @@ import { DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { MatTableDataSource, MatDialog } from '@angular/material';
-import { DisciplinaService } from '../disciplina.service';
 import { Router } from '@angular/router';
 import { Navigation } from 'selenium-webdriver';
 import { ProfessorDialogComponent } from "./professor-dialog/professor-dialog.component";
 import { QrCodeDialogComponent } from "./qr-code-dialog/qr-code-dialog.component";
+import { DisciplinaService } from '../../../services/disciplina.service';
 
 @Component({
   selector: 'app-consulta',

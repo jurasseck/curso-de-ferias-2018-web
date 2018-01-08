@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, Inject } from '@angular/core';
-import { DisciplinaService } from '../disciplina.service';
+import { DisciplinaService } from '../../../services/disciplina.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProfessorService } from '../professor.service';

@@ -1703,3 +1703,341 @@ Agora vamos informar para o módulo main, que para todo end-point /relatorio car
   loadChildren: './relatorio/relatorio.module#RelatorioModule'
 }
 
+Vamos ajustar nosso menu para que o link de relatório envie para este endereço "main.component.html":
+<mat-list-item>
+    <button mat-icon-button >
+        <mat-icon>info</mat-icon>
+    </button>
+  <a mdLine routerLink="/main/relatorio"  (click)="sidenav.close()">Relatório</a>
+</mat-list-item>
+
+
+Agora vamos iniciar nosso relatório, porém temos um serviço que é comum, entre disciplinas e o relatório que é a obtenção da listagem.
+Podemos extrair este service para uma camada acima, juntamente com o validators, criarmos uma nova pasta chamada services
+E nela deixarmos este serviço, para que ambos os módulos chamem ele, e assim um módulo não depender do outro, e sem do TS comum.
+
+Para isto recortamos o disciplina.service.ts para a pasta /services/disciplina.service.ts, 
+ajustamos sua importação referente ao environment
+import { environment } from '../../environments/environment';
+
+depois ajustamos a importação do módulo disciplina.module.ts
+import { DisciplinaService } from '../../services/disciplina.service';
+
+e ajustamos também a importação nos componentes de disciplinas:
+consulta.component.ts e formulario.component.ts
+import { DisciplinaService } from '../../../services/disciplina.service';
+
+Com isto nosso serviço ficou externalizado do módulo e podendo ser chamado por outros módulos, sem dependencia modular de um para outro.
+Assim vamos utilizar este serviço no nosso relatorio.module.ts
+
+Agora vamos criar o novo serviço chamado relatorio.service.ts dentro da pasta, "main/relatorio" 
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import { environment } from '../../../environments/environment';
+@Injectable()
+export class RelatorioService {
+
+  constructor(private _httpClient:HttpClient ) { }
+  private _urlRelatorio = environment.URL+"relatorio";
+  getPresencaDisciplina(disciplina){
+    return this._httpClient.get<Array<any>>(this._urlRelatorio+"/"+disciplina);
+  }
+}
+
+Levando em consideração o layout que queremos fazer, vamos precisar importar estes serviços e alguns componentes do angular material, nosso relatorio.module.ts ficaria com as seguintes dependencias:
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { PresencaComponent } from './presenca/presenca.component';
+import { RelatorioRouting } from "./relatorio.routing";
+import { MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatTooltipModule, MatSelectModule, MatOptionModule, MatDatepickerModule, MatNativeDateModule, MatListModule, MatDialogModule, MAT_DATE_LOCALE, MatExpansionModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { ReactiveFormsModule, FormsModule, FormBuilder } from '@angular/forms';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { DisciplinaService } from '../../services/disciplina.service';
+import { RelatorioService } from './relatorio.service';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    RouterModule,
+    RelatorioRouting,
+    MatIconModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FlexLayoutModule,
+    MatTooltipModule,
+    MatSelectModule, 
+    MatOptionModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatListModule,
+    MatDialogModule,
+    MatExpansionModule,
+    HttpClientModule
+  ],
+  declarations: [PresencaComponent],
+  providers: [HttpClient,FormBuilder, DisciplinaService, RelatorioService , {provide: MAT_DATE_LOCALE, useValue: 'pt-br'}]
+})
+export class RelatorioModule { }
+
+
+Agora iniciaremos a criação do nosso HTML (presenca.component.html), incluindo campos e formulário, sem vinculos com o ts, para manipulação inicial:
+Vamos criar um Painel Expansivo para os filtros, e sua listagem também será comporta com o painel:
+http://storage1.static.itmages.com/i/18/0108/h_1515441375_3008489_e99c436cdd.png
+
+e nossa listagem quando filtrarmos ficará desta forma com painel expansivo:
+http://storage4.static.itmages.com/i/18/0108/h_1515441415_6753914_d4eceb5926.png
+
+Por horá só tem html, e variaveis manipuladas pelo pŕoprio html, sem nenhum fluxo implementado no ts:
+variavel utilizada no html para comportamento do filtro é a "filtred" e utilizamos as mesmas chamadas do calendário da tela anterior: (keypress)="openCalendar(dtInicio);"
+
+Abaixo o html (como pode ver já deixei comentado nossas tag de erro referente ao formulário que vamos manipular):
+<div class="mat-elevation-z8">
+  <mat-accordion class="example-headers-align">
+    <mat-expansion-panel [expanded]="!filtred" (opened)="filtred = false" hideToggle="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title fxFlex="70">
+          <mat-icon>filter_list</mat-icon> 
+          <div fxFlexOffset="10px"> Filtros</div>
+        </mat-panel-title>
+      </mat-expansion-panel-header>  
+      <form fxLayout="column">
+        <div fxFlex="100" fxLayout="row">  
+          <mat-form-field fxFlex="47"> 
+            <mat-select  placeholder="Disciplina" >
+                <mat-option *ngFor="let disc of disciplinas"  [value]="disc.id">
+                  {{ disc.descricao }}
+                </mat-option>
+            </mat-select>
+            <!--mat-error *ngIf="form.controls['disciplina'].hasError('required')">
+              Campo obrigatório
+            </mat-error-->
+          </mat-form-field>
+        </div>
+        <div fxFlex="100" fxLayout="row">
+          <mat-form-field fxFlex="47"> 
+            <input matInput (keypress)="openCalendar(dtInicio);"  [matDatepicker]="dtInicio" placeholder="Data Início">
+            <mat-datepicker-toggle matSuffix [for]="dtInicio"></mat-datepicker-toggle>
+            <mat-datepicker #dtInicio touchUi="true"></mat-datepicker>
+            <!--mat-error *ngIf="form.controls['dataInicio'].hasError('required')">
+              Campo obrigatório
+            </mat-error-->
+          </mat-form-field>
+          <span fxFlex="5"></span>
+          <mat-form-field fxFlex="47"> 
+            <input matInput (keypress)="openCalendar(dtTermino);"  [matDatepicker]="dtTermino" placeholder="Data Término">
+            <mat-datepicker-toggle matSuffix [for]="dtTermino"></mat-datepicker-toggle>
+            <mat-datepicker #dtTermino touchUi="true"></mat-datepicker>
+            <!--mat-error *ngIf="form.controls['dataTermino'].hasError('required')">
+              Campo obrigatório
+            </mat-error-->
+          </mat-form-field>
+        </div>
+        <br/>
+        <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
+            <button mat-raised-button (click)="filtred=true" color="primary" >Filtrar</button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+<br/>
+<div *ngIf="filtred" class="mat-elevation-z8">
+
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title fxFlex="70">
+          José
+        </mat-panel-title>
+        <mat-panel-description>
+          Frequência 10%
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <mat-list>
+        <h3 matSubheader>Presenças</h3>
+        <mat-list-item>
+          <mat-icon matListIcon>check</mat-icon>
+          <h3 matLine> Presente </h3>
+          <p matLine>
+            <span> XX/XX/XXXX </span>
+          </p>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+            <mat-icon matListIcon>remove</mat-icon>
+            <h3 matLine> Ausência </h3>
+            <p matLine>
+              <span> XX/XX/XXXX </span>
+            </p>
+          </mat-list-item>
+        <mat-divider></mat-divider>
+      </mat-list>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+
+Agora vamos iniciar nosso ts, criando inicialmente nosso formulário para que possamos ajustar nosso comportamento do formulário.
+openCalendar(item){
+  item.open();
+}
+
+Agora vamos obter a lista de disciplinas, primeiro injetamos a disciplina depois atribuimos a listagem disciplinas:
+  import { DisciplinaService } from '../../../services/disciplina.service';
+
+  public disciplinas=[];
+
+  constructor(private _disciplinaService:DisciplinaService) { }
+
+  ngOnInit() {
+    this._disciplinaService.listar().subscribe(suc=>{
+      this.disciplinas = suc;
+    })
+  }
+
+Com isto nossa listagem já começara a funcionar, agora vamos criar nosso formulário para validarmos a request, e habilitar/desabilitar o botão filtrar, e realizarmos a ação de busca:
+import { Component, OnInit } from '@angular/core';
+import { DisciplinaService } from '../../../services/disciplina.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RelatorioService } from '../relatorio.service';
+
+@Component({
+  selector: 'app-presenca',
+  templateUrl: './presenca.component.html',
+  styleUrls: ['./presenca.component.scss']
+})
+export class PresencaComponent implements OnInit {
+
+  public filtred: boolean;
+  public disciplinas = [];
+  public relatorio=[];
+  public form: FormGroup;
+
+  constructor(private _disciplinaService: DisciplinaService,
+              private _relatorioService: RelatorioService,
+              private _form: FormBuilder) {
+    this.form = this._form.group({
+      disciplina: [null, Validators.required],
+      dataInicio: [null, Validators.required],
+      dataFim: [null, Validators.required]
+    })
+  }
+
+  ngOnInit() {
+    this._disciplinaService.listar().subscribe(suc => {
+      this.disciplinas = suc;
+    })
+  }
+
+  openCalendar(item) {
+    item.open();
+  }
+
+  gerarRelatorio() {
+    this.filtred = []
+    this.relatorio=null;
+    this._relatorioService.getPresencaDisciplina(this.form.value).subscribe(suc=>{
+      this.relatorio = suc;
+    })
+  }
+}
+
+Agora ajustamos o html, para bloquear o botão filtrar e realizar o ngIf referente aos usuários presentes:
+<div class="mat-elevation-z8">
+  <mat-accordion class="example-headers-align">
+    <mat-expansion-panel [expanded]="!filtred" [disabled]="!filtred" (opened)="filtred = false" hideToggle="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title fxFlex="70">
+          <mat-icon>filter_list</mat-icon> 
+          <div fxFlexOffset="10px"> Filtros</div>
+        </mat-panel-title>
+      </mat-expansion-panel-header>  
+      <form [formGroup]="form" fxLayout="column">
+        <div fxFlex="100" fxLayout="row">  
+          <mat-form-field fxFlex="47"> 
+            <mat-select formControlName="disciplina"  placeholder="Disciplina" >
+                <mat-option *ngFor="let disc of disciplinas" [value]="disc.id">
+                  {{ disc.descricao }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls['disciplina'].hasError('required')">
+              Campo obrigatório
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100" fxLayout="row">
+          <mat-form-field fxFlex="47"> 
+            <input matInput (keypress)="openCalendar(dtInicio);" formControlName="dataInicio"  [matDatepicker]="dtInicio" placeholder="Data Início">
+            <mat-datepicker-toggle matSuffix [for]="dtInicio"></mat-datepicker-toggle>
+            <mat-datepicker #dtInicio touchUi="true"></mat-datepicker>
+            <mat-error *ngIf="form.controls['dataInicio'].hasError('required')">
+              Campo obrigatório
+            </mat-error>
+          </mat-form-field>
+          <span fxFlex="5"></span>
+          <mat-form-field fxFlex="47"> 
+            <input matInput (keypress)="openCalendar(dtTermino);" formControlName="dataFim"  [matDatepicker]="dtTermino" placeholder="Data Término">
+            <mat-datepicker-toggle matSuffix [for]="dtTermino"></mat-datepicker-toggle>
+            <mat-datepicker #dtTermino touchUi="true"></mat-datepicker>
+            <mat-error *ngIf="form.controls['dataFim'].hasError('required')">
+              Campo obrigatório
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <br/>
+        <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
+            <button mat-raised-button (click)="gerarRelatorio()" [disabled]="!form.valid" color="primary" >Filtrar</button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+<br/>
+<div *ngIf="filtred" class="mat-elevation-z8">
+
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let item of relatorio">
+      <mat-expansion-panel-header>
+        <mat-panel-title fxFlex="70">
+          {{item.usuario.nome}}
+        </mat-panel-title>
+        <mat-panel-description>
+          Frequência {{item.frequencia}} %
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <mat-list>
+        <h3 matSubheader>Presenças</h3>
+        <mat-list-item>
+          <mat-icon matListIcon>check</mat-icon>
+          <h3 matLine> Presente </h3>
+          <p matLine>
+            <span> XX/XX/XXXX </span>
+          </p>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+            <mat-icon matListIcon>remove</mat-icon>
+            <h3 matLine> Ausência </h3>
+            <p matLine>
+              <span> XX/XX/XXXX </span>
+            </p>
+          </mat-list-item>
+        <mat-divider></mat-divider>
+      </mat-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+
+Porém nossa listagem, vai ficar extensa fazendo o HTML, vamos criar um component e usar Input para fazer esse detalhe.
+
+
+
+
+

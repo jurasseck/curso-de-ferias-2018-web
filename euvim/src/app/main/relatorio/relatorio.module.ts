@@ -3,13 +3,36 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { PresencaComponent } from './presenca/presenca.component';
 import { RelatorioRouting } from "./relatorio.routing";
+import { MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatTooltipModule, MatSelectModule, MatOptionModule, MatDatepickerModule, MatNativeDateModule, MatListModule, MatDialogModule, MAT_DATE_LOCALE, MatExpansionModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { ReactiveFormsModule, FormsModule, FormBuilder } from '@angular/forms';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { DisciplinaService } from '../../services/disciplina.service';
+import { RelatorioService } from './relatorio.service';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
-    RelatorioRouting
+    RelatorioRouting,
+    MatIconModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FlexLayoutModule,
+    MatTooltipModule,
+    MatSelectModule, 
+    MatOptionModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatListModule,
+    MatDialogModule,
+    MatExpansionModule,
+    HttpClientModule
   ],
-  declarations: [PresencaComponent]
+  declarations: [PresencaComponent],
+  providers: [HttpClient,FormBuilder, DisciplinaService, RelatorioService , {provide: MAT_DATE_LOCALE, useValue: 'pt-br'}]
 })
 export class RelatorioModule { }
