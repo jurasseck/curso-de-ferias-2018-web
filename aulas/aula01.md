@@ -254,10 +254,39 @@ npm install --save hammerjs
 ```ng serve```
 
 ##### No arquivo index.html
-```<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">```
+```typescript
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Euvim</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  **<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">**
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>
+```
 
 ##### No arquivo src/main.js
-```import 'hammerjs';```
+``` typescript
+import { enableProdMode } from '@angular/core';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+import { AppModule } from './app/app.module';
+import { environment } from './environments/environment';
+import 'hammerjs';
+
+if (environment.production) {
+  enableProdMode();
+}
+
+platformBrowserDynamic().bootstrapModule(AppModule);
+```
 
 ##### No arquivo style.scss
 ```@import "~@angular/material/prebuilt-themes/indigo-pink.css";```
