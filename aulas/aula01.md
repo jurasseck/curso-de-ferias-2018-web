@@ -16,7 +16,7 @@ Sumário
 * [Hands-on](#hands-on)
   * [NODE](#node)
   * [NPM](#npm)
-  * [Angular CLI)(#angular-cli)
+  * [Angular CLI](#angular-cli)
 
 Conceitos
 =========
