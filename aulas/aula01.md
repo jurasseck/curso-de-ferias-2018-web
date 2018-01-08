@@ -254,6 +254,9 @@ npm install --save hammerjs
 ```ng serve```
 
 ##### No arquivo index.html
+
+```<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">```
+
 ```typescript
 <!doctype html>
 <html lang="en">
@@ -264,7 +267,7 @@ npm install --save hammerjs
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  **<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">**
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
   <app-root></app-root>
@@ -273,6 +276,8 @@ npm install --save hammerjs
 ```
 
 ##### No arquivo src/main.js
+```import 'hammerjs';```
+
 ``` typescript
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -292,6 +297,11 @@ platformBrowserDynamic().bootstrapModule(AppModule);
 ```@import "~@angular/material/prebuilt-themes/indigo-pink.css";```
 
 ##### No arquivo app.module.ts
+``` typescript
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+BrowserAnimationsModule
+```
+
 ``` typescript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -317,6 +327,17 @@ Utilizando Componente Angular Material
 ------------------------------------
 
 ##### No arquivo app.component.html
+``` typescript
+<form class="example-form">
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Favorite food" value="Sushi">
+    </mat-form-field>
+  
+    <mat-form-field class="example-full-width">
+      <textarea matInput placeholder="Leave a comment"></textarea>
+    </mat-form-field>
+  </form>
+```
 
 ``` typescript
 <!--The content below is only a placeholder and can be replaced.-->
@@ -351,6 +372,11 @@ Utilizando Componente Angular Material
 ```
 
 ##### No arquivo app.module.ts
+``` typescript
+import { MatInputModule } from '@angular/material/input';
+MatInputModule
+```
+
 ``` typescript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
