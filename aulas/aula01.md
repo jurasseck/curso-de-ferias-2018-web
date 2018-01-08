@@ -9,10 +9,12 @@ Sumário
   * [O que é o Angular (e TypeScript)?](#o-que-é-o-angular-e-typescript)
   * [O que é uma API?](#o-que-é-uma-api)
   * [O que é REST?](#o-que-é-rest)
+  * [O que é Mock?](#o-que-é-mock)
 * [Angular](#angular)
   * [Componentes](#componentes)
   * [Diretivas](#diretivas)
   * [Services](#services)
+  * [Arquitetura](#arquitetura)
 * [Hands-on](#hands-on)
   * [NODE](#node)
   * [NPM](#npm)
@@ -90,6 +92,11 @@ O que é REST?
 
   Um exemplo simples de api, é a API pública do [Pokeapi](https://pokeapi.co/), que é uma API pública para consumir dados de pokemons.
   
+O que é Mock?
+-------------
+
+TODO
+
 Angular
 =======
   
@@ -123,12 +130,6 @@ Componentes
   Para o Angular, assim como o falecido AngularJS, é muito importante a importação dos módulos e componentes que você irá fazer uso. Como convenção, você tem os arquivos main.ts, app.module.ts e o app.routes.ts, dividindo a responsabilidade da sua aplicação.
   
   O objetivo do app.module é basicamente importar todos os recursos que a aplicação irá utilizar e defini-las em um módulo – onde possamos fazer o bootstrap – ou inicialização da nossa aplicação. Essa inicialização é feita pelo main.ts, que é o core da aplicação chamado no index.html.
-  
-  Entendendo o que seja o Angular e como ele se relaciona com os Componentes, podemos passar a pensar na sua Arquitetura:
-  
-  ![Arquitetura](https://angular.io/generated/images/guide/architecture/overview2.png)
-  
-  No Angular tudo é centrado no Component. Conforme você pode analisar mais ao centro do diagrama o componente angular é definido por meio de um Metadata​, que nada mais é que aquele objeto {} definido dentro do decorador @Component​. Este mesmo componente possui um Template​ e a comunicação de dados entre a parte lógica do Componente e o Template é realizada por meio de Property Bindings, ou Ligação por meio de propriedades.
   
 Diretivas
 ---------
@@ -174,6 +175,15 @@ Services
    e pela aplicação do Service no construtor: 
    
    `constructor(private service: MyService){}`
+   
+Arquitetura
+-----------
+
+  Entendendo o que seja o Angular e como ele se relaciona com os componentes, diretivas e services, podemos passar a pensar na sua Arquitetura:
+  
+  ![Arquitetura](https://angular.io/generated/images/guide/architecture/overview2.png)
+  
+  No Angular tudo é centrado no Component. Conforme você pode analisar mais ao centro do diagrama o componente angular é definido por meio de um Metadata​, que nada mais é que aquele objeto {} definido dentro do decorador @Component​. Este mesmo componente possui um Template​ e a comunicação de dados entre a parte lógica do Componente e o Template é realizada por meio de Property Bindings, ou Ligação por meio de propriedades.
    
 Hands-on
 =======
