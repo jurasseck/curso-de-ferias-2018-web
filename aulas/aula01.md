@@ -198,12 +198,23 @@ Node
   
   [Link para download](https://nodejs.org/en/download/)
   
+  * Verificando a versão do Node
   `node -v`
   
 NPM
 ---
   
   NPM​ vem de Node Package Manager ou gerenciador de pacotes do Node. O NPM é distribuído juntamente com a plataforma do node e é por meio dele que iremos instalar todas nossas dependências de desenvolvimento e bibliotecas.
+  
+  * Instalando a versão do NPM
+  `npm install npm@latest -g`
+  
+  * Verificando a versão do NPM
+  `npm -v`
+  
+  * Atualizando a versão do NPM
+  `npm install node@8.9.1 -g`
+  
   
 Angular CLI
 -----------
