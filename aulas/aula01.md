@@ -20,6 +20,7 @@ Sumário
   * [NPM](#npm)
   * [NVM](#nvm)
   * [Angular CLI](#angular-cli)
+  * [Primeiro Projeto](#primeiro-projeto)
 
 Conceitos
 =========
@@ -232,3 +233,11 @@ Angular CLI
   
 ##### Instalando Angular CLI
 `npm i -g @angular/cli@latest`
+
+Primeiro Projeto
+----------------
+
+  Para criar um projeto Angular, utilizando do Angular CLI.
+  
+##### Criando o primeiro projeto
+`ng new euvim --style=scss`
