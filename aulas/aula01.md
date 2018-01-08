@@ -4,7 +4,7 @@ Sumário
 =======
 
 * [Conceitos](#conceitos)
-  * [O que é um Framework (Javascript)?](#o-que-é-um-framework-javascript)
+  * [O que é um Framework (Javascript)?](#o-que-é-um-framework-javascript)
 * [Angular](#angular)
 * [Hands-on](#hands-on)
 
