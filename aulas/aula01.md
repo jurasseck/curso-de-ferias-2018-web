@@ -10,7 +10,13 @@ Sumário
   * [O que é uma API?](#o-que-é-uma-api)
   * [O que é REST?](#o-que-é-rest)
 * [Angular](#angular)
+  * [Componentes](#componentes)
+  * [Diretivas](#diretivas)
+  * [Services](#services)
 * [Hands-on](#hands-on)
+  * [NODE](#node)
+  * [NPM](#npm)
+  * [Angular CLI)(#angular-cli)
 
 Conceitos
 =========
@@ -87,7 +93,8 @@ O que é REST?
 Angular
 =======
   
-  #### Componentes
+Componentes
+-----------
    
   Agora voltando para as aplicações Angular, elas são feitas a partir de um conjunto de web components. Um web componente é a combinação de estilo CSS + template HTML + classe javascript que irá dizer ao Angular como controlar uma parte da aplicação.
   
@@ -123,8 +130,9 @@ Angular
   
   No Angular tudo é centrado no Component. Conforme você pode analisar mais ao centro do diagrama o componente angular é definido por meio de um Metadata​, que nada mais é que aquele objeto {} definido dentro do decorador @Component​. Este mesmo componente possui um Template​ e a comunicação de dados entre a parte lógica do Componente e o Template é realizada por meio de Property Bindings, ou Ligação por meio de propriedades.
   
-  #### Diretivas
-  
+Diretivas
+---------
+
   O Angular também possui um recurso “mágico” para utilizar na camada de View, que são as Diretivas, que são atributos HTML especiais que aceitam um certo grau de lógica de programação na camada do template.
   
   Alguns exemplos são:
@@ -145,8 +153,9 @@ Angular
   
     `<input [(​ngModel​)]​="userName">`
   
-  #### Services
-  
+Services
+--------
+
   Services são basicamente classes _Singleton_, que é um padrão de software (do inglês _Design Pattern_), garantindo a instância única de uma classe, para assim ter um ponto global de acesso ao objeto. 
   
   Basicamente, o service serve para “guardar a lógica do negócio”, consumindo os end-points da API e retornando ou enviando os dados de acordo com a requisição vinda do componente.
@@ -169,7 +178,8 @@ Angular
 Hands-on
 =======
 
-  #### Node
+Node
+----
   
   Em linhas gerais o node.js é uma plataforma escrita em javascript feita para rodar código javascript. Em uma simples analogia, o Node.js seria a soma do PHP+Apache. é importante frisar que o Node.js roda código javascript apenas no lado do servidor.
   Utilizaremos o node aqui não para criar API's ou renderizar HTML no lado do servidor. Iremos utilizar o node como ferramenta principal para desenvolvimento. Por meio dele vamos instalar a linha de comando do angular e executar nossa aplicação localmente.
@@ -178,11 +188,13 @@ Hands-on
   
   [Link para download](https://nodejs.org/en/download/)
   
-  #### NPM
+NPM
+---
   
   NPM​ vem de Node Package Manager ou gerenciador de pacotes do Node. O NPM é distribuído juntamente com a plataforma do node e é por meio dele que iremos instalar todas nossas dependências de desenvolvimento e bibliotecas.
   
-  #### Angular CLI
+Angular CLI
+-----------
   
   Uma vez instalado o Node/NPM, precisamos instalar a interface de linha de comando do Angular. Agora sim vamos começar de fato a trabalhar com node, pelo gerenciador de pacotes npm
   
