@@ -195,12 +195,9 @@ Node
   Em linhas gerais o node.js é uma plataforma escrita em javascript feita para rodar código javascript. Em uma simples analogia, o Node.js seria a soma do PHP+Apache. é importante frisar que o Node.js roda código javascript apenas no lado do servidor.
   Utilizaremos o node aqui não para criar API's ou renderizar HTML no lado do servidor. Iremos utilizar o node como ferramenta principal para desenvolvimento. Por meio dele vamos instalar a linha de comando do angular e executar nossa aplicação localmente.
   
-  É possível instalar via mvn também.
-  
   [Link para download](https://nodejs.org/en/download/)
   
-  * Verificando a versão do Node
-  
+##### Verificando a versão do Node
   `node -v`
 
 NPM
@@ -208,16 +205,13 @@ NPM
   
   NPM vem de Node Package Manager ou gerenciador de pacotes do Node. O NPM é distribuído juntamente com a plataforma do node e é por meio dele que iremos instalar todas nossas dependências de desenvolvimento e bibliotecas.
   
-  * Instalando a versão do NPM
-  
+##### Instalando a versão do NPM
   `npm install npm@latest -g`
   
-  * Verificando a versão do NPM
-  
+##### Verificando a versão do NPM
   `npm -v`
   
-  * Atualizando a versão do NPM
-  
+##### Atualizando a versão do NPM
   `npm install npm@8.9.1 -g`
   
 NVM
@@ -225,17 +219,16 @@ NVM
 
   NVM vem de Node Version Manager ou gerenciador de versões do Node.
   
-  * Verificando a versão do NVM
-  
+##### Verificando a versão do NVM
   `nvm --version`
   
-  * Instalando ou atualizando Node
-  
+##### Instalando ou atualizando Node
   `nvm install node`
   
 Angular CLI
 -----------
   
   Uma vez instalado o Node/NPM, precisamos instalar a interface de linha de comando do Angular. Agora sim vamos começar de fato a trabalhar com node, pelo gerenciador de pacotes npm.
-  
+  
+##### Instalando Angular CLI
 `npm i -g @angular/cli@latest`
