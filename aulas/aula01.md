@@ -95,7 +95,7 @@ O que é REST?
 O que é Mock?
 -------------
 
-TODO
+Durante o desenvolvimento frequentemente é necessário consumir uma API REST, porém, diversas vezes as APIs ainda não estão desenvolvidas. Consequentemente, para que o desenvolvimento frontend não pare, precisamos ter APIs "falsas" que simulam o comportamento das APIs. Essas APIs falsas são conhecidas como Mocks. 
 
 Angular
 =======
