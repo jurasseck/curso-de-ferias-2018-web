@@ -140,19 +140,19 @@ Diretivas
   
   Alguns exemplos são:
   
-  * ***ngIf**: Remove ou adiciona um componente com base em uma expressão booleana
+  * ***ngIf**: Remove ou adiciona um componente com base em uma expressão booleana:
   
     ```<section *ngIf="showSection==true"></section>```
     
-  * ***ngFor**: Percorre um laço de repetição fazendo o bind (ligação) do conteúdo dentro da tag que carregar a diretiva
+  * ***ngFor**: Percorre um laço de repetição fazendo o bind (ligação) do conteúdo dentro da tag que carregar a diretiva:
   
     ```<li *ngFor="let item of list"></li>```
     
-  * **[ngClass]**: Faz o bind (ligação) de classe no html, a chave do objeto representa o nome da classe a ser aplicada, o valor do objeto representa a condição ou expressão
+  * **[ngClass]**: Faz o bind (ligação) de classe no html, a chave do objeto representa o nome da classe a ser aplicada, o valor do objeto representa a condição ou expressão:
   
     ```<div [ngClass]="{'is-active': pagina == 'home'}"></div>```
     
-  * **[(ngModel)]**: O famoso *two-way data-binding*, ou ligação de dados em duas vias, além de controle de validação dos formulários
+  * **[(ngModel)]**: O famoso *two-way data-binding*, ou ligação de dados em duas vias, além de controle de validação dos formulários:
   
     ```<input [(ngModel)]="userName">```
     
@@ -240,7 +240,7 @@ Primeiro Projeto
   Para criar um projeto Angular, utilizando do Angular CLI.
   
 ##### Criando o projeto
-`ng new euvim --style=scss`
+```ng new euvim --style=scss```
 
 ##### Incluindo Angular
 ```
