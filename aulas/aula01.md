@@ -326,6 +326,8 @@ export class AppModule { }
 Utilizando Componente
 ---------------------
 
+[Componentes Angular Material](https://material.angular.io/components/categories)
+
 ##### No arquivo app.component.html
 ``` typescript
   <form class="example-form">
