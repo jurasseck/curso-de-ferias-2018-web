@@ -171,7 +171,7 @@ export class MyService() {}
 ```
   
 A injeção de Service dentro do Componente é feito por meio de importação e pela aplicação do Service no construtor:
-```
+``` typescript
 import {MyService} from '../../providers/myservice.service'
 
 constructor(private service: MyService){}
@@ -262,7 +262,7 @@ npm install --save hammerjs
 ```@import "~@angular/material/prebuilt-themes/indigo-pink.css";```
 
 ##### No 
-```
+``` typescript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
