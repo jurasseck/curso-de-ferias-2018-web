@@ -4,7 +4,7 @@ Sumário
 =======
 
 * [Conceitos](#conceitos)
-  * [O que é um Framework (Javascript)?](#o-que-e-um-framework-javascript)
+  * [O que é um Framework (Javascript)?](#o-que-é-um-framework-javascript)
 * [Angular](#angular)
 * [Hands-on](#hands-on)
 
@@ -12,7 +12,7 @@ Conceitos
 =========
 
 O que é um Framework (JavaScript)?
---------------------------------------
+----------------------------------
 
   Um framework para aplicações web é um framework de software designado para suportar o desenvolvimento de sites web dinâmicos, aplicações Web e serviços Web. O framework destina-se a aliviar a sobrecarga associada a atividades comuns realizadas em desenvolvimento Web. Por exemplo, muitos frameworks fornecem bibliotecas para acesso à banco de dados, frameworks de modelagem e gerenciamento de sessão, e geralmente promovem a reutilização de código.
 
