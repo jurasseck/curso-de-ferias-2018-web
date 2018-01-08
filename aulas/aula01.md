@@ -3,14 +3,12 @@
 Sumário
 =======
 
-* [Conceitos](#conceitos)
-* [Angular](#angular)
-* [Hands-on](#handson)
+* [Conceitos](#Conceitos)
+* [Angular](#Angular)
+* [Hands-on](#Hands-on)
 
-conceitos
+Conceitos
 =========
-
-## Conceitos
 
 * **O que é um Framework (JavaScript)?**
 
@@ -76,10 +74,8 @@ conceitos
 
   Um exemplo simples de api, é a API pública do [Pokeapi](https://pokeapi.co/), que é uma API pública para consumir dados de pokemons.
   
-angular
+Angular
 =======
-
-  ## Angular
   
   #### Componentes
    
@@ -160,11 +156,9 @@ angular
    
    `constructor(private service: MyService){}`
    
-handson
+Hands-on
 =======
 
-  ## Hands-on
-  
   #### Node
   
   Em linhas gerais o node.js é uma plataforma escrita em javascript feita para rodar código javascript. Em uma simples analogia, o Node.js seria a soma do PHP+Apache. é importante frisar que o Node.js roda código javascript apenas no lado do servidor.
