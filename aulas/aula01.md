@@ -241,3 +241,12 @@ Primeiro Projeto
   
 ##### Criando o primeiro projeto
 `ng new euvim --style=scss`
+
+###### Incluindo Angular
+`npm install --save @angular/material`
+`npm install --save @angular/cdk`
+`npm install --save @angular/animations`
+`npm install --save hammerjs`
+
+###### Executando o servidor
+`ng serve`
