@@ -115,7 +115,7 @@ Componentes
   import {Component} from '@angular/core'
   @Component({
     selector: 'my-app',
-    template: '<h1>Hello World!</h1>
+    template: '<h1>Hello World!</h1>'
   })
   export class AppComponent {
     name = 'MATERA'
@@ -154,7 +154,7 @@ Diretivas
     
   * **[(ngModel)]**: O famoso *two-way data-binding*, ou ligação de dados em duas vias, além de controle de validação dos formulários:
   
-    ```<input [(ngModel)]="userName">```
+    ```<input [(ngModel)]="userName">```
     
 Services
 --------
@@ -170,13 +170,12 @@ Services
 export class MyService() {}
 ```
   
-A injeção de Service dentro do Componente é feito por meio do 
- 
-```import {MyService} from '../../providers/myservice.service'```
-    
-e pela aplicação do Service no construtor: 
-   
-```constructor(private service: MyService){}```
+A injeção de Service dentro do Componente é feito por meio de importação e pela aplicação do Service no construtor:
+```
+import {MyService} from '../../providers/myservice.service'
+
+constructor(private service: MyService){}
+```
    
 Arquitetura
 -----------
