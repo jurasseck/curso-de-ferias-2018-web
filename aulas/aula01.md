@@ -7,7 +7,7 @@ Sumário
   * [O que é um Framework (Javascript)?](#o-que-é-um-framework-javascript)
   * [O que é SPA e como se comporta?](#o-que-é-spa-e-como-se-comporta)
   * [O que é o Angular (e TypeScript)?](#o-que-é-o-angular-e-typescript)
-  * [O que é uma API?](#o-que-é-uma-api)
+  * [O que é uma API?](#o-que-é-uma-api)
   * [O que é REST?](#o-que-é-rest)
 * [Angular](#angular)
 * [Hands-on](#hands-on)
