@@ -16,7 +16,7 @@
   
   O router é uma peça importantíssima no modelo de desenvolvimento de SPAs. É ele que define/constrói a tela para o usuário, permitindo que, mesmo após um refresh, a página volte ao seu estado anterior ou a um estado próximo disso É muito comum salvar informações localmente no navegador do usuário (O desenvolvimento mobile híbrido segue uma lógica parecida). Em geral é armazenado um token ou qualquer informação que possa identificar o usuário e sua máquina, fazendo do localStorage. 
 
-* **O que é o Angular (E TypeScript)?**
+* **O que é o Angular (e TypeScript)?**
  
   Antes de entender o que é Angular é preciso entender o que seja o TypeScript, que foi adotado desde a versão 2 do Framework.
   
@@ -25,6 +25,8 @@
   No final, TypeScript pega o seu código cheio de classes e transforma em JavaScript puro, no qual o browser vai compreender. No próprio site é definido que o TypeScript compila para JavaScript, o que é um termo **tecnicamente errado** – mas cada vez mais aceito, dado que aquele código “malucão” em JavaScript pode ser encarado como código de máquina.
   
   Agora voltando para as aplicações Angular, elas são feitas a partir de um conjunto de web components. Um web componente é a combinação de estilo CSS + template HTML + classe javascript que irá dizer ao Angular como controlar uma parte da aplicação.
+  
+  #### Componentes
   
   Além de componentes, no Angular possuímos uma série de bibliotecas (Classes) que resolvem cada uma um problema específico.
   
@@ -95,33 +97,15 @@
   
   A injeção de Service dentro do Componente é feito por meio do 
   
-  `import {MyService} from ‘../../providers/myservice.service’`
+  `import {MyService} from '../../providers/myservice.service'`
     
    e pela aplicação do Service no construtor: 
    
    `constructor(private service: MyService){}`
-   
-  #### Node
+      
+  ### Conectando ao Backend
   
-  Em linhas gerais o node.js é uma plataforma escrita em javascript feita para rodar código javascript. Em uma simples analogia, o Node.js seria a soma do PHP+Apache. é importante frisar que o Node.js roda código javascript apenas no lado do servidor.
-  Utilizaremos o node aqui não para criar API's ou renderizar HTML no lado do servidor. Iremos utilizar o node como ferramenta principal para desenvolvimento. Por meio dele vamos instalar a linha de comando do angular e executar nossa aplicação localmente.
-  
-  É possível instalar via mvn também.
-  
-  [Link para download](https://nodejs.org/en/download/)
-  
-  #### NPM
-  
-  NPM​ vem de Node Package Manager ou gerenciador de pacotes do Node. O NPM é distribuído juntamente com a plataforma do node e é por meio dele que iremos instalar todas nossas dependências de desenvolvimento e bibliotecas.
-  
-  #### Angular CLI
-  
-  Uma vez instalado o Node/NPM, precisamos instalar a interface de linha de comando do Angular. Agora sim vamos começar de fato a trabalhar com node, pelo gerenciador de pacotes npm
-  
-    `npm i -g @angular/cli@latest`
-    
-  ### Conectando ao back-end
-* O que é REST?
+* **O que é REST?**
 
   O termo REST foi definido por Roy T. Fielding em sua tese de PhD. Roy foi um dos principais desenvolvedores de muitos dos protocolos Web essenciais, incluindo HTTP e URIs, e ele formalizou várias das idéias por trás deles nesse documento. Nesta dissertação, Roy primeiro define uma metodologia de falar sobre estilos arquiteturais — alto nível, padrões de abstração que expressam as principais ídeias por trás de uma abordagem arquitetural. Cada estilo arquitetural com um conjunto de regras que o define. Exemplos de estilos arquiteturais incluem “o estilo nulo” (que não possue regras), pipe e filter, cliente/servidor, objetos distrubuídos e REST.
   
@@ -153,12 +137,33 @@
   
       Em outras palavras, um servidor não deveria guardar o estado da comunicação de qualquer um dos clientes que se comunique com ele além de uma única requisição. A razão mais óbvia para isso é escalabilidade - o número de clientes que podem interagir com o servidor seria consideravelmente impactado se fosse preciso manter o estado do cliente.
 
-* O que é API?
+* **O que é API?**
 
   API é um conjunto de rotinas e padrões de programação para acesso a um aplicativo de software ou plataforma baseado na Web. A sigla API refere-se ao termo em inglês "Application Programming Interface" que significa em tradução para o português "Interface de Programação de Aplicativos".
   
   Através das APIs, os aplicativos podem se comunicar uns com os outros sem conhecimento ou intervenção dos usuários. Elas funcionam através da comunicação de diversos códigos, definindo comportamentos específicos de determinado objeto em uma interface. A API liga as diversas funções em um site de maneira que possam ser utilizadas em outras aplicações.
 
-* Como fazer uma aplicação “consumir” uma API REST?
+* **Como fazer uma aplicação “consumir” uma API REST?**
 
   Um exemplo simples de api, é a API pública do [Pokeapi](https://pokeapi.co/), que é uma API pública para consumir dados de pokemons.
+  
+  #### Hands-on
+  
+  #### Node
+  
+  Em linhas gerais o node.js é uma plataforma escrita em javascript feita para rodar código javascript. Em uma simples analogia, o Node.js seria a soma do PHP+Apache. é importante frisar que o Node.js roda código javascript apenas no lado do servidor.
+  Utilizaremos o node aqui não para criar API's ou renderizar HTML no lado do servidor. Iremos utilizar o node como ferramenta principal para desenvolvimento. Por meio dele vamos instalar a linha de comando do angular e executar nossa aplicação localmente.
+  
+  É possível instalar via mvn também.
+  
+  [Link para download](https://nodejs.org/en/download/)
+  
+  #### NPM
+  
+  NPM​ vem de Node Package Manager ou gerenciador de pacotes do Node. O NPM é distribuído juntamente com a plataforma do node e é por meio dele que iremos instalar todas nossas dependências de desenvolvimento e bibliotecas.
+  
+  #### Angular CLI
+  
+  Uma vez instalado o Node/NPM, precisamos instalar a interface de linha de comando do Angular. Agora sim vamos começar de fato a trabalhar com node, pelo gerenciador de pacotes npm
+  
+    `npm i -g @angular/cli@latest`
