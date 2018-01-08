@@ -3,9 +3,9 @@
 Sumário
 =======
 
-* [Conceitos](#Conceitos)
-* [Angular](#Angular)
-* [Hands-on](#Hands-on)
+* [Conceitos](#conceitos)
+* [Angular](#angular)
+* [Hands-on](#hands-on)
 
 Conceitos
 =========
