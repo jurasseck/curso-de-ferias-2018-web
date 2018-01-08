@@ -9,7 +9,7 @@ Sumário
   * [O que é o Angular (e TypeScript)?](#o-que-é-o-angular-e-typescript)
   * [O que é uma API?](#o-que-é-uma-api)
   * [O que é REST?](#o-que-é-rest)
-  * [O que é Mock?](#o-que-é-mock)
+  * [O que é Mock?](#o-que-é-mock)
 * [Angular](#angular)
   * [Componentes](#componentes)
   * [Diretivas](#diretivas)
