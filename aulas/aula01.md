@@ -119,7 +119,8 @@ Componentes
   })
   export class AppComponent {
     name = 'MATERA'
-  }```
+  }
+  ```
   
   Analisando o código acima, percebemos alguns pontos importantes. Primeiro, nós temos a importação da classe Component do núcleo do Angular, o que nos permite criar componentes utilizando o decorador @Component.
   
@@ -166,7 +167,8 @@ Services
   
   ``` typescript
   @Injectable()
-  export class MyService() {}```
+  export class MyService() {}
+  ```
   
   A injeção de Service dentro do Componente é feito por meio do 
   
@@ -241,10 +243,12 @@ Primeiro Projeto
 `ng new euvim --style=scss`
 
 ##### Incluindo Angular
-```npm install --save @angular/material
+```
+npm install --save @angular/material
 npm install --save @angular/cdk
 npm install --save @angular/animations
-npm install --save hammerjs```
+npm install --save hammerjs
+```
 
 ##### Executando o projeto
 ```ng serve```
@@ -259,7 +263,8 @@ npm install --save hammerjs```
 ```@import "~@angular/material/prebuilt-themes/indigo-pink.css";```
 
 ##### No 
-```import { BrowserModule } from '@angular/platform-browser';
+```
+import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
@@ -276,4 +281,5 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }```
+export class AppModule { }
+```
