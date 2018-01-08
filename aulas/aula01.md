@@ -239,14 +239,17 @@ Primeiro Projeto
 
   Para criar um projeto Angular, utilizando do Angular CLI.
   
-##### Criando o primeiro projeto
+##### Criando o projeto
 `ng new euvim --style=scss`
 
-###### Incluindo Angular
+##### Incluindo Angular
 `npm install --save @angular/material`
+
 `npm install --save @angular/cdk`
+
 `npm install --save @angular/animations`
+
 `npm install --save hammerjs`
 
-###### Executando o servidor
+##### Executando o projeto
 `ng serve`
