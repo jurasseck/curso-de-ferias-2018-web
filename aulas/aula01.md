@@ -5,6 +5,10 @@ Sumário
 
 * [Conceitos](#conceitos)
   * [O que é um Framework (Javascript)?](#o-que-é-um-framework-javascript)
+  * [O que é SPA e como se comporta?](#o-que-é-spa-e-como-se-comporta)
+  * [O que é o Angular (e TypeScript)?](#o-que-é-o-angular-e-typescript)
+  * [O que é uma API?](#o-que-é-uma-api)
+  * [O que é REST?](#o-que-é-rest)
 * [Angular](#angular)
 * [Hands-on](#hands-on)
 
@@ -18,7 +22,8 @@ O que é um Framework (JavaScript)?
 
   Os frameworks também trouxeram o uso de padrões de desenvolvimento, aumentando o "poder" de uma aplicação do lado cliente, especialmente quando falamos de SPA (Single Page Application), onde é possível tratar o Front-End e o Back-End de forma quase independente.
 
-* **O que é SPA e como se comporta?**
+O que é SPA e como se comporta?
+-------------------------------
   
   Como conceito mais básico e simplista do Single Page Application (SPA), podemos dizer que trata-se de uma aplicação que não faz refresh no navegador ao mudar de página. 
   
@@ -28,21 +33,24 @@ O que é um Framework (JavaScript)?
   
   O router é uma peça importantíssima no modelo de desenvolvimento de SPAs. É ele que define/constrói a tela para o usuário, permitindo que, mesmo após um refresh, a página volte ao seu estado anterior ou a um estado próximo disso É muito comum salvar informações localmente no navegador do usuário (O desenvolvimento mobile híbrido segue uma lógica parecida). Em geral é armazenado um token ou qualquer informação que possa identificar o usuário e sua máquina, fazendo do localStorage. 
 
-* **O que é o Angular (e TypeScript)?**
- 
+O que é o Angular (e TypeScript)?
+---------------------------------
+
   Antes de entender o que é Angular é preciso entender o que seja o TypeScript, que foi adotado desde a versão 2 do Framework.
   
   O TypeScript possibilita que você escreva código JavaScript na forma que foi acostumado quando aprendeu Orientação a Objetos. Assim é possível criar métodos que retornem um valor com tipo definido. 
   
   No final, TypeScript pega o seu código cheio de classes e transforma em JavaScript puro, no qual o browser vai compreender. No próprio site é definido que o TypeScript compila para JavaScript, o que é um termo **tecnicamente errado** – mas cada vez mais aceito, dado que aquele código “malucão” em JavaScript pode ser encarado como código de máquina.
 
-* **O que é API?**
+O que é uma API?
+----------------
 
   API é um conjunto de rotinas e padrões de programação para acesso a um aplicativo de software ou plataforma baseado na Web. A sigla API refere-se ao termo em inglês "Application Programming Interface" que significa em tradução para o português "Interface de Programação de Aplicativos".
   
   Através das APIs, os aplicativos podem se comunicar uns com os outros sem conhecimento ou intervenção dos usuários. Elas funcionam através da comunicação de diversos códigos, definindo comportamentos específicos de determinado objeto em uma interface. A API liga as diversas funções em um site de maneira que possam ser utilizadas em outras aplicações.
 
-* **O que é REST?**
+O que é REST?
+-------------
 
   O termo REST foi definido por Roy T. Fielding em sua tese de PhD. Roy foi um dos principais desenvolvedores de muitos dos protocolos Web essenciais, incluindo HTTP e URIs, e ele formalizou várias das idéias por trás deles nesse documento. Nesta dissertação, Roy primeiro define uma metodologia de falar sobre estilos arquiteturais — alto nível, padrões de abstração que expressam as principais ídeias por trás de uma abordagem arquitetural. Cada estilo arquitetural com um conjunto de regras que o define. Exemplos de estilos arquiteturais incluem “o estilo nulo” (que não possue regras), pipe e filter, cliente/servidor, objetos distrubuídos e REST.
   
