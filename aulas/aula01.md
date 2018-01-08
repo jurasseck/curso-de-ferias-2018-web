@@ -7,7 +7,7 @@ Sumário
   * [O que é um Framework (Javascript)?](#o-que-é-um-framework-javascript)
   * [O que é SPA e como se comporta?](#o-que-é-spa-e-como-se-comporta)
   * [O que é o Angular (e TypeScript)?](#o-que-é-o-angular-e-typescript)
-  * [O que é uma API?](#o-que-é-uma-api)
+  * [O que é API?](#o-que-é-api)
   * [O que é REST?](#o-que-é-rest)
   * [O que é Mock?](#o-que-é-mock)
 * [Angular](#angular)
@@ -50,8 +50,8 @@ O que é o Angular (e TypeScript)?
   
   No final, TypeScript pega o seu código cheio de classes e transforma em JavaScript puro, no qual o browser vai compreender. No próprio site é definido que o TypeScript compila para JavaScript, o que é um termo **tecnicamente errado** – mas cada vez mais aceito, dado que aquele código “malucão” em JavaScript pode ser encarado como código de máquina.
 
-O que é uma API?
-----------------
+O que é API?
+------------
 
   API é um conjunto de rotinas e padrões de programação para acesso a um aplicativo de software ou plataforma baseado na Web. A sigla API refere-se ao termo em inglês "Application Programming Interface" que significa em tradução para o português "Interface de Programação de Aplicativos".
   
