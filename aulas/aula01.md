@@ -198,6 +198,8 @@ Node
   
   [Link para download](https://nodejs.org/en/download/)
   
+  `node -v`
+  
 NPM
 ---
   
@@ -206,6 +208,6 @@ NPM
 Angular CLI
 -----------
   
-  Uma vez instalado o Node/NPM, precisamos instalar a interface de linha de comando do Angular. Agora sim vamos começar de fato a trabalhar com node, pelo gerenciador de pacotes npm
+  Uma vez instalado o Node/NPM, precisamos instalar a interface de linha de comando do Angular. Agora sim vamos começar de fato a trabalhar com node, pelo gerenciador de pacotes npm.
   
     `npm i -g @angular/cli@latest`
