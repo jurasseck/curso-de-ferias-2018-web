@@ -119,8 +119,7 @@ Componentes
   })
   export class AppComponent {
     name = 'MATERA'
-  }
-  ```
+  }```
   
   Analisando o código acima, percebemos alguns pontos importantes. Primeiro, nós temos a importação da classe Component do núcleo do Angular, o que nos permite criar componentes utilizando o decorador @Component.
   
@@ -142,19 +141,19 @@ Diretivas
   
   * ***ngIf**: Remove ou adiciona um componente com base em uma expressão booleana
   
-    `<section *ngIf="showSection==true"></section>`
+    ```<section *ngIf="showSection==true"></section>```
     
   * ***ngFor**: Percorre um laço de repetição fazendo o bind (ligação) do conteúdo dentro da tag que carregar a diretiva
   
-    `<li *​ngFor​="let item of list"></li>`
+    ```<li *​ngFor​="let item of list"></li>```
     
   * **[ngClass]**: Faz o bind (ligação) de classe no html, a chave do objeto representa o nome da classe a ser aplicada, o valor do objeto representa a condição ou expressão
   
-    `<div [​ngClass​]​="{'is-active': pagina == 'home'}"></div>`
+    ```<div [​ngClass​]​="{'is-active': pagina == 'home'}"></div>```
     
   * **[(ngModel)]**: O famoso *two-way data-binding*, ou ligação de dados em duas vias, além de controle de validação dos formulários
   
-    `<input [(​ngModel​)]​="userName">`
+    ```<input [(​ngModel​)]​="userName">```
   
 Services
 --------
@@ -167,16 +166,15 @@ Services
   
   ``` typescript
   @Injectable()
-  export class MyService() {}
-  ```
+  export class MyService() {}```
   
   A injeção de Service dentro do Componente é feito por meio do 
   
-  `import {MyService} from '../../providers/myservice.service'`
+  ```import {MyService} from '../../providers/myservice.service'```
     
    e pela aplicação do Service no construtor: 
    
-   `constructor(private service: MyService){}`
+   ```constructor(private service: MyService){}```
    
 Arquitetura
 -----------
@@ -199,7 +197,7 @@ Node
   [Link para download](https://nodejs.org/en/download/)
   
 ##### Verificando a versão do Node
-  `node -v`
+  ```node -v```
 
 NPM
 ---
@@ -207,13 +205,13 @@ NPM
   NPM vem de Node Package Manager ou gerenciador de pacotes do Node. O NPM é distribuído juntamente com a plataforma do node e é por meio dele que iremos instalar todas nossas dependências de desenvolvimento e bibliotecas.
   
 ##### Instalando a versão do NPM
-  `npm install npm@latest -g`
+  ```npm install npm@latest -g```
   
 ##### Verificando a versão do NPM
-  `npm -v`
+  ```npm -v```
   
 ##### Atualizando a versão do NPM
-  `npm install npm@8.9.1 -g`
+  ```npm install npm@8.9.1 -g```
   
 NVM
 ---
@@ -221,10 +219,10 @@ NVM
   NVM vem de Node Version Manager ou gerenciador de versões do Node.
   
 ##### Verificando a versão do NVM
-  `nvm --version`
+  ```nvm --version```
   
 ##### Instalando ou atualizando Node
-  `nvm install node`
+  ```nvm install node```
   
 Angular CLI
 -----------
@@ -232,7 +230,7 @@ Angular CLI
   Uma vez instalado o Node/NPM, precisamos instalar a interface de linha de comando do Angular. Agora sim vamos começar de fato a trabalhar com node, pelo gerenciador de pacotes npm.
   
 ##### Instalando Angular CLI
-`npm i -g @angular/cli@latest`
+```npm i -g @angular/cli@latest```
 
 Primeiro Projeto
 ----------------
@@ -243,13 +241,39 @@ Primeiro Projeto
 `ng new euvim --style=scss`
 
 ##### Incluindo Angular
-`npm install --save @angular/material`
-
-`npm install --save @angular/cdk`
-
-`npm install --save @angular/animations`
-
-`npm install --save hammerjs`
+```npm install --save @angular/material
+npm install --save @angular/cdk
+npm install --save @angular/animations
+npm install --save hammerjs```
 
 ##### Executando o projeto
-`ng serve`
+```ng serve```
+
+##### No arquivo index.html
+```<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">```
+
+##### No arquivo src/main.js
+```import 'hammerjs';```
+
+##### No arquivo style.scss
+```@import "~@angular/material/prebuilt-themes/indigo-pink.css";```
+
+##### No 
+```import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+import { AppComponent } from './app.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }```
