@@ -199,12 +199,13 @@ Node
   [Link para download](https://nodejs.org/en/download/)
   
   * Verificando a versão do Node
-  `node -v`
   
+  `node -v`
+
 NPM
 ---
   
-  NPM​ vem de Node Package Manager ou gerenciador de pacotes do Node. O NPM é distribuído juntamente com a plataforma do node e é por meio dele que iremos instalar todas nossas dependências de desenvolvimento e bibliotecas.
+  NPM vem de Node Package Manager ou gerenciador de pacotes do Node. O NPM é distribuído juntamente com a plataforma do node e é por meio dele que iremos instalar todas nossas dependências de desenvolvimento e bibliotecas.
   
   * Instalando a versão do NPM
   `npm install npm@latest -g`
@@ -213,9 +214,18 @@ NPM
   `npm -v`
   
   * Atualizando a versão do NPM
-  `npm install node@8.9.1 -g`
-  
+  `npm install npm@8.9.1 -g`
   
+NVM
+---
+
+  NVM vem de Node Version Manager ou gerenciador de versões do Node.
+  
+  * Verificando a versão do NVM
+  `nvm --version`
+  
+  * Instalando ou atualizando Node
+  `nvm install node`
 Angular CLI
 -----------
   
