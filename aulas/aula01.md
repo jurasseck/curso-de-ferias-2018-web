@@ -21,7 +21,7 @@ Sumário
   * [NVM](#nvm)
   * [Angular CLI](#angular-cli)
   * [Primeiro Projeto](#primeiro-projeto)
-  * [Utilizando Componente Angular Material](#utilizando-componente-angular-material)
+  * [Utilizando Componente](#utilizando-componente)
 
 Conceitos
 =========
@@ -323,12 +323,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 export class AppModule { }
 ```
 
-Utilizando Componente Angular Material
-------------------------------------
+Utilizando Componente
+---------------------
 
 ##### No arquivo app.component.html
 ``` typescript
-<form class="example-form">
+  <form class="example-form">
     <mat-form-field class="example-full-width">
       <input matInput placeholder="Favorite food" value="Sushi">
     </mat-form-field>
