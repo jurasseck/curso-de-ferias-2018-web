@@ -21,7 +21,7 @@ Sumário
   * [NVM](#nvm)
   * [Angular CLI](#angular-cli)
   * [Primeiro Projeto](#primeiro-projeto)
-  * [Primeiro Componente Angular Material](#primeiro-componente-angular-material)
+  * [Utilizando Componente Angular Material](#utilizando-componente-angular-material)
 
 Conceitos
 =========
@@ -284,7 +284,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 export class AppModule { }
 ```
 
-Primeiro Componente Angular Material
+Utilizando Componente Angular Material
 ------------------------------------
 
 ##### No arquivo app.component.html
