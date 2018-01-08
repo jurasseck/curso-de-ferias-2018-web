@@ -16,7 +16,7 @@ Sumário
   * [Services](#services)
   * [Arquitetura](#arquitetura)
 * [Hands-on](#hands-on)
-  * [NODE](#node)
+  * [Node](#node)
   * [NPM](#npm)
   * [Angular CLI](#angular-cli)
 
