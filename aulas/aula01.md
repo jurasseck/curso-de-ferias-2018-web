@@ -146,16 +146,16 @@ Diretivas
     
   * ***ngFor**: Percorre um laço de repetição fazendo o bind (ligação) do conteúdo dentro da tag que carregar a diretiva
   
-    ```<li *​ngFor​="let item of list"></li>```
+    ```<li *ngFor="let item of list"></li>```
     
   * **[ngClass]**: Faz o bind (ligação) de classe no html, a chave do objeto representa o nome da classe a ser aplicada, o valor do objeto representa a condição ou expressão
   
-    ```<div [​ngClass​]​="{'is-active': pagina == 'home'}"></div>```
+    ```<div [ngClass]="{'is-active': pagina == 'home'}"></div>```
     
   * **[(ngModel)]**: O famoso *two-way data-binding*, ou ligação de dados em duas vias, além de controle de validação dos formulários
   
-    ```<input [(​ngModel​)]​="userName">```
-  
+    ```<input [(ngModel)]="userName">```
+    
 Services
 --------
 
@@ -163,20 +163,20 @@ Services
   
   Basicamente, o service serve para “guardar a lógica do negócio”, consumindo os end-points da API e retornando ou enviando os dados de acordo com a requisição vinda do componente.
   
-  Para criar um serviço no Angular, basta criar uma Classe e decorá-la com o decorador `@Injectable()`, como por exemplo:
+  Para criar um serviço no Angular, basta criar uma Classe e decorá-la com o decorador "@Injectable()", como por exemplo:
   
-  ``` typescript
-  @Injectable()
-  export class MyService() {}
-  ```
+``` typescript
+@Injectable()
+export class MyService() {}
+```
   
-  A injeção de Service dentro do Componente é feito por meio do 
-  
-  ```import {MyService} from '../../providers/myservice.service'```
+A injeção de Service dentro do Componente é feito por meio do 
+ 
+```import {MyService} from '../../providers/myservice.service'```
     
-   e pela aplicação do Service no construtor: 
+e pela aplicação do Service no construtor: 
    
-   ```constructor(private service: MyService){}```
+```constructor(private service: MyService){}```
    
 Arquitetura
 -----------
