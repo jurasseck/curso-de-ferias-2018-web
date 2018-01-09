@@ -365,6 +365,7 @@ button.user {
     position: fixed;
     margin: 0px;
     height: 100%;
+    width: 100%;
 }
 #content{
     position: fixed;
