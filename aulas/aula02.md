@@ -10,7 +10,7 @@ Sumário
   * [Rotas](#rotas)
   * [Layout](#layout)
 * [Hands-on](#hands-on)
-  * [Criando um Módulo](#criando-um-módulo)
+  * [Criando um Módulo](#criando-um-módulo)
   * [Criando um Componente](#criando-um-componente)
   * [Configurando Rotas](#configurando-rotas)
   * [Adicionando um Layout]($adicionando-um-layout)
