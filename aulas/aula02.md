@@ -144,7 +144,49 @@ import { MainComponent } from './main.component';
 export class MainRouting { }
 ```
 
-##### src/app/app.module.ts
+Hands-On
+========
+
+##### Criando um módulo
+```ng g module main```
+
+##### Criando um componente
+```ng g component main```
+
+##### No arquivo src/app/app.routing.ts
+``` typescript
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot([
+      { path: '', redirectTo: '/main', pathMatch: 'full' }
+    ], {useHash:true})
+  ]
+})
+export class AppRoutingModule { }
+```
+
+##### No arquivo src/app/main/main.routing.ts
+``` typescript
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { MainComponent } from './main.component';
+
+@NgModule({
+  imports: [
+    RouterModule.forChild([
+      { path: 'main', 
+        component: MainComponent
+      }
+    ])
+  ]
+})
+export class MainRouting { }
+```
+
+##### No arquivo src/app/app.module.ts
 ``` typescript
 import { RouterModule } from '@angular/router';
 import { MainModule } from "./main/main.module";
@@ -178,7 +220,7 @@ import { AppRoutingModule } from "./app.routing";
 export class AppModule { }
 ```
 
-##### src/app/main/main.routing.ts
+##### No arquivo src/app/main/main.routing.ts
 ``` typescript
 import { MainRouting } from './main.routing';
 import { RouterModule } from "@angular/router";
@@ -201,12 +243,3 @@ import { RouterModule } from "@angular/router";
 export class MainModule { }
 
 ```
-
-Hands-On
-========
-
-##### Criando um módulo
-```ng g module main```
-
-##### Criando um componente
-```ng g component main```
