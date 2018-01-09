@@ -68,7 +68,7 @@ describe('MainComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should be created', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
@@ -97,7 +97,7 @@ export class MainComponent implements OnInit {
 ``` typescript
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MainComponent } from '../src/app/main/main.component';
+import { MainComponent } from './main.component';
 
 @NgModule({
   imports: [
