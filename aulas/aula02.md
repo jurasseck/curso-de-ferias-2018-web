@@ -8,7 +8,7 @@ Sumário
   * [Modules](#modules)
   * [Componentes](#componentes)
   * [Rotas](#rotas)
-  * [Layoyt](#layout
+  * [Layoyt](#layout)
 * [Hands-on](#hands-on)
   
 Conceitos
