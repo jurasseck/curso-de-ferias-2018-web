@@ -8,6 +8,7 @@ Sumário
   * [Modules](#modules)
   * [Componentes](#componentes)
   * [Rotas](#rotas)
+  * [Layoyt](#layout
 * [Hands-on](#hands-on)
   
 Conceitos
@@ -154,6 +155,12 @@ export class MainRouting { }
 <router-outlet></router-outlet>
 ```
 
+Layout
+------
+
+##### Instalando Flex
+```npm install --save @angular/flex-layout```
+
 Hands-On
 ========
 
@@ -254,4 +261,100 @@ import { MainComponent } from './main.component';
   ]
 })
 export class MainRouting { }
+```
+##### Adicionando Flex Layout
+```npm install --save @angular/flex-layout```
+
+##### No arquivo src/app/main/main.component.html
+``` typescript
+<mat-sidenav-container>
+    <mat-sidenav #sidenav>
+    <a mat-button style="height: 0; position: absolute;"></a>  
+        <mat-nav-list>
+        <mat-list-item href="#/main">
+            <button mat-icon-button >
+                <mat-icon>info</mat-icon>
+            </button>
+            <a mdLine>Usuários</a>
+        </mat-list-item>
+        <mat-list-item href="#/main">
+            <button mat-icon-button >
+                <mat-icon>info</mat-icon>
+            </button>
+            <a mdLine>Disciplinas</a>
+        </mat-list-item>
+        <mat-list-item href="#/main">
+            <button mat-icon-button >
+                <mat-icon>info</mat-icon>
+            </button>
+            <a mdLine>Relatório</a>
+        </mat-list-item>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-toolbar color="primary">
+        <button mat-icon-button (click)="sidenav.open()">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <span>Eu vim</span>
+    </mat-toolbar>
+    <mat-card id="content">
+        <router-outlet></router-outlet>
+    </mat-card>
+</mat-sidenav-container>
+```
+##### Importar FlexLayoutModule, MatIconModule, MatSidenavModule, MatCardModule, MatListModule, MatToolbarModule, MatButtonModule
+```import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatIconModule, MatSidenavModule, MatCardModule, MatListModule, MatToolbarModule, MatButtonModule } from '@angular/material';```
+
+``` typescript
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MainComponent } from './main.component';
+
+import { MainRouting } from './main.routing';
+import { RouterModule } from '@angular/router';
+
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatIconModule, MatSidenavModule, MatCardModule, MatListModule, MatToolbarModule, MatButtonModule } from '@angular/material';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    MainRouting,
+    RouterModule,
+    FlexLayoutModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatCardModule,
+    MatListModule,
+    MatToolbarModule,
+    MatButtonModule
+  ],
+  declarations: [MainComponent]
+})
+export class MainModule { }
+```
+
+##### No arquivo src/app/main/main.component.scss
+``` css
+.navSpan {
+    width: 100%;
+}
+button.user {
+    float:right;
+}
+.mat-drawer-container{
+    position: fixed;
+    margin: 0px;
+    height: 100%;
+}
+#content{
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    top: 65px;
+    z-index: -1;
+    overflow-x: auto;
+}
 ```
