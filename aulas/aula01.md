@@ -198,7 +198,7 @@ Node
   
   [Link para download](https://nodejs.org/en/download/)
   
-##### Verificando a versão do Node (v9.3.0)
+##### Verificando a versão do Node (v8.9.4)
   ```node -v```
 
 NPM
