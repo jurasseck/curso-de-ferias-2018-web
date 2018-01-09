@@ -198,7 +198,7 @@ Node
   
   [Link para download](https://nodejs.org/en/download/)
   
-##### Verificando a versão do Node
+##### Verificando a versão do Node (v9.3.0)
   ```node -v```
 
 NPM
@@ -209,11 +209,10 @@ NPM
 ##### Instalando a versão do NPM
   ```npm install npm@latest -g```
   
+  ```npm install npm@5.5.1 -g```
+  
 ##### Verificando a versão do NPM
   ```npm -v```
-  
-##### Atualizando a versão do NPM
-  ```npm install npm@8.9.1 -g```
   
 NVM
 ---
@@ -235,6 +234,8 @@ Angular CLI
 
 ##### Instalando Angular CLI
 ```npm i -g @angular/cli@latest```
+
+```npm i -g @angular/cli@1.6.3```
 
 Primeiro Projeto
 ----------------
