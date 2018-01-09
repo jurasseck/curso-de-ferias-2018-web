@@ -39,6 +39,7 @@ export interface Element {
 ```
 
 DataSource
+----------
 ``` typescript
 export class UsuarioDataSource extends DataSource<any> {
   
@@ -46,24 +47,7 @@ export class UsuarioDataSource extends DataSource<any> {
     return Observable.of([
       {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
       {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-      {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-      {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-      {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-      {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-      {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-      {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-      {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-      {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-      {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
-      {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
-      {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
-      {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
-      {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
-      {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
-      {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
-      {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
-      {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
-      {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
+      {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'}
     ]);
   }
 
@@ -315,10 +299,107 @@ export class UsuarioDataSource extends DataSource<any> {
       {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
       {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
       {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
-      {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
+      {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'}
     ]);
   }
 
   disconnect() {}
+}
+```
+##### No arquivo src/app/main/usuario/usuario.component.html
+```html
+<div class="mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource">
+    <ng-container matColumnDef="position">
+      <mat-header-cell *matHeaderCellDef  fxFlex="10"> Ações </mat-header-cell>
+      <mat-cell *matCellDef="let element" fxFlex="10" class="buttons">
+          <button mat-icon-button color="primary"  mdTooltip="Editar">
+            <mat-icon class="mat-24" aria-label="Editar">edit</mat-icon>
+          </button>
+          <button mat-icon-button color="danger" mdTooltip="Remover">
+              <mat-icon class="mat-24" aria-label="Remover">delete</mat-icon>
+          </button>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="nome">
+      <mat-header-cell *matHeaderCellDef> Nome </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.nome}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="login">
+        <mat-header-cell *matHeaderCellDef> Login </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.login}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef> E-mail </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="perfil">
+      <mat-header-cell *matHeaderCellDef> Perfil </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.perfil}} </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <button mat-fab color="primary">
+    <mat-icon class="mat-24" aria-label="Adicionar">add</mat-icon>
+  </button> 
+</div>
+```
+
+##### No arquivo src/app/main/usuario/consulta/consulta.component.ts
+``` typescript
+import { Component, OnInit } from '@angular/core';
+
+import { DataSource } from '@angular/cdk/collections';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+
+@Component({
+  selector: 'app-consulta',
+  templateUrl: './consulta.component.html',
+  styleUrls: ['./consulta.component.scss']
+})
+export class ConsultaComponent implements OnInit {
+
+  public displayedColumns = ['position', 'nome', 'login', 'email', 'perfil'];
+  public dataSource = new UsuarioDataSource();
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}
+
+export interface Element {
+  id: number;
+  nome: string;
+  login: number;
+  email: string;
+  perfil: string;
+}
+
+export class UsuarioDataSource extends DataSource<any> {
+  
+  connect(): Observable<any[]> {
+    return Observable.of([
+      {id: 1, nome: 'José da Silva', login: "jose", email: 'jose@ponto.com.br', perfil:"Aluno"},
+      {id: 2, nome: 'Mariano das Neves', login: "mariano", email: 'marino@ponto.com.br', perfil:"Aluno"},
+      {id: 3, nome: 'Magyver da Silva', login: "magyver", email: 'magyver@ponto.com.br', perfil:"Aluno"},
+      {id: 4, nome: 'Irineu Nunes', login: "irineu", email: 'irineu@ponto.com.br', perfil:"Aluno"},
+      {id: 5, nome: 'Carlos Silva', login: "carlos", email: 'carlos@ponto.com.br', perfil:"Aluno"}
+    ]);
+  }
+
+  disconnect() {}
+}
+```
+
+##### No arquivo src/app/main/usuario/consulta/consulta.component.scss
+``` css
+.mat-fab{
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
 }
 ```
