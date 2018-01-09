@@ -49,7 +49,6 @@
 </div>
 <br/>
 <div *ngIf="filtred" class="mat-elevation-z8">
-
   <mat-accordion>
     <mat-expansion-panel *ngFor="let item of relatorio">
       <mat-expansion-panel-header>
@@ -60,25 +59,7 @@
           Frequência {{item.frequencia}} %
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <mat-list>
-        <h3 matSubheader>Presenças</h3>
-        <mat-list-item>
-          <mat-icon matListIcon>check</mat-icon>
-          <h3 matLine> Presente </h3>
-          <p matLine>
-            <span> XX/XX/XXXX </span>
-          </p>
-        </mat-list-item>
-        <mat-divider></mat-divider>
-        <mat-list-item>
-            <mat-icon matListIcon>remove</mat-icon>
-            <h3 matLine> Ausência </h3>
-            <p matLine>
-              <span> XX/XX/XXXX </span>
-            </p>
-          </mat-list-item>
-        <mat-divider></mat-divider>
-      </mat-list>
+      <app-item-presenca ></app-item-presenca>
     </mat-expansion-panel>
   </mat-accordion>
 </div>

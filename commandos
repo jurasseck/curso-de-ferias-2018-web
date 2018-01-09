@@ -1994,8 +1994,43 @@ Agora ajustamos o html, para bloquear o botão filtrar e realizar o ngIf referen
 </div>
 
 Porém nossa listagem, vai ficar extensa fazendo o HTML, vamos criar um component e usar Input para fazer esse detalhe.
+Então dentro da pasta, "main/relatorio/presenca" vamos executar o comando para criarmos nosso novo componente:
+ng g component item-presenca
+com isto ele gerará nosso componente com um seletor padrão de nome "app-item-presenca".
 
+Agora vamos colocar ele na listagem para vermos se está funcionando, então em presenca.component.html colocamos a nova tag:
+app-item-presenca, subistituindo nossa listagem
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let item of relatorio">
+    <mat-expansion-panel-header>
+      <mat-panel-title fxFlex="70">
+        {{item.usuario.nome}}
+      </mat-panel-title>
+      <mat-panel-description>
+        Frequência {{item.frequencia}} %
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <app-item-presenca></app-item-presenca>
+  </mat-expansion-panel>
+</mat-accordion>
 
+Como pode ver nossa listagem de presença já é nosso novo component, então pensando em nosso fluxo precisamos de algumas entradas para o nosso item-presenca.compoent.ts;
+import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 
+@Input("dataInicio")
+private cursoInicio:Date;
+@Input("dataFim")
+private cursoFim:Date;
+@Input()
+private periodoInicial:Date;
+@Input()
+private periodoFinal:Date;
+@Input()
+private presencas:Array<Date>;
 
+Os dois primeiros items mostra que podemos obter com um nome no html o valor, desssa propriedade e dentro de nosso TS ela se referenciar a outra campo;
 
+Como pode ver vamos ter muita manipulação de datas, neste contexto, então para isto vamos instalar uma lib chamada momment.js que será responsável por calculos entre outras funções em nosso projeto;
+Para isto vamos executar o seguinte comando, na raiz do projeto:
+npm install moment --save
+https://momentjs.com/
