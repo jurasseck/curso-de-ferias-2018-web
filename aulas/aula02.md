@@ -144,6 +144,16 @@ import { MainComponent } from './main.component';
 export class MainRouting { }
 ```
 
+##### No arquivo src/app/app.component.html
+```
+<router-outlet></router-outlet>
+```
+
+##### No arquivo src/app/main/main.component.html
+```
+<router-outlet></router-outlet>
+```
+
 Hands-On
 ========
 
