@@ -13,7 +13,7 @@ Sumário
   * [Criando um Módulo](#criando-um-módulo)
   * [Criando um Componente](#criando-um-componente)
   * [Configurando Rotas](#configurando-rotas)
-  * [Adicionando um Layout]($adicionando-um-layout)
+  * [Adicionando Layout](#adicionando-layout)
   
 Conceitos
 =========
