@@ -319,8 +319,10 @@ Adicionando Layout
 ```
 
 ##### Importar FlexLayoutModule, MatIconModule, MatSidenavModule, MatCardModule, MatListModule, MatToolbarModule, MatButtonModule
-```import { FlexLayoutModule } from "@angular/flex-layout";
-import { MatIconModule, MatSidenavModule, MatCardModule, MatListModule, MatToolbarModule, MatButtonModule } from '@angular/material';```
+``` typescript
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatIconModule, MatSidenavModule, MatCardModule, MatListModule, MatToolbarModule, MatButtonModule } from '@angular/material';
+```
 
 ``` typescript
 import { NgModule } from '@angular/core';
@@ -330,7 +332,7 @@ import { MainComponent } from './main.component';
 import { MainRouting } from './main.routing';
 import { RouterModule } from '@angular/router';
 
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule, MatSidenavModule, MatCardModule, MatListModule, MatToolbarModule, MatButtonModule } from '@angular/material';
 
 @NgModule({
