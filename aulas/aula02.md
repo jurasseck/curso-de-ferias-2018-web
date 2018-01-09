@@ -10,6 +10,10 @@ Sumário
   * [Rotas](#rotas)
   * [Layout](#layout)
 * [Hands-on](#hands-on)
+  * [Criando um Módulo](#criando-um-módulo)
+  * [Criando um Componente](#criando-um-componente)
+  * [Configurando Rotas](#configurando-rotas)
+  * [Adicionando um Layout]($adicionando-um-layout)
   
 Conceitos
 =========
@@ -154,11 +158,18 @@ Layout
 Hands-On
 ========
 
-##### Criando um módulo
+Criando um Módulo
+-----------------
+
 ```ng g module main```
 
-##### Criando um componente
+Criando um Componente
+---------------------
+
 ```ng g component main```
+
+Configurando Rotas
+------------------
 
 ##### No arquivo src/app/app.routing.ts
 ``` typescript
@@ -262,6 +273,9 @@ export class MainRouting { }
 ```
 <router-outlet></router-outlet>
 ```
+
+Adicionando Layout
+------------------
 
 ##### Adicionando Flex Layout
 ```npm install --save @angular/flex-layout```
