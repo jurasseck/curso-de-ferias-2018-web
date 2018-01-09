@@ -152,3 +152,63 @@ export class MainRouting { }
     </mat-card>
 </mat-sidenav-container>
 ```
+##### No arquivo src/app/main/main.module.ts
+```import { MatTableModule } from '@angular/material';```
+
+``` typescript
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MainComponent } from './main.component';
+
+import { MainRouting } from './main.routing';
+import { RouterModule } from '@angular/router';
+
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatIconModule, MatSidenavModule, MatCardModule, MatListModule, MatToolbarModule, MatButtonModule, MatTableModule } from '@angular/material';
+import { ConsultaComponent } from './usuario/consulta/consulta.component';
+import { FormularioComponent } from './usuario/formulario/formulario.component';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    MainRouting,
+    RouterModule,
+    FlexLayoutModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatCardModule,
+    MatListModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatTableModule
+  ],
+  declarations: [MainComponent, ConsultaComponent, FormularioComponent]
+})
+export class MainModule { }
+```
+
+##### No arquivo src/app/main/usuario/consulta/consulta.component.html
+``` html
+<div class="example-container mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource">
+    <ng-container matColumnDef="position">
+      <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="weight">
+      <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="symbol">
+      <mat-header-cell *matHeaderCellDef> Symbol </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.symbol}} </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>
+```
