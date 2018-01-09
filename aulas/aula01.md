@@ -301,7 +301,18 @@ platformBrowserDynamic().bootstrapModule(AppModule)
 ```
 
 ##### No arquivo style.scss
-```@import "~@angular/material/prebuilt-themes/indigo-pink.css";```
+``` css
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+body{
+    margin:0px;
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+ }
+```
 
 ##### No arquivo app.module.ts
 ``` typescript
