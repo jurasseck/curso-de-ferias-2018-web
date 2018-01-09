@@ -9,6 +9,7 @@ import { ReactiveFormsModule, FormsModule, FormBuilder } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { DisciplinaService } from '../../services/disciplina.service';
 import { RelatorioService } from './relatorio.service';
+import { ItemPresencaComponent } from './presenca/item-presenca/item-presenca.component';
 
 @NgModule({
   imports: [
@@ -32,7 +33,7 @@ import { RelatorioService } from './relatorio.service';
     MatExpansionModule,
     HttpClientModule
   ],
-  declarations: [PresencaComponent],
+  declarations: [PresencaComponent, ItemPresencaComponent],
   providers: [HttpClient,FormBuilder, DisciplinaService, RelatorioService , {provide: MAT_DATE_LOCALE, useValue: 'pt-br'}]
 })
 export class RelatorioModule { }
