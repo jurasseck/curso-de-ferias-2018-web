@@ -36,7 +36,7 @@ Componentes
 
 ##### src/app/main/main.component.scss
 ``` css
-
+empty
 ```
 
 ##### src/app/main/main.component.html
@@ -143,16 +143,6 @@ import { MainComponent } from './main.component';
   ]
 })
 export class MainRouting { }
-```
-
-##### No arquivo src/app/app.component.html
-```
-<router-outlet></router-outlet>
-```
-
-##### No arquivo src/app/main/main.component.html
-```
-<router-outlet></router-outlet>
 ```
 
 Layout
@@ -262,6 +252,17 @@ import { MainComponent } from './main.component';
 })
 export class MainRouting { }
 ```
+
+##### No arquivo src/app/app.component.html
+```
+<router-outlet></router-outlet>
+```
+
+##### No arquivo src/app/main/main.component.html
+```
+<router-outlet></router-outlet>
+```
+
 ##### Adicionando Flex Layout
 ```npm install --save @angular/flex-layout```
 
@@ -302,6 +303,7 @@ export class MainRouting { }
     </mat-card>
 </mat-sidenav-container>
 ```
+
 ##### Importar FlexLayoutModule, MatIconModule, MatSidenavModule, MatCardModule, MatListModule, MatToolbarModule, MatButtonModule
 ```import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatIconModule, MatSidenavModule, MatCardModule, MatListModule, MatToolbarModule, MatButtonModule } from '@angular/material';```
