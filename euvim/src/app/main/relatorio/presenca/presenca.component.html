@@ -50,7 +50,7 @@
 <br/>
 <div *ngIf="filtred" class="mat-elevation-z8">
   <mat-accordion>
-    <mat-expansion-panel *ngFor="let item of relatorio">
+    <mat-expansion-panel *ngFor="let item of relatorio" (opened)="item.show = true" (closed)="item.show = false">
       <mat-expansion-panel-header>
         <mat-panel-title fxFlex="70">
           {{item.usuario.nome}}
@@ -59,7 +59,7 @@
           Frequência {{item.frequencia}} %
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <app-item-presenca ></app-item-presenca>
+      <app-item-presenca *ngIf="item.show" [dataInicio]="disciplina.dataInicio" [dataFim]="disciplina.dataTermino" [periodoInicial]="form.value.dataInicio" [periodoFinal]="form.value.dataFim" [presencas]="item.presenca" ></app-item-presenca>
     </mat-expansion-panel>
   </mat-accordion>
 </div>

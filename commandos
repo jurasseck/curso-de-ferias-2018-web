@@ -1741,3 +1741,93 @@ Como pode ver vamos ter muita manipulação de datas, neste contexto, então par
 Para isto vamos executar o seguinte comando, na raiz do projeto:
 npm install moment --save
 https://momentjs.com/
+
+"item-presenca.component.ts" vamos deixar a seguinte lógica para geração do nosso relatório usando moment
+import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
+import * as moment from 'moment';
+
+@Component({
+  selector: 'app-item-presenca',
+  templateUrl: './item-presenca.component.html',
+  styleUrls: ['./item-presenca.component.scss'],
+  encapsulation: ViewEncapsulation.None
+})
+export class ItemPresencaComponent implements OnInit {
+
+  @Input("dataInicio")
+  private cursoInicio:Date;
+  @Input("dataFim")
+  private cursoFim:Date;
+  @Input()
+  private periodoInicial:Date;
+  @Input()
+  private periodoFinal:Date;
+  @Input()
+  private presencas:Array<any>=[];
+
+  public listPresenca=[];
+
+  constructor() { }
+
+  ngOnInit() {
+    let inicio = moment(this.cursoInicio).isSameOrAfter(this.periodoInicial) ? this.cursoInicio : this.periodoInicial;   
+    let fim = moment(this.cursoFim).isSameOrBefore(this.periodoFinal) ? this.cursoFim : this.periodoFinal;
+    let dataCurso = moment(inicio);
+    while(dataCurso.isSameOrBefore(fim)){
+      if(dataCurso.weekday()>1 && dataCurso.weekday()<7){
+        this.listPresenca.push({date: dataCurso.toDate(), presente : this.presencas.includes(dataCurso.format("YYYY-MM-DD")) })
+      }
+      dataCurso.add(1, 'days');
+    } 
+  }
+
+}
+
+
+Agora vamos ajustar nosso html para exibição dos dados de presença dos alunos em item-presenca.component.html:
+<mat-list>
+  <h3 matSubheader>Presenças</h3>
+  <ng-container *ngFor="let item of listPresenca">
+    <mat-list-item>
+      <mat-icon matListIcon>{{item.presente ? 'check' : 'remove'}}</mat-icon>
+      <h3 matLine>{{item.presente ? 'Presente' : 'Ausente'}} </h3>
+      <p matLine>
+        <span>{{item.date | date:'d/M/y'}} </span>
+      </p>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+  </ng-container>
+</mat-list>
+
+
+Agora com isso vamos ajustar nossa implementação, no presenca.component.ts para que tenhamos o item da disciplina que enviamos na request, para obter suas datas e posteriormente passarmos no html
+gerarRelatorio() {
+    this.filtred = true
+    this.relatorio=null;
+    this.disciplina = this.disciplinas.find((item) => { return item.id = this.form.value.disciplina });
+    this._relatorioService.getPresencaDisciplina(this.form.value).subscribe(suc=>{
+      this.relatorio = suc;
+    })
+  }
+
+Agora vamos ajustar nosso html presenca.component.html para que agora vamos informar os parametros do nosso componente.
+<app-item-presenca *ngIf="item.show" [dataInicio]="disciplina.dataInicio" [dataFim]="disciplina.dataTermino" [periodoInicial]="form.value.dataInicio" [periodoFinal]="form.value.dataFim" [presencas]="item.presenca" ></app-item-presenca>
+
+Porém como podem ver ficou as linhas do mat-divider, sobrepondo o card, então vamos ajustar o css do nosso item-presenca.component.scsss colocando o seguinte css:
+.mat-card .mat-divider{
+    position: unset;
+    left: unset;
+}
+
+Pronto com isto finalizamos um relatório.
+
+
+Aula 08 - Criar o Login, Interceptor?
+
+
+
+
+
+Aula 09 - Interceptor de error, criar loading
+
+

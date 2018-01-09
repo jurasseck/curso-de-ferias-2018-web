@@ -18,18 +18,20 @@ export class ItemPresencaComponent implements OnInit {
   @Input()
   private periodoFinal:Date;
   @Input()
-  private presencas:Array<Date>=[];
+  private presencas:Array<any>=[];
 
   public listPresenca=[];
 
   constructor() { }
 
   ngOnInit() {
-    let inicio = moment(this.cursoInicio).isSameOrAfter(this.periodoInicial) ? this.cursoInicio : this.periodoInicial;
+    let inicio = moment(this.cursoInicio).isSameOrAfter(this.periodoInicial) ? this.cursoInicio : this.periodoInicial;   
     let fim = moment(this.cursoFim).isSameOrBefore(this.periodoFinal) ? this.cursoFim : this.periodoFinal;
     let dataCurso = moment(inicio);
     while(dataCurso.isSameOrBefore(fim)){
-      this.listPresenca.push({date: dataCurso.toDate(), presente : this.presencas.includes(dataCurso.toDate()) })
+      if(dataCurso.weekday()>1 && dataCurso.weekday()<7){
+        this.listPresenca.push({date: dataCurso.toDate(), presente : this.presencas.includes(dataCurso.format("YYYY-MM-DD")) })
+      }
       dataCurso.add(1, 'days');
     } 
   }
