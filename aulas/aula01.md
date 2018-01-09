@@ -237,6 +237,9 @@ Angular CLI
 
 ```npm i -g @angular/cli@1.6.3```
 
+##### Link com última versão
+```npm link @angular/cli```
+
 Primeiro Projeto
 ----------------
 
