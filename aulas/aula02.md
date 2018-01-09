@@ -212,8 +212,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
 
 import { RouterModule } from '@angular/router';
-import { MainModule } from "./main/main.module";
-import { AppRoutingModule } from "./app.routing";
+import { MainModule } from './main/main.module';
+import { AppRoutingModule } from './app.routing';
 
 @NgModule({
   declarations: [
@@ -222,7 +222,10 @@ import { AppRoutingModule } from "./app.routing";
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MatInputModule
+    MatInputModule,
+    RouterModule,
+    MainModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
@@ -238,18 +241,17 @@ import { RouterModule } from "@angular/router";
 
 ``` typescript
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { MainComponent } from './main.component';
-
-import { MainRouting } from './main.routing';
-import { RouterModule } from "@angular/router";
 
 @NgModule({
   imports: [
-    CommonModule
-  ],
-  declarations: [MainComponent]
+    RouterModule.forChild([
+      { path: 'main', 
+        component: MainComponent
+      }
+    ])
+  ]
 })
-export class MainModule { }
-
+export class MainRouting { }
 ```
