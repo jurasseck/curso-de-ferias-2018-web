@@ -6,7 +6,7 @@ Sumário
 
 * [Conceitos](#conceitos)
   * [Formulários](#formulários)
-  * [ComboBox](#combobox)
+  * [Binding](#binding)
   * [Validadores](#validadores)
   * [Mensagens de Erro](#mensagens-de-erro)
 * [Hands-on](#hands-on)
@@ -37,8 +37,8 @@ Formulários
 </form>
 ```
 
-ComboBox
---------
+Binding
+-------
 ``` typescript
 <mat-form-field fxFlex="47"> 
     <mat-select formControlName="perfil" placeholder="Perfil">
