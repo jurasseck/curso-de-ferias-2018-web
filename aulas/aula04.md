@@ -9,7 +9,7 @@ Sumário
   * [Elementos](#elementos)
   * [DataSource](#datasource)
 * [Hands-on](#hands-on)
-  * [Criando Módulo de Usuário](#criando-módulo-de-usuário)
+  * [Adicionando Rota para Formulário de Usuário](#adicionando-rota-para-formulário-de-usuário)
   * [Criando Componente de Consulta de Usuário](#criando-componente-de-consulta-de-usuário)
   * [Criando Componente de Formulário de Usuário](#criando-componente-de-formulário-de-usuário)
   * [Configurando Rota de Consulta de Usuário](#configurando-rota-de-consulta-de-usuário)
@@ -23,8 +23,8 @@ Conceitos
 Hands-on
 =========
 
-Adicionando Rota para Formulário
--------
+Adicionando Rota para Formulário de Usuário
+-------------------------------------------
 
 ##### No arquivo src/app/main/main.routing.ts
 ``` typescript
