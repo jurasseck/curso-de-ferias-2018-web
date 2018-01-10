@@ -14,7 +14,7 @@ Sumário
   * [Criando ComboBox de Perfis](#criando-combobox-de-perfis)
   * [Adicionando Validações](#adicionando-validações)
   * [Adicionando Mensagens de Erro](#adicionando-mensagens-de-erro)
-  * [Validações Customizadas](#validações-customizadas)
+  * [Validações Customizadas](#validações-customizadas)
   
 Conceitos
 =========
