@@ -12,6 +12,8 @@ Sumário
 * [Hands-on](#hands-on)
   * [Criando Serviço de Usuário](#criando-serviço-de-usuário)
   * [Adicionando Rota de Edição de Usuário](#adicionando-rota-de-edição-de-usuário)
+  * [Utilizando Serviço na Consulta de Usuário](#utilizando-serviço-na-consulta-de-usuário)
+  * [Utilizando Serviço no Formulário de Usuário](#utilizando-serviçono-formulário-de-usuário]
   
 Conceitos
 =========
@@ -280,8 +282,8 @@ export class ConsultaComponent implements OnInit {
 
 ##### No arquivo src/app/main/usuario/consulta/consulta.componente.html
 ``` typescript
-(click)="editar(element.id)
-(click)="excluir(element.id)
+(click)="editar(element.id)"
+(click)="excluir(element.id)"
 
 <div *ngIf="noResults$" class="noResult">Nenhum resultado</div>
 ```
@@ -324,4 +326,179 @@ export class ConsultaComponent implements OnInit {
     <mat-icon class="mat-24" aria-label="Adicionar">add</mat-icon>
   </button> 
 </div>
+```
+
+Utilizando Serviço no Formulário de Usuário
+-------------------------------------------
+
+##### No arquivo src/app/main/usuario/formulario/formulario.componente.ts
+``` typescript
+import { UsuarioService } from '../usuario.service';
+import { Router, ActivatedRoute } from '@angular/router';
+public perfis = [
+    { id: "PROFESSOR", descricao: 'Professor' },
+    { id: "ADMINISTRADOR", descricao: 'Administrador' },
+    { id: "ALUNO", descricao: 'Aluno' },
+  ];
+public id;
+
+constructor(private formBuilder: FormBuilder, private _usuarioService: UsuarioService, private _router: Router, private _activateRoute: ActivatedRoute) 
+
+ngOnInit() {
+  this.id = null;    
+  this._activateRoute.params.subscribe(params=>{
+    this.id = params['id'];
+  })
+  if(this.id){
+    var item = <any> this._usuarioService.carregar(this.id);
+    item.senha = null;
+    item.confirmacao = null;
+    this.form.setValue(item);
+    this.form.get("senha").setValidators(null);
+    this.form.get("confirmacao").setValidators(null);
+  }
+}
+
+salvar() {
+  if(this.form.valid){
+    if(this.id){
+      this._usuarioService.editar(this.form.value);
+    } else {
+      this._usuarioService.adicionar(this.form.value);
+    }
+    this.form.reset();
+    this._router.navigate(['/main/usuario/consulta']);
+  }
+}
+```
+
+``` typescript
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { EqualsPasswordValidator } from '../../../validators/equals.password.validator';
+import { UsuarioService } from '../usuario.service';
+import { Router, ActivatedRoute } from '@angular/router';
+
+@Component({
+  selector: 'app-formulario',
+  templateUrl: './formulario.component.html',
+  styleUrls: ['./formulario.component.scss']
+})
+export class FormularioComponent implements OnInit {
+
+  public perfis = [
+    { id: "PROFESSOR", descricao: 'Professor' },
+    { id: "ADMINISTRADOR", descricao: 'Administrador' },
+    { id: "ALUNO", descricao: 'Aluno' },
+  ];
+
+  public form : FormGroup;
+  public id;
+  
+  constructor(private formBuilder: FormBuilder, private _usuarioService: UsuarioService, private _router: Router, private _activateRoute: ActivatedRoute) {
+    this.form = formBuilder.group({
+        id: [null],
+        nome: [null, Validators.required],
+        email: [null, Validators.compose([Validators.required, Validators.email])],
+        login: [null, Validators.required],
+        perfil: [null, Validators.required],
+        senha: [null, Validators.required],
+        confirmacao: [null, Validators.required]
+    }, {validator: EqualsPasswordValidator.validate("senha", "confirmacao")})
+   }
+  
+  ngOnInit() {
+    this.id = null;    
+    this._activateRoute.params.subscribe(params=>{
+      this.id = params['id'];
+    })
+    if(this.id){
+      var item = <any> this._usuarioService.carregar(this.id);
+      item.senha = null;
+      item.confirmacao = null;
+      this.form.setValue(item);
+      this.form.get("senha").setValidators(null);
+      this.form.get("confirmacao").setValidators(null);
+    }
+  }
+
+  salvar() {
+    if(this.form.valid){
+      if(this.id){
+        this._usuarioService.editar(this.form.value);
+      } else {
+        this._usuarioService.adicionar(this.form.value);
+      }
+      this.form.reset();
+      this._router.navigate(['/main/usuario/consulta']);
+    }
+  }
+
+}
+```
+
+##### No arquivo src/app/main/usuario/formulario/formulario.componente.html
+``` typescript
+(click)="salvar()"
+```
+
+``` typescript
+<form [formGroup]="form" fxLayout="column">
+  <mat-form-field fxFlex="100"> 
+    <input matInput formControlName="nome" placeholder="Nome">
+    <mat-error *ngIf="form.controls['nome'].hasError('required')">
+        Campo obrigatório
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field fxFlex="100"> 
+    <input matInput formControlName="email" placeholder="E-mail">
+    <mat-error *ngIf="form.controls['email'].hasError('required')">
+        Campo obrigatório
+    </mat-error>
+    <mat-error *ngIf="form.controls['email'].hasError('email') && !form.controls['email'].hasError('required')">
+        E-mail inválido
+    </mat-error>
+  </mat-form-field>
+  <div fxFlex="100" fxLayout="row">
+    <mat-form-field fxFlex="47"> 
+      <input matInput formControlName="login" placeholder="Login">
+      <mat-error *ngIf="form.controls['login'].hasError('required')">
+          Campo obrigatório
+      </mat-error>
+    </mat-form-field>
+    <span fxFlex="5"></span>
+    <mat-form-field fxFlex="47"> 
+        <mat-select formControlName="perfil" placeholder="Perfil">
+            <mat-option *ngFor="let perfil of perfis" [value]="perfil.id">
+              {{ perfil.descricao }}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls['perfil'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxFlex="100" fxLayout="row">
+    <mat-form-field fxFlex="47"> 
+      <input matInput formControlName="senha" placeholder="Senha" type="password">
+      <mat-error *ngIf="form.controls['senha'].hasError('required')">
+          Campo obrigatório
+      </mat-error>
+    </mat-form-field>
+    <span fxFlex="5"></span>
+    <mat-form-field fxFlex="47"> 
+      <input matInput formControlName="confirmacao" placeholder="Confirmação" type="password">
+      <mat-error *ngIf="form.controls['confirmacao'].hasError('required')">
+          Campo obrigatório
+      </mat-error>
+      <mat-error *ngIf="form.controls['confirmacao'].hasError('passwordEquals') && !form.controls['confirmacao'].hasError('required')">
+          Campo Confirmação não é igual ao campo Senha
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
+      <button mat-raised-button color="primary" [disabled]="!form.valid" (click)="salvar()">Salvar</button>
+      <button mat-raised-button color="warn" routerLink="/main/usuario/consulta">Cancelar</button>
+  </div>
+</form>
 ```
