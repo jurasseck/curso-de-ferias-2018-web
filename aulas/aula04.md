@@ -12,6 +12,7 @@ Sumário
   * [Adicionando Rota para Formulário de Usuário](#adicionando-rota-para-formulário-de-usuário)
   * [Criando Formulário de Usuário](#criando-formulário-de-usuário)
   * [Criando ComboBox de Perfis](#criando-combobox-de-perfis)
+  * [Adicionando Validações](#adicionando-validaçes)
   
 Conceitos
 =========
@@ -251,7 +252,7 @@ export class FormularioComponent implements OnInit {
     </mat-form-field>
     <span fxFlex="5"></span>
     <mat-form-field fxFlex="47"> 
-        <mat-select formControlName="perfil" placeholder="Perfil">
+        <mat-select placeholder="Perfil">
             <mat-option *ngFor="let perfil of perfis" [value]="perfil.id">
               {{ perfil.descricao }}
             </mat-option>
@@ -273,3 +274,7 @@ export class FormularioComponent implements OnInit {
   </div>
 </form>
 ```
+
+Adicionando Validações
+----------------------
+
