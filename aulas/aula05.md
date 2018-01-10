@@ -664,3 +664,191 @@ export class UsuarioService {
 
 }
 ```
+
+##### No arquivo src/app/main/usuario/consulta/consulta.component.ts
+``` typescript
+excluir(id){
+  this._usuarioService.excluir(id).subscribe(suc=>{
+    this.atualizarListaDeUsuarios();
+  });
+}
+
+editar(id){
+  this._router.navigate(["/main/usuario/editar", id]);
+}
+
+private atualizarListaDeUsuarios(){
+  this._usuarioService.listar().subscribe(suc => {
+    this.noResults$ = suc.length == 0;
+    this.dataSource = new MatTableDataSource(suc);
+  });
+}
+```
+
+``` typescript
+import { Component, OnInit } from '@angular/core';
+
+import { DataSource } from '@angular/cdk/collections';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import { UsuarioService } from '../usuario.service';
+import { MatTableDataSource } from '@angular/material';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-consulta',
+  templateUrl: './consulta.component.html',
+  styleUrls: ['./consulta.component.scss']
+})
+export class ConsultaComponent implements OnInit {
+
+  public displayedColumns = ['position', 'nome', 'login', 'email', 'perfil'];
+  public dataSource: MatTableDataSource<any>;
+
+  public perfis = {
+     "PROFESSOR": 'Professor',
+     "ADMINISTRADOR": 'Administrador',
+     "ALUNO": 'Aluno'
+  };
+
+  public noResults$ = false;
+  constructor(private _usuarioService: UsuarioService, private _router: Router) { }
+  
+  ngOnInit() {
+    this.atualizarListaDeUsuarios();
+  }
+ 
+  excluir(id){
+    this._usuarioService.excluir(id).subscribe(suc=>{
+      this.atualizarListaDeUsuarios();
+  });
+  }
+
+  editar(id){
+    this._router.navigate(["/main/usuario/editar", id]);
+  }
+
+  private atualizarListaDeUsuarios(){
+    this._usuarioService.listar().subscribe(suc => {
+      this.noResults$ = suc.length == 0;
+      this.dataSource = new MatTableDataSource(suc);
+    });
+  }
+
+}
+```
+
+##### No arquivo src/app/main/usuario/formulario/formulario.component.ts
+``` typescript
+ngOnInit() {
+  this.id = null;    
+  this._activateRoute.params.subscribe(params=>{
+    this.id = params['id'];
+  });
+  if(this.id){
+    this._usuarioService.carregar(this.id).subscribe(suc=>{
+      var item = Object(suc);
+      delete item.urlFoto;
+      item.senha = null;
+      item.confirmacao = null;
+      this.form.get("senha").setValidators(null);
+      this.form.get("confirmacao").setValidators(null);
+      this.form.setValue(item);
+    });
+  }
+}
+
+salvar() {
+  if(this.form.valid){
+    if(this.id){
+      this._usuarioService.editar(this.form.value).subscribe(suc=>{
+        this.consultar();
+      });
+    } else {
+      this._usuarioService.adicionar(this.form.value).subscribe(suc=>{
+        this.consultar();
+      });
+    }
+  }
+}
+
+consultar() {
+  this.form.reset();
+  this._router.navigate(['/main/usuario/consulta']);
+} 
+```
+
+``` typescript
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { EqualsPasswordValidator } from '../../../validators/equals.password.validator';
+import { UsuarioService } from '../usuario.service';
+import { Router, ActivatedRoute } from '@angular/router';
+
+@Component({
+  selector: 'app-formulario',
+  templateUrl: './formulario.component.html',
+  styleUrls: ['./formulario.component.scss']
+})
+export class FormularioComponent implements OnInit {
+
+  public perfis = [
+    { id: "PROFESSOR", descricao: 'Professor' },
+    { id: "ADMINISTRADOR", descricao: 'Administrador' },
+    { id: "ALUNO", descricao: 'Aluno' },
+  ];
+
+  public form : FormGroup;
+  public id;
+  
+  constructor(private formBuilder: FormBuilder, private _usuarioService: UsuarioService, private _router: Router, private _activateRoute: ActivatedRoute) {
+    this.form = formBuilder.group({
+        id: [null],
+        nome: [null, Validators.required],
+        email: [null, Validators.compose([Validators.required, Validators.email])],
+        login: [null, Validators.required],
+        perfil: [null, Validators.required],
+        senha: [null, Validators.required],
+        confirmacao: [null, Validators.required]
+    }, {validator: EqualsPasswordValidator.validate("senha", "confirmacao")})
+   }
+  
+  ngOnInit() {
+    this.id = null;    
+    this._activateRoute.params.subscribe(params=>{
+      this.id = params['id'];
+    });
+    if(this.id){
+      this._usuarioService.carregar(this.id).subscribe(suc=>{
+        var item = Object(suc);
+        delete item.urlFoto;
+        item.senha = null;
+        item.confirmacao = null;
+        this.form.get("senha").setValidators(null);
+        this.form.get("confirmacao").setValidators(null);
+        this.form.setValue(item);
+      });
+    }
+  }
+
+  salvar() {
+    if(this.form.valid){
+      if(this.id){
+        this._usuarioService.editar(this.form.value).subscribe(suc=>{
+          this.consultar();
+        });
+      } else {
+        this._usuarioService.adicionar(this.form.value).subscribe(suc=>{
+          this.consultar();
+        });
+      }
+    }
+  }
+
+  consultar() {
+    this.form.reset();
+    this._router.navigate(['/main/usuario/consulta']);
+  } 
+
+}
+```
