@@ -10,10 +10,7 @@ Sumário
   * [DataSource](#datasource)
 * [Hands-on](#hands-on)
   * [Adicionando Rota para Formulário de Usuário](#adicionando-rota-para-formulário-de-usuário)
-  * [Criando Componente de Consulta de Usuário](#criando-componente-de-consulta-de-usuário)
-  * [Criando Componente de Formulário de Usuário](#criando-componente-de-formulário-de-usuário)
-  * [Configurando Rota de Consulta de Usuário](#configurando-rota-de-consulta-de-usuário)
-  * [Tabela de Consulta de Usuários](#tabela-de-consulta-de-usuários)
+  * [Criando Formulário de Usuário](#criando-formulário-de-usuário)
   * [Criando ComboBox de Perfis](#criando-combobox-de-perfis)
   
 Conceitos
@@ -107,6 +104,9 @@ routerLink="/main/usuario/adicionar"
   </button> 
 </div>
 ```
+
+Criando Formulário de Usuário
+-----------------------------
 
 ##### No arquivo src/app/main/main.module.ts
 ``` typescript
