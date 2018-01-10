@@ -10,12 +10,7 @@ Sumário
   * [Validadores](#validadores)
   * [Mensagens de Erro](#mensagens-de-erro)
 * [Hands-on](#hands-on)
-  * [Adicionando Rota para Formulário de Usuário](#adicionando-rota-para-formulário-de-usuário)
-  * [Criando Formulário de Usuário](#criando-formulário-de-usuário)
-  * [Criando ComboBox de Perfis](#criando-combobox-de-perfis)
-  * [Adicionando Validações](#adicionando-validações)
-  * [Adicionando Mensagens de Erro](#adicionando-mensagens-de-erro)
-  * [Validações Customizadas](#validações-customizadas)
+  * [ACriando Serviço de Usuário](#criando-serviço-de-usuário)
   
 Conceitos
 =========
