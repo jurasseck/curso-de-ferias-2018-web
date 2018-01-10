@@ -8,7 +8,6 @@ Sumário
   * [Serviços](#formulários)
   * [Arrays](#arrays)
   * [Navegação com Rotas](#navegação-com-rotas)
-  * [Mensagens de Erro](#mensagens-de-erro)
 * [Hands-on](#hands-on)
   * [Criando Serviço de Usuário](#criando-serviço-de-usuário)
   * [Adicionando Rota de Edição de Usuário](#adicionando-rota-de-edição-de-usuário)
