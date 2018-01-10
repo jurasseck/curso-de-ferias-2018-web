@@ -1847,8 +1847,79 @@ export class RelatorioService {
 Pronto com isto finalizamos um relatório.
 
 
-Aula 08 - Criar o Login, Interceptor?
+Aula 08 - Criar o Login, SessionStorage, AuthGuard, Interceptor
+Vamos iniciar pela criação do nosso módulo de login, dentro da nossa pasta app.
+ng g module login
+ng g component login
+dentro da pasta "login" cd login
+ng g service login
 
+Após isto vamos criar nosso login.routing.ts
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { LoginComponent } from './login.component';
+
+@NgModule({
+  imports: [
+    RouterModule.forChild([
+      { path: 'login', 
+        component: LoginComponent,
+      }
+    ])
+  ]
+})
+export class LoginRouting { }
+
+Depois atualizaremos nosso módulo login.module.ts para importar nossa rota, provider.
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { LoginComponent } from './login.component';
+import { LoginRouting } from './login.routing';
+import { RouterModule } from "@angular/router";
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { LoginService } from './login.service';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    RouterModule,
+    LoginRouting,
+    HttpClientModule
+  ],
+  declarations: [LoginComponent],
+  providers: [HttpClient, LoginService ]
+})
+export class LoginModule { }
+
+Após isto precisamos ajustar nosso app.module para importar este módulo.
+import { LoginModule } from './login/login.module';
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    RouterModule,
+    MainModule,
+    AppRoutingModule,
+    LoginModule
+  ]
+
+Agora vamos ajustar nosso app.routing.ts para redirecionar sempre para nossa tela de login ao invés de da main, caso não haja main em nosso path;
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot([
+      { path: 'main', redirectTo: '/main', pathMatch: 'full' },
+      { path: '**', redirectTo: '/login', pathMatch: 'full' }
+    ], {useHash:true})
+  ]
+})
+export class AppRoutingModule { }
+
+Pronto agora quando entrarmos no site, deve aparece nossa tela de login atualmente somente com texto padrão:
+http://localhost:4200
+
+Vamos então criar nosso HTML, que será nosso login.
 
 
 
