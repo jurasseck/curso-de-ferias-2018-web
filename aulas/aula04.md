@@ -278,3 +278,158 @@ export class FormularioComponent implements OnInit {
 Adicionando Validações
 ----------------------
 
+##### No arquivo src/app/main/main.module.ts
+``` typescript
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
+```
+
+``` typescript
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MainComponent } from './main.component';
+
+import { MainRouting } from './main.routing';
+import { RouterModule } from '@angular/router';
+
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatIconModule, MatSidenavModule, MatCardModule, MatListModule, MatToolbarModule, MatButtonModule, MatTableModule, MatFormFieldModule, MatSelectModule, MatInputModule } from '@angular/material';
+import { ConsultaComponent } from './usuario/consulta/consulta.component';
+import { FormularioComponent } from './usuario/formulario/formulario.component';
+
+import { ReactiveFormsModule, FormsModule, FormBuilder } from '@angular/forms';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    MainRouting,
+    RouterModule,
+    FlexLayoutModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatCardModule,
+    MatListModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    FormsModule
+  ],
+  providers: [
+    FormBuilder
+  ],
+  declarations: [MainComponent, ConsultaComponent, FormularioComponent]
+})
+export class MainModule { }
+```
+
+##### No arquivo src/app/main/usuario/formulario/formulario.component.ts
+``` typescript
+import { FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
+import { Validators } from '@angular/forms';
+
+public form : FormGroup;
+  
+constructor(private formBuilder: FormBuilder) {
+  this.form = formBuilder.group({
+      id: [null],
+      nome: [null, Validators.required],
+      email: [null, Validators.compose([Validators.required, Validators.email])],
+      login: [null, Validators.required],
+      perfil: [null, Validators.required],
+      senha: [null, Validators.required],
+      confirmacao: [null, Validators.required]
+  })
+}   
+```
+
+``` typescript
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+@Component({
+  selector: 'app-formulario',
+  templateUrl: './formulario.component.html',
+  styleUrls: ['./formulario.component.scss']
+})
+export class FormularioComponent implements OnInit {
+
+  public perfis = [
+    { id: "PROFESSOR", descricao: 'Professor' },
+    { id: "ADMINISTRADOR", descricao: 'Administrador' },
+    { id: "ALUNO", descricao: 'Aluno' },
+  ];
+
+  public form : FormGroup;
+  
+  constructor(private formBuilder: FormBuilder) {
+    this.form = formBuilder.group({
+        id: [null],
+        nome: [null, Validators.required],
+        email: [null, Validators.compose([Validators.required, Validators.email])],
+        login: [null, Validators.required],
+        perfil: [null, Validators.required],
+        senha: [null, Validators.required],
+        confirmacao: [null, Validators.required]
+    })
+   }
+  
+  ngOnInit() {
+  }
+
+}
+```
+
+##### No arquivo src/app/main/usuario/formulario/formulario.component.ts
+``` typescript
+[formGroup]="form"
+
+formControlName="nome"
+formControlName="email"
+formControlName="login"
+formControlName="perfil"
+formControlName="senha"
+formControlName="confirmacao"
+```
+
+``` typescript
+<form [formGroup]="form" fxLayout="column">
+  <mat-form-field fxFlex="100"> 
+    <input matInput formControlName="nome" placeholder="Nome">
+  </mat-form-field>
+  <mat-form-field fxFlex="100"> 
+    <input matInput formControlName="email" placeholder="E-mail">
+  </mat-form-field>
+  <div fxFlex="100" fxLayout="row">
+    <mat-form-field fxFlex="47"> 
+      <input matInput formControlName="login" placeholder="Login">
+    </mat-form-field>
+    <span fxFlex="5"></span>
+    <mat-form-field fxFlex="47"> 
+        <mat-select formControlName="perfil" placeholder="Perfil">
+            <mat-option *ngFor="let perfil of perfis" [value]="perfil.id">
+              {{ perfil.descricao }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+  </div>
+  <div fxFlex="100" fxLayout="row">
+    <mat-form-field fxFlex="47"> 
+      <input matInput formControlName="senha" placeholder="Senha" type="password">
+    </mat-form-field>
+    <span fxFlex="5"></span>
+    <mat-form-field fxFlex="47"> 
+      <input matInput formControlName="confirmacao" placeholder="Confirmação" type="password">
+    </mat-form-field>
+  </div>
+  <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
+      <button mat-raised-button color="primary">Cadastrar</button>
+      <button mat-raised-button color="warn" routerLink="/main/usuario/consulta">Cancelar</button>
+  </div>
+</form>
+```
