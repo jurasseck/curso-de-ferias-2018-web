@@ -6,8 +6,8 @@ Sumário
 
 * [Conceitos](#conceitos)
   * [Serviços](#formulários)
-  * [Binding](#binding)
-  * [Validadores](#validadores)
+  * [Arrays](#arrays)
+  * [Navegação com Rotas](#navegação-com-rotas)
   * [Mensagens de Erro](#mensagens-de-erro)
 * [Hands-on](#hands-on)
   * [Criando Serviço de Usuário](#criando-serviço-de-usuário)
@@ -21,7 +21,7 @@ Conceitos
 [Componentes Angular Material](https://material.angular.io/components)
 
 Serviços
------------
+--------
 
 ``` typescript
 import { Injectable } from '@angular/core';
@@ -32,6 +32,39 @@ export class UsuarioService {
   constructor() { }
 
 }
+```
+
+Arrays
+------
+
+``` typescript
+private usuarios = [
+    {id: 1, nome: 'José da Silva', login: "jose", email: 'jose@ponto.com.br', perfil:"ALUNO"},
+    {id: 2, nome: 'Mariano das Neves', login: "mariano", email: 'marino@ponto.com.br', perfil:"ALUNO"},
+    {id: 3, nome: 'Magyver da Silva', login: "magyver", email: 'magyver@ponto.com.br', perfil:"ALUNO"},
+    {id: 4, nome: 'Irineu Nunes', login: "irineu", email: 'irineu@ponto.com.br', perfil:"ALUNO"},
+    {id: 5, nome: 'Carlos Silva', login: "carlos1", email: 'carlos@ponto.com.br', perfil:"ALUNO"}
+  ];
+
+this.usuarios.forEach(usuario=>{
+      maxIdentifier < usuario.id ? maxIdentifier = usuario.id : maxIdentifier = maxIdentifier;
+    });
+
+this.usuarios.findIndex(item=> item.id == id);
+
+this.usuarios.find(item=> item.id == id);
+```
+
+Navegação com Rotas
+-------------------
+
+``` typescript
+this._router.navigate(['/main/usuario/consulta']);
+this._router.navigate(["/main/usuario/editar", id]);
+
+this._activateRoute.params.subscribe(params=>{
+      this.id = params['id'];
+    });
 ```
 
 Hands-on
@@ -66,7 +99,7 @@ export class UsuarioService {
     let maxIdentifier = 0;
     this.usuarios.forEach(usuario=>{
       maxIdentifier < usuario.id ? maxIdentifier = usuario.id : maxIdentifier = maxIdentifier;
-    })
+    });
     usuario.identifier = maxIdentifier + 1;
     this.usuarios.push(usuario);
   }
@@ -411,7 +444,7 @@ export class FormularioComponent implements OnInit {
     this.id = null;    
     this._activateRoute.params.subscribe(params=>{
       this.id = params['id'];
-    })
+    });
     if(this.id){
       var item = <any> this._usuarioService.carregar(this.id);
       item.senha = null;
