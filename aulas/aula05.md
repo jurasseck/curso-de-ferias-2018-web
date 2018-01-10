@@ -13,6 +13,7 @@ Sumário
   * [Adicionando Rota de Edição de Usuário](#adicionando-rota-de-edição-de-usuário)
   * [Utilizando Serviço na Consulta de Usuário](#utilizando-serviço-na-consulta-de-usuário)
   * [Utilizando Serviço no Formulário de Usuário](#utilizando-serviço-no-formulário-de-usuário)
+  * [Consumindo APIs REST](#consumindo-apis-rest)
   
 Conceitos
 =========
@@ -533,4 +534,19 @@ export class FormularioComponent implements OnInit {
       <button mat-raised-button color="warn" routerLink="/main/usuario/consulta">Cancelar</button>
   </div>
 </form>
+```
+
+Consumindo APIs REST
+--------------------
+
+``` typescript
+
+```
+
+``` typescript
+
+```
+
+``` typescript
+
 ```
