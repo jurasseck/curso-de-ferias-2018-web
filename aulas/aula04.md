@@ -8,6 +8,7 @@ Sumário
   * [Formulários](#formulários)
   * [ComboBox](#combobox)
   * [Validadores](#validadores)
+  * [Mensagens de Erro](#mensagens-de-erro)
 * [Hands-on](#hands-on)
   * [Adicionando Rota para Formulário de Usuário](#adicionando-rota-para-formulário-de-usuário)
   * [Criando Formulário de Usuário](#criando-formulário-de-usuário)
@@ -24,11 +25,62 @@ Conceitos
 Formulários
 -----------
 
+``` typescript
+<form fxLayout="column">
+  <mat-form-field fxFlex="100"> 
+    <input matInput placeholder="Nome">
+  </mat-form-field>
+  <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
+      <button mat-raised-button color="primary">Salvar</button>
+      <button mat-raised-button color="warn" routerLink="/main/cancelar">Cancelar</button>
+  </div>
+</form>
+```
+
 ComboBox
 --------
+``` typescript
+<mat-form-field fxFlex="47"> 
+    <mat-select formControlName="perfil" placeholder="Perfil">
+        <mat-option *ngFor="let perfil of perfis" [value]="perfil.id">
+          {{ perfil.descricao }}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+```
+
+``` typescript
+public perfis = [
+    { id: "PROFESSOR", descricao: 'Professor' },
+    { id: "ADMINISTRADOR", descricao: 'Administrador' },
+    { id: "ALUNO", descricao: 'Aluno' },
+  ];
+```
 
 Validadores
 -----------
+``` typescript
+import {FormGroup} from '@angular/forms';
+
+export class MeuValidator {
+
+  public static validate(firstField, secondField) {
+    // to do something
+  }
+
+}
+```
+
+Mensagens de Erro
+-----------------
+``` typescript
+<mat-form-field fxFlex="100"> 
+  <input matInput formControlName="nome" placeholder="Nome">
+  <mat-error *ngIf="form.controls['nome'].hasError('required')">
+      Campo obrigatório
+  </mat-error>
+</mat-form-field>
+```
 
 Hands-on
 =========
