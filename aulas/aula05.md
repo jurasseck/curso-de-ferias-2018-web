@@ -561,14 +561,106 @@ export class FormularioComponent implements OnInit {
 Consumindo APIs REST
 --------------------
 
+##### No arquivo src/app/main/main.module.ts
 ``` typescript
-
+import { HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 ```
 
 ``` typescript
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MainComponent } from './main.component';
 
+import { MainRouting } from './main.routing';
+import { RouterModule } from '@angular/router';
+
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatIconModule, MatSidenavModule, MatCardModule, MatListModule, MatToolbarModule, MatButtonModule, MatTableModule, MatFormFieldModule, MatSelectModule, MatInputModule } from '@angular/material';
+import { ConsultaComponent } from './usuario/consulta/consulta.component';
+import { FormularioComponent } from './usuario/formulario/formulario.component';
+
+import { ReactiveFormsModule, FormsModule, FormBuilder } from '@angular/forms';
+import { UsuarioService } from './usuario/usuario.service';
+
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    MainRouting,
+    RouterModule,
+    FlexLayoutModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatCardModule,
+    MatListModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    FormsModule,
+    HttpClientModule
+  ],
+  providers: [
+    FormBuilder,
+    UsuarioService,
+    HttpClient
+  ],
+  declarations: [MainComponent, ConsultaComponent, FormularioComponent]
+})
+export class MainModule { }
+```
+
+##### No arquivo src/app/main/usuario/usuario.service.ts
+``` typescript
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+
+private _urlUsuario = environment.url+"/api/v1/usuarios";
+
+return this._httpClient.post(this._urlUsuario, usuario, {responseType: 'text'});
+return this._httpClient.delete(this._urlUsuario+"/"+id, {responseType: 'text'});
+return this._httpClient.put(this._urlUsuario+"/"+usuario.id, usuario, {responseType: 'text'});
+return this._httpClient.get<Array<Object>>(this._urlUsuario);
+return this._httpClient.get(this._urlUsuario+"/"+id);
 ```
 
 ``` typescript
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
+@Injectable()
+export class UsuarioService {
+
+  private usuarios;
+  private _urlUsuario = environment.url+"/api/v1/usuarios";
+
+  constructor(private _httpClient: HttpClient) { }
+  
+  adicionar(usuario){
+    return this._httpClient.post(this._urlUsuario, usuario, {responseType: 'text'});
+  }
+
+  excluir(id){
+    return this._httpClient.delete(this._urlUsuario+"/"+id, {responseType: 'text'});
+  }
+
+  editar(usuario){
+    return this._httpClient.put(this._urlUsuario+"/"+usuario.id, usuario, {responseType: 'text'});
+  }
+
+  listar(){
+    return this._httpClient.get<Array<Object>>(this._urlUsuario);
+  }
+
+  carregar(id){
+    return this._httpClient.get(this._urlUsuario+"/"+id);
+  }
+
+}
 ```
