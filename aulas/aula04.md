@@ -12,7 +12,7 @@ Sumário
   * [Adicionando Rota para Formulário de Usuário](#adicionando-rota-para-formulário-de-usuário)
   * [Criando Formulário de Usuário](#criando-formulário-de-usuário)
   * [Criando ComboBox de Perfis](#criando-combobox-de-perfis)
-  * [Adicionando Validações](#adicionando-validações)
+  * [Adicionando Validações](#adicionando-validações)
   * [Adicionando Mensagens de Erro](#adicionando-mensagens-de-erro)
   
 Conceitos
