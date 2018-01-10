@@ -29,7 +29,7 @@ export class ItemPresencaComponent implements OnInit {
     let fim = moment(this.cursoFim).isSameOrBefore(this.periodoFinal) ? this.cursoFim : this.periodoFinal;
     let dataCurso = moment(inicio);
     while(dataCurso.isSameOrBefore(fim)){
-      if(dataCurso.weekday()>1 && dataCurso.weekday()<7){
+      if(dataCurso.weekday()>0 && dataCurso.weekday()<6){
         this.listPresenca.push({date: dataCurso.toDate(), presente : this.presencas.includes(dataCurso.format("YYYY-MM-DD")) })
       }
       dataCurso.add(1, 'days');
