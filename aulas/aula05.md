@@ -186,3 +186,142 @@ import { FormularioComponent } from './usuario/formulario/formulario.component';
 })
 export class MainRouting { }
 ```
+
+Utilizando Serviço na Consulta de Usuário
+-----------------------------------------
+
+##### No arquivo src/app/main/usuario/consulta/consulta.componente.ts
+``` typescript
+import { UsuarioService } from '../usuario.service';
+import { MatTableDataSource } from '@angular/material';
+import { Router } from '@angular/router';
+
+public dataSource: MatTableDataSource<any>;
+
+  public perfis = {
+     "PROFESSOR": 'Professor',
+     "ADMINISTRADOR": 'Administrador',
+     "ALUNO": 'Aluno'
+  };
+
+  public noResults$ = false;
+  constructor(private _usuarioService: UsuarioService, private _router: Router) { }
+  
+  ngOnInit() {
+    this.atualizarListaDeUsuarios();
+  }
+ 
+  excluir(id){
+    this._usuarioService.excluir(id);
+    this.atualizarListaDeUsuarios();
+  }
+
+  editar(id){
+    this._router.navigate(["/main/usuario/editar", id]);
+  }
+
+  private atualizarListaDeUsuarios(){
+    var items = this._usuarioService.listar();
+    this.noResults$ = items.length == 0;
+    this.dataSource = new MatTableDataSource(items);
+  }
+```
+
+``` typescript
+import { Component, OnInit } from '@angular/core';
+
+import { DataSource } from '@angular/cdk/collections';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import { UsuarioService } from '../usuario.service';
+import { MatTableDataSource } from '@angular/material';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-consulta',
+  templateUrl: './consulta.component.html',
+  styleUrls: ['./consulta.component.scss']
+})
+export class ConsultaComponent implements OnInit {
+
+  public displayedColumns = ['position', 'nome', 'login', 'email', 'perfil'];
+  public dataSource: MatTableDataSource<any>;
+
+  public perfis = {
+     "PROFESSOR": 'Professor',
+     "ADMINISTRADOR": 'Administrador',
+     "ALUNO": 'Aluno'
+  };
+
+  public noResults$ = false;
+  constructor(private _usuarioService: UsuarioService, private _router: Router) { }
+  
+  ngOnInit() {
+    this.atualizarListaDeUsuarios();
+  }
+ 
+  excluir(id){
+    this._usuarioService.excluir(id);
+    this.atualizarListaDeUsuarios();
+  }
+
+  editar(id){
+    this._router.navigate(["/main/usuario/editar", id]);
+  }
+
+  private atualizarListaDeUsuarios(){
+    var items = this._usuarioService.listar();
+    this.noResults$ = items.length == 0;
+    this.dataSource = new MatTableDataSource(items);
+  }
+
+}
+```
+
+##### No arquivo src/app/main/usuario/consulta/consulta.componente.html
+``` typescript
+(click)="editar(element.id)
+(click)="excluir(element.id)
+
+<div *ngIf="noResults$" class="noResult">Nenhum resultado</div>
+```
+
+``` typescript
+<div class="mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource">
+    <ng-container matColumnDef="position">
+      <mat-header-cell *matHeaderCellDef  fxFlex="10"> Ações </mat-header-cell>
+      <mat-cell *matCellDef="let element" fxFlex="10" class="buttons">
+          <button mat-icon-button color="primary" (click)="editar(element.id)" mdTooltip="Editar">
+            <mat-icon class="mat-24" aria-label="Editar">edit</mat-icon>
+          </button>
+          <button mat-icon-button color="danger" (click)="excluir(element.id)" mdTooltip="Excluir">
+              <mat-icon class="mat-24" aria-label="Excluir">delete</mat-icon>
+          </button>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="nome">
+      <mat-header-cell *matHeaderCellDef> Nome </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.nome}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="login">
+        <mat-header-cell *matHeaderCellDef> Login </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.login}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef> E-mail </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="perfil">
+      <mat-header-cell *matHeaderCellDef> Perfil </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{perfis[element.perfil]}} </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <div *ngIf="noResults$" class="noResult">Nenhum resultado</div>
+  <button mat-fab color="primary" routerLink="/main/usuario/adicionar">
+    <mat-icon class="mat-24" aria-label="Adicionar">add</mat-icon>
+  </button> 
+</div>
+```
