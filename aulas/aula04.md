@@ -227,3 +227,49 @@ export class FormularioComponent implements OnInit {
 
 }
 ```
+
+##### No arquivo src/app/main/usuario/formulario/formulario.component.html
+``` typescript
+<mat-select formControlName="perfil" placeholder="Perfil">
+    <mat-option *ngFor="let perfil of perfis" [value]="perfil.id">
+      {{ perfil.descricao }}
+    </mat-option>
+</mat-select>
+```
+
+``` typescript
+<form fxLayout="column">
+  <mat-form-field fxFlex="100"> 
+    <input matInput placeholder="Nome">
+  </mat-form-field>
+  <mat-form-field fxFlex="100"> 
+    <input matInput placeholder="E-mail">
+  </mat-form-field>
+  <div fxFlex="100" fxLayout="row">
+    <mat-form-field fxFlex="47"> 
+      <input matInput placeholder="Login">
+    </mat-form-field>
+    <span fxFlex="5"></span>
+    <mat-form-field fxFlex="47"> 
+        <mat-select formControlName="perfil" placeholder="Perfil">
+            <mat-option *ngFor="let perfil of perfis" [value]="perfil.id">
+              {{ perfil.descricao }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+  </div>
+  <div fxFlex="100" fxLayout="row">
+    <mat-form-field fxFlex="47"> 
+      <input matInput placeholder="Senha" type="password">
+    </mat-form-field>
+    <span fxFlex="5"></span>
+    <mat-form-field fxFlex="47"> 
+      <input matInput placeholder="Confirmação" type="password">
+    </mat-form-field>
+  </div>
+  <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
+      <button mat-raised-button color="primary">Cadastrar</button>
+      <button mat-raised-button color="warn" routerLink="/main/usuario/consulta">Cancelar</button>
+  </div>
+</form>
+```
