@@ -11,6 +11,7 @@ Sumário
   * [Mensagens de Erro](#mensagens-de-erro)
 * [Hands-on](#hands-on)
   * [Criando Serviço de Usuário](#criando-serviço-de-usuário)
+  * [Adicionando Rota de Edição de Usuário](#adicionando-rota-de-edição-de-usuário)
   
 Conceitos
 =========
@@ -142,4 +143,46 @@ import { UsuarioService } from './usuario/usuario.service';
 export class MainModule { }
 ```
 
+Adicionando Rota de Edição de Usuário
+-------------------------------------
 
+##### No arquivo src/app/main/main.routing.ts
+``` typescript
+{
+  path: 'usuario/editar/:id',
+  component: FormularioComponent
+}
+```
+
+``` typescript
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { MainComponent } from './main.component';
+import { ConsultaComponent } from './usuario/consulta/consulta.component';
+import { FormularioComponent } from './usuario/formulario/formulario.component';
+
+@NgModule({
+  imports: [
+    RouterModule.forChild([
+      { path: 'main', 
+        component: MainComponent,
+        children: [
+          {
+            path: 'usuario/consulta',
+            component: ConsultaComponent
+          },
+          {
+            path: 'usuario/adicionar',
+            component: FormularioComponent
+          },
+          {
+            path: 'usuario/editar/:id',
+            component: FormularioComponent
+          }
+        ]
+      }
+    ])
+  ]
+})
+export class MainRouting { }
+```
