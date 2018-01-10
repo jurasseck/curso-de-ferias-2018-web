@@ -1819,6 +1819,31 @@ Porém como podem ver ficou as linhas do mat-divider, sobrepondo o card, então 
     left: unset;
 }
 
+Antes de finalizarmos este item, podemos ver que nossa request, para obtenção do relatório está com as datas, com formatação diferente que o servidor vai aceitar, então vamos usar o moment para ajustar:
+de: http://storage6.static.itmages.com/i/18/0110/h_1515576329_2979360_5212df7eb0.png
+para: http://storage2.static.itmages.com/i/18/0110/h_1515576486_2191796_581722cf2c.png
+
+No arquivo "relatorio.service.ts" vamos importar a lib moment, e utilizar o seu método format:
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import { environment } from '../../../environments/environment';
+import * as moment from 'moment';
+
+@Injectable()
+export class RelatorioService {
+
+  constructor(private _httpClient:HttpClient ) { }
+
+  private _urlRelatorio = environment.URL+"relatorio";
+
+  getPresencaDisciplina(filter){
+    let httpParams = new HttpParams().append("dataInicio",moment(filter.dataInicio).format("YYYY-MM-DDD"))
+                                     .append("dataFim",moment(filter.dataFim).format("YYYY-MM-DDD"));
+    return this._httpClient.get<Array<any>>(this._urlRelatorio+"/"+filter.disciplina, {params:httpParams});
+  }
+}
+
 Pronto com isto finalizamos um relatório.
 
 
