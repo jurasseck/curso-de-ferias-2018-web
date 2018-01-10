@@ -189,7 +189,7 @@ export class MainModule { }
     </mat-form-field>
   </div>
   <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
-      <button mat-raised-button color="primary">Cadastrar</button>
+      <button mat-raised-button color="primary">Salvar</button>
       <button mat-raised-button color="warn" routerLink="/main/usuario/consulta">Cancelar</button>
   </div>
 </form>
@@ -271,7 +271,7 @@ export class FormularioComponent implements OnInit {
     </mat-form-field>
   </div>
   <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
-      <button mat-raised-button color="primary">Cadastrar</button>
+      <button mat-raised-button color="primary">Salvar</button>
       <button mat-raised-button color="warn" routerLink="/main/usuario/consulta">Cancelar</button>
   </div>
 </form>
@@ -397,6 +397,8 @@ formControlName="login"
 formControlName="perfil"
 formControlName="senha"
 formControlName="confirmacao"
+
+[disabled]="!form.valid"
 ```
 
 ``` typescript
@@ -430,7 +432,7 @@ formControlName="confirmacao"
     </mat-form-field>
   </div>
   <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
-      <button mat-raised-button color="primary">Cadastrar</button>
+      <button mat-raised-button color="primary" [disabled]="!form.valid">Salvar</button>
       <button mat-raised-button color="warn" routerLink="/main/usuario/consulta">Cancelar</button>
   </div>
 </form>
@@ -498,7 +500,7 @@ Adicionando Mensagens de Erro
     </mat-form-field>
   </div>
   <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
-      <button mat-raised-button color="primary">Cadastrar</button>
+      <button mat-raised-button color="primary" [disabled]="!form.valid">Salvar</button>
       <button mat-raised-button color="warn" routerLink="/main/usuario/consulta">Cancelar</button>
   </div>
 </form>
@@ -631,7 +633,7 @@ export class FormularioComponent implements OnInit {
     </mat-form-field>
   </div>
   <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
-      <button mat-raised-button color="primary">Cadastrar</button>
+      <button mat-raised-button color="primary" [disabled]="!form.valid">Salvar</button>
       <button mat-raised-button color="warn" routerLink="/main/usuario/consulta">Cancelar</button>
   </div>
 </form>
