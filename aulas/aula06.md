@@ -10,7 +10,7 @@ Sumário
   * [Navegação com Rotas](#navegação-com-rotas)
   * [Observable](#observable)
 * [Hands-on](#hands-on)
-  * [Criando Serviço de Usuário](#criando-serviço-de-usuário)
+  * [Refatorando Módulos e Rotas](#refatorando-módulos-e-rotas)
   * [Adicionando Rota de Edição de Usuário](#adicionando-rota-de-edição-de-usuário)
   * [Utilizando Serviço na Consulta de Usuário](#utilizando-serviço-na-consulta-de-usuário)
   * [Utilizando Serviço no Formulário de Usuário](#utilizando-serviço-no-formulário-de-usuário)
@@ -28,8 +28,8 @@ Serviços
 Hands-on
 ========
 
-Refatorando Módulos
--------------------
+Refatorando Módulos e Rotas
+---------------------------
 
 ##### No arquivo src/app/main/main.routing.ts
 ``` typescript
