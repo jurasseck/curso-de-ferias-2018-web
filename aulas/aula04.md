@@ -14,6 +14,7 @@ Sumário
   * [Criando Componente de Formulário de Usuário](#criando-componente-de-formulário-de-usuário)
   * [Configurando Rota de Consulta de Usuário](#configurando-rota-de-consulta-de-usuário)
   * [Tabela de Consulta de Usuários](#tabela-de-consulta-de-usuários)
+  * [Criando ComboBox de Perfis](#criando-combobox-de-perfis)
   
 Conceitos
 =========
@@ -189,4 +190,40 @@ export class MainModule { }
       <button mat-raised-button color="warn" routerLink="/main/usuario/consulta">Cancelar</button>
   </div>
 </form>
+```
+
+Criando ComboBox de Perfis
+--------------------------
+##### No arquivo src/app/main/usuario/formulario/formulario.component.ts
+``` typescript
+  public perfis = [
+    { id: "PROFESSOR", descricao: 'Professor' },
+    { id: "ADMINISTRADOR", descricao: 'Administrador' },
+    { id: "ALUNO", descricao: 'Aluno' },
+  ];
+```
+
+``` typescript
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-formulario',
+  templateUrl: './formulario.component.html',
+  styleUrls: ['./formulario.component.scss']
+})
+export class FormularioComponent implements OnInit {
+
+  public perfis = [
+    { id: "PROFESSOR", descricao: 'Professor' },
+    { id: "ADMINISTRADOR", descricao: 'Administrador' },
+    { id: "ALUNO", descricao: 'Aluno' },
+  ];
+
+  constructor() {
+  }
+  
+  ngOnInit() {
+  }
+
+}
 ```
