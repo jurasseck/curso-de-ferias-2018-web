@@ -5,7 +5,7 @@ Sumário
 =======
 
 * [Conceitos](#conceitos)
-  * [Formulários](#formulários)
+  * [Formulários](#formulários)
   * [ComboBox](#combobox)
   * [Validadores](#validadores)
 * [Hands-on](#hands-on)
