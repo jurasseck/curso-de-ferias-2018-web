@@ -361,6 +361,28 @@ export class ConsultaComponent implements OnInit {
 </div>
 ```
 
+##### No arquivo src/app/main/usuario/consulta/consulta.componente.scss
+``` typescript
+.noResult {
+    padding: 20px;
+    text-align: center;
+    font-size: 12px;
+}
+```
+
+``` typescript
+.mat-fab{
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+}
+.noResult {
+    padding: 20px;
+    text-align: center;
+    font-size: 12px;
+}
+```
+
 Utilizando Serviço no Formulário de Usuário
 -------------------------------------------
 
