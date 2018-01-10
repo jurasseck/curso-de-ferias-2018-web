@@ -506,3 +506,133 @@ Adicionando Mensagens de Erro
 
 Validações Customizadas
 -----------------------
+
+##### No arquivo src/app/validators/equals.password.validator.ts
+``` typescript
+import {FormGroup} from '@angular/forms';
+
+export class EqualsPasswordValidator {
+
+  public static validate(firstField, secondField) {
+    return (formGroup: FormGroup) => {       
+    (formGroup.controls && formGroup.controls[firstField].value == formGroup.controls[secondField].value) 
+        ? formGroup.controls[secondField].setErrors(formGroup.controls[secondField].getError('required') ? {required: {valid:false}} : null) :
+        formGroup.controls[secondField].setErrors({passwordEquals: {valid: false}});
+    }
+  }
+
+}
+```    
+
+##### No arquivo src/app/main/usuario/formulario/formulario.component.ts
+``` typescript
+import { EqualsPasswordValidator } from '../../../validators/equals.password.validator';
+
+{validator: EqualsPasswordValidator.validate("senha", "confirmacao")}
+```    
+    
+``` typescript
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { EqualsPasswordValidator } from '../../../validators/equals.password.validator';
+
+@Component({
+  selector: 'app-formulario',
+  templateUrl: './formulario.component.html',
+  styleUrls: ['./formulario.component.scss']
+})
+export class FormularioComponent implements OnInit {
+
+  public perfis = [
+    { id: "PROFESSOR", descricao: 'Professor' },
+    { id: "ADMINISTRADOR", descricao: 'Administrador' },
+    { id: "ALUNO", descricao: 'Aluno' },
+  ];
+
+  public form : FormGroup;
+  
+  constructor(private formBuilder: FormBuilder) {
+    this.form = formBuilder.group({
+        id: [null],
+        nome: [null, Validators.required],
+        email: [null, Validators.compose([Validators.required, Validators.email])],
+        login: [null, Validators.required],
+        perfil: [null, Validators.required],
+        senha: [null, Validators.required],
+        confirmacao: [null, Validators.required]
+    }, {validator: EqualsPasswordValidator.validate("senha", "confirmacao")})
+   }
+  
+  ngOnInit() {
+  }
+
+}
+```
+
+##### No arquivo src/app/main/usuario/formulario/formulario.component.html
+``` typescript
+<mat-error *ngIf="form.controls['confirmacao'].hasError('passwordEquals') && !form.controls['confirmacao'].hasError('required')">
+    Campo Confirmação não é igual ao campo Senha
+</mat-error>
+```    
+    
+``` typescript
+<form [formGroup]="form" fxLayout="column">
+  <mat-form-field fxFlex="100"> 
+    <input matInput formControlName="nome" placeholder="Nome">
+    <mat-error *ngIf="form.controls['nome'].hasError('required')">
+        Campo obrigatório
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field fxFlex="100"> 
+    <input matInput formControlName="email" placeholder="E-mail">
+    <mat-error *ngIf="form.controls['email'].hasError('required')">
+        Campo obrigatório
+    </mat-error>
+    <mat-error *ngIf="form.controls['email'].hasError('email') && !form.controls['email'].hasError('required')">
+        E-mail inválido
+    </mat-error>
+  </mat-form-field>
+  <div fxFlex="100" fxLayout="row">
+    <mat-form-field fxFlex="47"> 
+      <input matInput formControlName="login" placeholder="Login">
+      <mat-error *ngIf="form.controls['login'].hasError('required')">
+          Campo obrigatório
+      </mat-error>
+    </mat-form-field>
+    <span fxFlex="5"></span>
+    <mat-form-field fxFlex="47"> 
+        <mat-select formControlName="perfil" placeholder="Perfil">
+            <mat-option *ngFor="let perfil of perfis" [value]="perfil.id">
+              {{ perfil.descricao }}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls['perfil'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxFlex="100" fxLayout="row">
+    <mat-form-field fxFlex="47"> 
+      <input matInput formControlName="senha" placeholder="Senha" type="password">
+      <mat-error *ngIf="form.controls['senha'].hasError('required')">
+          Campo obrigatório
+      </mat-error>
+    </mat-form-field>
+    <span fxFlex="5"></span>
+    <mat-form-field fxFlex="47"> 
+      <input matInput formControlName="confirmacao" placeholder="Confirmação" type="password">
+      <mat-error *ngIf="form.controls['confirmacao'].hasError('required')">
+          Campo obrigatório
+      </mat-error>
+      <mat-error *ngIf="form.controls['confirmacao'].hasError('passwordEquals') && !form.controls['confirmacao'].hasError('required')">
+          Campo Confirmação não é igual ao campo Senha
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
+      <button mat-raised-button color="primary">Cadastrar</button>
+      <button mat-raised-button color="warn" routerLink="/main/usuario/consulta">Cancelar</button>
+  </div>
+</form>
+```
