@@ -8,6 +8,7 @@ Sumário
   * [Serviços](#serviços)
   * [Arrays](#arrays)
   * [Navegação com Rotas](#navegação-com-rotas)
+  * [Observable](#observable)
 * [Hands-on](#hands-on)
   * [Criando Serviço de Usuário](#criando-serviço-de-usuário)
   * [Adicionando Rota de Edição de Usuário](#adicionando-rota-de-edição-de-usuário)
@@ -65,6 +66,15 @@ this._router.navigate(["/main/usuario/editar", id]);
 this._activateRoute.params.subscribe(params=>{
       this.id = params['id'];
     });
+```
+
+Observable
+-------------------
+
+``` typescript
+this._usuarioService.editar(this.form.value).subscribe(suc=>{
+  // to do something
+});
 ```
 
 Hands-on
