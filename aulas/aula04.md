@@ -12,7 +12,8 @@ Sumário
   * [Adicionando Rota para Formulário de Usuário](#adicionando-rota-para-formulário-de-usuário)
   * [Criando Formulário de Usuário](#criando-formulário-de-usuário)
   * [Criando ComboBox de Perfis](#criando-combobox-de-perfis)
-  * [Adicionando Validações](#adicionando-validaçes)
+  * [Adicionando Validações](#adicionando-validações)
+  * [Adicionando Mensagens de Erro](#adicionando-mensagens-de-erro)
   
 Conceitos
 =========
@@ -425,6 +426,74 @@ formControlName="confirmacao"
     <span fxFlex="5"></span>
     <mat-form-field fxFlex="47"> 
       <input matInput formControlName="confirmacao" placeholder="Confirmação" type="password">
+    </mat-form-field>
+  </div>
+  <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
+      <button mat-raised-button color="primary">Cadastrar</button>
+      <button mat-raised-button color="warn" routerLink="/main/usuario/consulta">Cancelar</button>
+  </div>
+</form>
+```
+
+Adicionando Mensagens de Erro
+-----------------------------
+
+##### No arquivo src/app/main/usuario/formulario/formulario.component.html
+``` typescript
+<mat-error *ngIf="form.controls['nome'].hasError('required')">
+    Campo obrigatório
+</mat-error>
+```    
+    
+``` typescript
+<form [formGroup]="form" fxLayout="column">
+  <mat-form-field fxFlex="100"> 
+    <input matInput formControlName="nome" placeholder="Nome">
+    <mat-error *ngIf="form.controls['nome'].hasError('required')">
+        Campo obrigatório
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field fxFlex="100"> 
+    <input matInput formControlName="email" placeholder="E-mail">
+    <mat-error *ngIf="form.controls['email'].hasError('required')">
+        Campo obrigatório
+    </mat-error>
+    <mat-error *ngIf="form.controls['email'].hasError('email') && !form.controls['email'].hasError('required')">
+        E-mail inválido
+    </mat-error>
+  </mat-form-field>
+  <div fxFlex="100" fxLayout="row">
+    <mat-form-field fxFlex="47"> 
+      <input matInput formControlName="login" placeholder="Login">
+      <mat-error *ngIf="form.controls['login'].hasError('required')">
+          Campo obrigatório
+      </mat-error>
+    </mat-form-field>
+    <span fxFlex="5"></span>
+    <mat-form-field fxFlex="47"> 
+        <mat-select formControlName="perfil" placeholder="Perfil">
+            <mat-option *ngFor="let perfil of perfis" [value]="perfil.id">
+              {{ perfil.descricao }}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls['perfil'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxFlex="100" fxLayout="row">
+    <mat-form-field fxFlex="47"> 
+      <input matInput formControlName="senha" placeholder="Senha" type="password">
+      <mat-error *ngIf="form.controls['senha'].hasError('required')">
+          Campo obrigatório
+      </mat-error>
+    </mat-form-field>
+    <span fxFlex="5"></span>
+    <mat-form-field fxFlex="47"> 
+      <input matInput formControlName="confirmacao" placeholder="Confirmação" type="password">
+      <mat-error *ngIf="form.controls['confirmacao'].hasError('required')">
+          Campo obrigatório
+      </mat-error>
     </mat-form-field>
   </div>
   <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
