@@ -305,7 +305,7 @@ export class ConsultaComponent implements OnInit {
   <mat-table #table [dataSource]="dataSource">
     <ng-container matColumnDef="segmento">
       <mat-header-cell *matHeaderCellDef> Segmento </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.segmento}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.segmento | titlecase}} </mat-cell>
     </ng-container>
     <ng-container matColumnDef="descricao">
         <mat-header-cell *matHeaderCellDef> Descrição </mat-header-cell>
