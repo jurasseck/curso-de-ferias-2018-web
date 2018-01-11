@@ -351,6 +351,7 @@ Adicionando Consulta de Disciplina
 ``` typescript
 import { MatNativeDateModule } from '@angular/material';
 import { MatDatepickerModule } from '@angular/material';
+import { MAT_DATE_LOCALE } from '@angular/material';
 ```
 
 ``` typescript
@@ -361,7 +362,7 @@ import { FormularioComponent } from './formulario/formulario.component';
 
 import { DisciplinaRouting } from './disciplina.routing';
 import { RouterModule } from '@angular/router';
-import { MatButtonModule, MatTableModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatIconModule, MatTooltipModule, MatOptionModule, MatNativeDateModule, MatDatepickerModule } from '@angular/material';
+import { MatButtonModule, MatTableModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatIconModule, MatTooltipModule, MatOptionModule, MatNativeDateModule, MatDatepickerModule, MAT_DATE_LOCALE } from '@angular/material';
 import { ReactiveFormsModule, FormsModule, FormBuilder } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { DisciplinaService } from './disciplina.service';
@@ -390,7 +391,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   providers: [
     FormBuilder,
     DisciplinaService,
-    HttpClient
+    HttpClient,
+    {provide: MAT_DATE_LOCALE, useValue: 'pt-br'}
   ],
   declarations: [ConsultaComponent, FormularioComponent]
 })
