@@ -467,7 +467,7 @@ export class ProfessorService {
 
   constructor(private _httpClient: HttpClient ) { }
   
-  private _urlProfessores = environment.url+"usuarios";
+  private _urlProfessores = environment.url+"/api/v1/usuarios";
 
   listar(){
     let httpParams = new HttpParams().set("tipo","PROFESSOR")
