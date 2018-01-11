@@ -1848,6 +1848,7 @@ Pronto com isto finalizamos um relatório.
 
 
 Aula 08 - Criar o Login, SessionStorage, AuthGuard, Interceptor
+
 Vamos iniciar pela criação do nosso módulo de login, dentro da nossa pasta app.
 ng g module login
 ng g component login
