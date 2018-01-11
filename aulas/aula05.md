@@ -636,7 +636,7 @@ return this._httpClient.post(this._urlUsuario, usuario, {responseType: 'text'});
 return this._httpClient.delete(this._urlUsuario+"/"+id, {responseType: 'text'});
 return this._httpClient.put(this._urlUsuario+"/"+usuario.id, usuario, {responseType: 'text'});
 return this._httpClient.get<Array<Object>>(this._urlUsuario);
-return this._httpClient.get(this._urlUsuario+"/"+id);
+return this._httpClient.get<any>(this._urlUsuario+"/"+id);
 ```
 
 ``` typescript
@@ -665,11 +665,12 @@ export class UsuarioService {
   }
 
   listar(){
-    return this._httpClient.get<Array<Object>>(this._urlUsuario);
+    return 
+    <Array<Object>>(this._urlUsuario);
   }
 
   carregar(id){
-    return this._httpClient.get(this._urlUsuario+"/"+id);
+    return this._httpClient.get<any>(this._urlUsuario+"/"+id);
   }
 
 }
