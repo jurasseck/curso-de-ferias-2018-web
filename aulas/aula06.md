@@ -477,4 +477,15 @@ export class ProfessorService {
 }
 ```
 
+Adicionando Formulário de Disciplina
+------------------------------------
+
+##### No arquivo src/app/main/disciplina/formulario/formulario.component.ts
+``` typescript
+img.urlLogo{
+    height: 50px;
+}
+```
+
+
 
