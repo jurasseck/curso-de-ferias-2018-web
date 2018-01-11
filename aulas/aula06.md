@@ -447,9 +447,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   providers: [
     FormBuilder,
     DisciplinaService,
+    ProfessorService,
     HttpClient,
-    {provide: MAT_DATE_LOCALE, useValue: 'pt-br'},
-    ProfessorService
+    {provide: MAT_DATE_LOCALE, useValue: 'pt-br'}    
   ],
   declarations: [ConsultaComponent, FormularioComponent]
 })
