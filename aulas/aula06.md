@@ -243,8 +243,8 @@ export class MainRouting { }
 </mat-sidenav-container>
 ```
 
-Consulta de Disciplina
-----------------------
+Adicionando Consulta de Disciplina
+----------------------------------
 
 ##### No arquivo src/app/main/disciplina/consulta/consulta.component.ts
 ``` typescript
@@ -342,4 +342,63 @@ export class ConsultaComponent implements OnInit {
     <mat-icon class="mat-24" routerLink="/main/disciplina/adicionar" aria-label="Adicionar">add</mat-icon>
   </button> 
 </div>
+```
+
+Adicionando Consulta de Disciplina
+----------------------------------
+
+##### No arquivo src/app/main/disciplina/disciplina.module.ts
+``` typescript
+import { MatNativeDateModule } from '@angular/material';
+import { MatDatepickerModule } from '@angular/material';
+```
+
+``` typescript
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ConsultaComponent } from './consulta/consulta.component';
+import { FormularioComponent } from './formulario/formulario.component';
+
+import { DisciplinaRouting } from './disciplina.routing';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule, MatTableModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatIconModule, MatTooltipModule, MatOptionModule, MatNativeDateModule, MatDatepickerModule } from '@angular/material';
+import { ReactiveFormsModule, FormsModule, FormBuilder } from '@angular/forms';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { DisciplinaService } from './disciplina.service';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    DisciplinaRouting,
+    RouterModule,
+    FlexLayoutModule,
+    MatTableModule,
+    MatIconModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTooltipModule,
+    MatSelectModule, 
+    MatOptionModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    ReactiveFormsModule,
+    FormsModule,
+    HttpClientModule
+  ],
+  providers: [
+    FormBuilder,
+    DisciplinaService,
+    HttpClient
+  ],
+  declarations: [ConsultaComponent, FormularioComponent]
+})
+export class DisciplinaModule { }
+```
+
+##### No arquivo src/app/main/disciplina/consulta/consulta.component.html
+
+``` typescript
+
 ```
