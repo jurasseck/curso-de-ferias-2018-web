@@ -166,6 +166,14 @@ Refatorar ;)
 Adicionando Rota de Disciplina
 ------------------------------
 
+##### No arquivo src/app/main/main.routing.ts
+``` typescript
+{
+  path: 'disciplina',
+  loadChildren: './disciplina/disciplina.module#DisciplinaModule'
+}
+```
+
 ``` typescript
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -193,6 +201,7 @@ import { MainComponent } from './main.component';
 export class MainRouting { }
 ```
 
+##### No arquivo src/app/main/main.component.html
 ``` typescript
 <mat-list-item routerLink="/main/disciplina/consulta" (click)="sidenav.close()">
 ```
@@ -233,11 +242,3 @@ export class MainRouting { }
     </mat-card>
 </mat-sidenav-container>
 ```
-
-``` typescript
-{
-  path: 'disciplina',
-  loadChildren: './disciplina/disciplina.module#DisciplinaModule'
-}
-```
-
