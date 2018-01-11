@@ -157,3 +157,87 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 })
 export class UsuarioModule { }
 ```
+
+Adicionando Disciplina
+----------------------
+
+Refatorar ;)
+
+Adicionando Rota de Disciplina
+------------------------------
+
+``` typescript
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { MainComponent } from './main.component';
+
+@NgModule({
+  imports: [
+    RouterModule.forChild([
+      { path: 'main', 
+        component: MainComponent,
+        children: [
+          {
+            path: 'usuario',
+            loadChildren: './usuario/usuario.module#UsuarioModule'
+          },
+          {
+            path: 'disciplina',
+            loadChildren: './disciplina/disciplina.module#DisciplinaModule'
+          }
+        ]
+      }
+    ])
+  ]
+})
+export class MainRouting { }
+```
+
+``` typescript
+<mat-list-item routerLink="/main/disciplina/consulta" (click)="sidenav.close()">
+```
+
+``` typescript
+<mat-sidenav-container>
+    <mat-sidenav #sidenav>
+    <a mat-button style="height: 0; position: absolute;"></a>  
+        <mat-nav-list>
+        <mat-list-item routerLink="/main/usuario/consulta" (click)="sidenav.close()">
+            <button mat-icon-button >
+                <mat-icon>info</mat-icon>
+            </button>
+            <a mdLine>Usuários</a>
+        </mat-list-item>
+        <mat-list-item routerLink="/main/disciplina/consulta" (click)="sidenav.close()">
+            <button mat-icon-button >
+                <mat-icon>info</mat-icon>
+            </button>
+            <a mdLine>Disciplinas</a>
+        </mat-list-item>
+        <mat-list-item href="#/main">
+            <button mat-icon-button >
+                <mat-icon>info</mat-icon>
+            </button>
+            <a mdLine>Relatório</a>
+        </mat-list-item>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-toolbar color="primary">
+        <button mat-icon-button (click)="sidenav.open()">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <span>Eu vim</span>
+    </mat-toolbar>
+    <mat-card id="content">
+        <router-outlet></router-outlet>
+    </mat-card>
+</mat-sidenav-container>
+```
+
+``` typescript
+{
+  path: 'disciplina',
+  loadChildren: './disciplina/disciplina.module#DisciplinaModule'
+}
+```
+
