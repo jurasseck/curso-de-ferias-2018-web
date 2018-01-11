@@ -234,8 +234,8 @@ export class MainModule { }
           <button mat-icon-button color="primary"  mdTooltip="Editar">
             <mat-icon class="mat-24" aria-label="Editar">edit</mat-icon>
           </button>
-          <button mat-icon-button color="danger" mdTooltip="Remover">
-              <mat-icon class="mat-24" aria-label="Remover">delete</mat-icon>
+          <button mat-icon-button color="danger" mdTooltip="Excluir">
+              <mat-icon class="mat-24" aria-label="Excluir">delete</mat-icon>
           </button>
       </mat-cell>
     </ng-container>

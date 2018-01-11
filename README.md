@@ -1,8 +1,8 @@
 ## Curso de Férias 2018 - Desenvolvimento Frontend com Angular
 
-![Node 6](https://img.shields.io/badge/node-6.x.x-green.svg)
-![NPM 3](https://img.shields.io/badge/npm-3.x.x-orange.svg)
-![Angular 4](https://img.shields.io/badge/angular-4.x.x-red.svg)
+![Node 8](https://img.shields.io/badge/node-8.9.4-green.svg)
+![NPM 5](https://img.shields.io/badge/npm-5.6.0-orange.svg)
+![Angular 5](https://img.shields.io/badge/angular-5.0.0-red.svg)
 
 ### [Aula 01](aulas/aula01.md)
 ### [Aula 02](aulas/aula02.md)
