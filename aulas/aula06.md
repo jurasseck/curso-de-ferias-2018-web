@@ -399,8 +399,82 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 export class DisciplinaModule { }
 ```
 
-##### No arquivo src/app/main/disciplina/consulta/consulta.component.html
+##### No diretório src/app/main/disciplina
+``` typescript
+ng g service professor
+```
+
+##### No arquivo src/app/main/disciplina/disciplina.module.ts
+``` typescript
+import { ProfessorService } from './professor.service';
+```
 
 ``` typescript
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ConsultaComponent } from './consulta/consulta.component';
+import { FormularioComponent } from './formulario/formulario.component';
 
+import { DisciplinaRouting } from './disciplina.routing';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule, MatTableModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatIconModule, MatTooltipModule, MatOptionModule, MatNativeDateModule, MatDatepickerModule, MAT_DATE_LOCALE } from '@angular/material';
+import { ReactiveFormsModule, FormsModule, FormBuilder } from '@angular/forms';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { DisciplinaService } from './disciplina.service';
+import { ProfessorService } from './professor.service';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    DisciplinaRouting,
+    RouterModule,
+    FlexLayoutModule,
+    MatTableModule,
+    MatIconModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTooltipModule,
+    MatSelectModule, 
+    MatOptionModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    ReactiveFormsModule,
+    FormsModule,
+    HttpClientModule
+  ],
+  providers: [
+    FormBuilder,
+    DisciplinaService,
+    HttpClient,
+    {provide: MAT_DATE_LOCALE, useValue: 'pt-br'},
+    ProfessorService
+  ],
+  declarations: [ConsultaComponent, FormularioComponent]
+})
+export class DisciplinaModule { }
 ```
+
+##### No arquivo src/app/main/disciplina/professor.service.ts
+``` typescript
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+
+@Injectable()
+export class ProfessorService {
+
+  constructor(private _httpClient: HttpClient ) { }
+  
+  private _urlProfessores = environment.url+"usuarios";
+
+  listar(){
+    let httpParams = new HttpParams().set("tipo","PROFESSOR")
+    return this._httpClient.get<Array<Object>>(this._urlProfessores, {params:httpParams});
+  }
+
+}
+```
+
+
