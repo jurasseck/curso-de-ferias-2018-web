@@ -313,11 +313,11 @@ export class ConsultaComponent implements OnInit {
     </ng-container>
     <ng-container matColumnDef="dataInicio">
       <mat-header-cell *matHeaderCellDef> Início </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.dataInicio | date:'d/M/yyy'}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.dataInicio | date:'dd/MM/yyyy'}} </mat-cell>
     </ng-container>
     <ng-container matColumnDef="dataTermino">
       <mat-header-cell *matHeaderCellDef> Término </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.dataTermino  | date:'d/M/yyy'}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.dataTermino  | date:'dd/MM/yyyy'}} </mat-cell>
     </ng-container>
     <ng-container matColumnDef="instrutores">
       <mat-header-cell *matHeaderCellDef> Instrutores </mat-header-cell>
