@@ -242,3 +242,104 @@ export class MainRouting { }
     </mat-card>
 </mat-sidenav-container>
 ```
+
+Consulta de Disciplina
+----------------------
+
+##### No arquivo src/app/main/disciplina/consulta/consulta.component.ts
+``` typescript
+public displayedColumns = ['segmento', 'descricao', 'dataInicio', 'dataTermino', 'instrutores', 'id'];
+```
+
+``` typescript
+import { Component, OnInit } from '@angular/core';
+
+import { DataSource } from '@angular/cdk/collections';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import { DisciplinaService } from '../disciplina.service';
+import { MatTableDataSource } from '@angular/material';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-consulta',
+  templateUrl: './consulta.component.html',
+  styleUrls: ['./consulta.component.scss']
+})
+export class ConsultaComponent implements OnInit {
+
+  public displayedColumns = ['segmento', 'descricao', 'dataInicio', 'dataTermino', 'instrutores', 'id'];
+  public dataSource: MatTableDataSource<any>;
+
+  public noResults$ = false;
+  constructor(private _disciplinaService: DisciplinaService, private _router: Router) { }
+  
+  ngOnInit() {
+    this.atualizarListaDeDisciplinas();
+  }
+ 
+  excluir(id){
+    this._disciplinaService.excluir(id).subscribe(suc=>{
+      this.atualizarListaDeDisciplinas();
+  });
+  }
+
+  editar(id){
+    this._router.navigate(["/main/disciplina/editar", id]);
+  }
+
+  private atualizarListaDeDisciplinas(){
+    this._disciplinaService.listar().subscribe(suc => {
+      this.noResults$ = suc.length == 0;
+      this.dataSource = new MatTableDataSource(suc);
+    });
+  }
+
+}
+```
+
+##### No arquivo src/app/main/disciplina/consulta/consulta.component.html
+
+``` typescript
+<div class="mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource">
+    <ng-container matColumnDef="segmento">
+      <mat-header-cell *matHeaderCellDef> Segmento </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.segmento}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="descricao">
+        <mat-header-cell *matHeaderCellDef> Descrição </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.descricao}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="dataInicio">
+      <mat-header-cell *matHeaderCellDef> Início </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.dataInicio | date:'d/M/yyy'}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="dataTermino">
+      <mat-header-cell *matHeaderCellDef> Término </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.dataTermino  | date:'d/M/yyy'}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="instrutores">
+      <mat-header-cell *matHeaderCellDef> Instrutores </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.instrutores.length}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef  fxFlex="10"> Ações </mat-header-cell>
+      <mat-cell *matCellDef="let element" fxFlex="10" class="buttons">
+         <button mat-icon-button color="primary"  matTooltip="Editar">
+            <mat-icon class="md-24"  (click)="editar(element.id)" aria-label="Editar">edit</mat-icon>
+          </button>
+          <button mat-icon-button color="danger" matTooltip="Remover">
+              <mat-icon class="md-24" (click)="remover(element.id)" aria-label="Remover">delete</mat-icon>
+          </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <div *ngIf="noResults$" class="noResult">Nenhum resultado</div>
+  <button mat-fab color="primary">
+    <mat-icon class="mat-24" routerLink="/main/disciplina/adicionar" aria-label="Adicionar">add</mat-icon>
+  </button> 
+</div>
+```
