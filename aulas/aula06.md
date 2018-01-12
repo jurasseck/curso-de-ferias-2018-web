@@ -248,7 +248,7 @@ Adicionando Consulta de Disciplina
 
 ##### No arquivo src/app/main/disciplina/consulta/consulta.component.ts
 ``` typescript
-public displayedColumns = ['segmento', 'descricao', 'dataInicio', 'dataTermino', 'instrutores', 'id'];
+public displayedColumns = ['id', 'segmento', 'descricao', 'dataInicio', 'dataTermino', 'instrutores'];
 ```
 
 ``` typescript
@@ -303,6 +303,17 @@ export class ConsultaComponent implements OnInit {
 ``` typescript
 <div class="mat-elevation-z8">
   <mat-table #table [dataSource]="dataSource">
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef  fxFlex="10"> Ações </mat-header-cell>
+      <mat-cell *matCellDef="let element" fxFlex="10" class="buttons">
+          <button mat-icon-button color="primary"  matTooltip="Editar">
+            <mat-icon class="md-24"  (click)="editar(element.id)" aria-label="Editar">edit</mat-icon>
+          </button>
+          <button mat-icon-button color="danger" matTooltip="Remover">
+              <mat-icon class="md-24" (click)="remover(element.id)" aria-label="Remover">delete</mat-icon>
+          </button>
+      </mat-cell>
+    </ng-container>
     <ng-container matColumnDef="segmento">
       <mat-header-cell *matHeaderCellDef> Segmento </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.segmento | titlecase}} </mat-cell>
@@ -322,17 +333,6 @@ export class ConsultaComponent implements OnInit {
     <ng-container matColumnDef="instrutores">
       <mat-header-cell *matHeaderCellDef> Instrutores </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.instrutores.length}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef  fxFlex="10"> Ações </mat-header-cell>
-      <mat-cell *matCellDef="let element" fxFlex="10" class="buttons">
-         <button mat-icon-button color="primary"  matTooltip="Editar">
-            <mat-icon class="md-24"  (click)="editar(element.id)" aria-label="Editar">edit</mat-icon>
-          </button>
-          <button mat-icon-button color="danger" matTooltip="Remover">
-              <mat-icon class="md-24" (click)="remover(element.id)" aria-label="Remover">delete</mat-icon>
-          </button>
-      </mat-cell>
     </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
@@ -487,5 +487,279 @@ img.urlLogo{
 }
 ```
 
+##### No arquivo src/app/main/disciplina/disciplina/disciplina.module.ts
+``` typescript
+import { MatListModule } from '@angular/material';
 
+import { ProfessorService } from './professor.service';
+```
 
+``` typescript
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ConsultaComponent } from './consulta/consulta.component';
+import { FormularioComponent } from './formulario/formulario.component';
+
+import { DisciplinaRouting } from './disciplina.routing';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule, MatTableModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatIconModule, MatTooltipModule, MatOptionModule, MatNativeDateModule, MatDatepickerModule, MAT_DATE_LOCALE, MatListModule } from '@angular/material';
+import { ReactiveFormsModule, FormsModule, FormBuilder } from '@angular/forms';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { DisciplinaService } from './disciplina.service';
+import { ProfessorService } from './professor.service';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    DisciplinaRouting,
+    RouterModule,
+    FlexLayoutModule,
+    MatTableModule,
+    MatIconModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTooltipModule,
+    MatSelectModule, 
+    MatOptionModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatListModule,
+    ReactiveFormsModule,
+    FormsModule,
+    HttpClientModule
+  ],
+  providers: [
+    FormBuilder,
+    DisciplinaService,
+    ProfessorService,
+    HttpClient,
+    {provide: MAT_DATE_LOCALE, useValue: 'pt-br'}
+  ],
+  declarations: [ConsultaComponent, FormularioComponent]
+})
+export class DisciplinaModule { }
+```
+
+##### No arquivo src/app/main/disciplina/formulario/formulario.component.ts
+``` typescript
+img.urlLogo{
+    height: 50px;
+}
+```
+
+##### No arquivo src/app/main/disciplina/formulario/formulario.module.ts
+``` typescrypt
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { EqualsPasswordValidator } from '../../../validators/equals.password.validator';
+import { DisciplinaService } from '../disciplina.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ProfessorService } from '../professor.service';
+
+@Component({
+  selector: 'app-formulario',
+  templateUrl: './formulario.component.html',
+  styleUrls: ['./formulario.component.scss']
+})
+export class FormularioComponent implements OnInit {
+
+  public segmentos = [
+    { id: "BACKEND", descricao: 'Backend' },
+    { id: "FRONTEND", descricao: 'Frontend' },
+    { id: "MOBILE", descricao: 'Mobile' }
+  ];
+
+  public form : FormGroup;
+  public id;
+  public professores= [];
+  public professorSelecionado;
+  
+  constructor(private formBuilder: FormBuilder, private _disciplinaService: DisciplinaService, private _professorService: ProfessorService, private _router: Router, private _activateRoute: ActivatedRoute) {
+    this.form = formBuilder.group({
+      id: [null],
+      descricao: [null, Validators.required],
+      segmento: [null, Validators.required],
+      dataInicio: [null, Validators.required],
+      dataTermino: [null, Validators.required],
+      urlLogo: [null],
+      instrutores: formBuilder.array([])
+    });
+   }
+  
+  ngOnInit() {
+    this.id = null;    
+    this._activateRoute.params.subscribe(params=>{
+      this.id = params['id'];
+    });
+    this._professorService.listar().subscribe(suc=>{
+      this.professores = suc;
+    })
+    if(this.id){
+      this._disciplinaService.carregar(this.id).subscribe(suc=>{
+        var item = suc;
+        this.form.setValue({
+          id: suc.id,
+          descricao: suc.descricao,
+          segmento: suc.segmento,
+          dataInicio: suc.dataInicio,
+          dataTermino: suc.dataTermino,
+          urlLogo: suc.urlLogo,
+          instrutores:[]
+        });
+        suc.instrutores.forEach(element => {
+          let item = this.professores.find(item=>{ return item.id == element});
+          if(item){
+            this.professorSelecionado = item;
+            this.adicionarProfessor();
+          }
+        });
+      });
+    }
+  }
+
+  salvar() {
+    if(this.form.valid){
+      if(this.id){
+        this._disciplinaService.editar(this.form.value).subscribe(suc=>{
+          this.consultar();
+        });
+      } else {
+        this._disciplinaService.adicionar(this.form.value).subscribe(suc=>{
+          this.consultar();
+        });
+      }
+    }
+  }
+
+  consultar() {
+    this.form.reset();
+    this._router.navigate(['/main/disciplina/consulta']);
+  }
+
+  carregarImagem(event){
+    event.target.src = "https://d30y9cdsu7xlg0.cloudfront.net/png/20804-200.png";
+  }
+
+  abrirCalendario(item){
+    item.open();
+  }
+
+  adicionarProfessor(){
+    let arrayProf = (<FormArray>this.form.get("instrutores"));
+    if(!arrayProf.value.includes(this.professorSelecionado.id)){
+      arrayProf.value.push(this.professorSelecionado.id);
+    }
+    this.professorSelecionado.selected = true;
+    delete this.professorSelecionado;
+  }
+
+  carregarNomeProfessor(id){
+    let item = this.professores.find(item=>{ return item.id == id});
+    return item ? item.nome : "Professor indisponível";
+  }
+  
+  removerProfessor(id){
+    let arrayProf = (<FormArray>this.form.get("instrutores"));
+    let index = arrayProf.value.findIndex(item=>{return item == id});
+    if(index > -1){
+      arrayProf.value.splice(index,1);
+    }
+    let item = this.professores.find(item=>{ return item.id == id});
+    item.selected = false;
+  }
+
+}
+```
+
+##### No arquivo src/app/main/disciplina/formulario/formulario.module.ts
+``` typescrypt
+<div  fxLayout="column">
+  <form [formGroup]="form"  fxLayout="column">
+    <div fxFlex="100" fxLayout="row">  
+      <mat-form-field fxFlex="47"> 
+        <mat-select formControlName="segmento" placeholder="Segmento" >
+            <mat-option *ngFor="let segmento of segmentos" [value]="segmento.id">
+              {{ segmento.descricao }}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls['segmento'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+      <span fxFlex="5"></span>
+      <mat-form-field fxFlex="47"> 
+        <input matInput formControlName="descricao" placeholder="Descrição" >
+        <mat-error *ngIf="form.controls['descricao'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex="100" fxLayout="row">
+      <mat-form-field fxFlex="47"> 
+        <input matInput (keypress)="abrirCalendario(dtInicio);" formControlName="dataInicio" [matDatepicker]="dtInicio" placeholder="Data Início">
+        <mat-datepicker-toggle matSuffix [for]="dtInicio"></mat-datepicker-toggle>
+        <mat-datepicker #dtInicio touchUi="true"></mat-datepicker>
+        <mat-error *ngIf="form.controls['dataInicio'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+      <span fxFlex="5"></span>
+      <mat-form-field fxFlex="47"> 
+        <input matInput (keypress)="abrirCalendario(dtTermino);" formControlName="dataTermino" [matDatepicker]="dtTermino" placeholder="Data Término">
+        <mat-datepicker-toggle matSuffix [for]="dtTermino"></mat-datepicker-toggle>
+        <mat-datepicker #dtTermino touchUi="true"></mat-datepicker>
+        <mat-error *ngIf="form.controls['dataTermino'].hasError('required')">
+          Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex="100" fxLayout="row">
+      <mat-form-field fxFlex="75"> 
+          <input matInput formControlName="urlLogo" placeholder="Url Logo" >
+          <mat-error *ngIf="form.controls['urlLogo'].hasError('required')">
+            Campo obrigatório
+          </mat-error>
+      </mat-form-field>
+      <span fxFlex="5"></span>
+      <img class="urlLogo" [src]="form.controls['urlLogo'].value" (error)="carregarImagem($event)"/>
+    </div>
+    <div fxFlex="100" fxLayout="row">
+      <mat-form-field fxFlex="75"> 
+        <mat-select [(ngModel)]="professorSelecionado" [ngModelOptions]="{standalone: true}" placeholder="Professores" >
+            <mat-option *ngFor="let professor of professores" [value]="professor">
+              {{ professor.nome }}
+            </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-hint>
+        Necessário pelo menos 2 professores cadastrados
+      </mat-hint>
+      <span fxFlex="5"></span>
+      <button mat-raised-button  mat-icon-button color="primary" [disabled]="professorSelecionado == null" (click)="adicionarProfessor()">
+          <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    <mat-list *ngIf="form.get('instrutores').value.length > 0">
+      <h3 mat-subheader>Professores selecionados</h3>
+      <ng-container *ngFor="let id of form.get('instrutores').value">
+        <mat-list-item>
+            <button mat-mini-fab type="button" color="warn" (click)="removerProfessor(id)">
+                <mat-icon>delete</mat-icon>
+            </button>
+            <p fxFlexOffset="10px">
+              {{carregarNomeProfessor(id)}}
+            </p>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </ng-container>
+    </mat-list>
+    <br/>
+    <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
+        <button mat-raised-button color="primary"  [disabled]="!form.valid || form.get('instrutores').value.length < 2" (click)="salvar()">Salvar</button>
+        <button mat-raised-button color="warn" routerLink="/main/disciplina/consulta">Cancelar</button>
+    </div>
+  </form>
+</div>
+```
