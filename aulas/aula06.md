@@ -5,10 +5,7 @@ Sumário
 =======
 
 * [Conceitos](#conceitos)
-  * [Serviços](#serviços)
-  * [Arrays](#arrays)
-  * [Navegação com Rotas](#navegação-com-rotas)
-  * [Observable](#observable)
+  * [Datas](#datas)
 * [Hands-on](#hands-on)
   * [Refatorando Módulos e Rotas](#refatorando-módulos-e-rotas)
   * [Adicionando Rota de Disciplina](#adicionando-rota-de-disciplina)
@@ -21,10 +18,18 @@ Conceitos
 
 [Componentes Angular Material](https://material.angular.io/components)
 
-Serviços
+Datas
 --------
+``` typescript
+import { MAT_DATE_LOCALE } from '@angular/material';
 
+providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'pt-br'}    
+  ]
   
+{{element.data  | date:'dd/MM/yyyy'}} 
+```
+
 Hands-on
 ========
 
@@ -545,7 +550,7 @@ img.urlLogo{
 ```
 
 ##### No arquivo src/app/main/disciplina/formulario/formulario.module.ts
-``` typescrypt
+``` typescript
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { EqualsPasswordValidator } from '../../../validators/equals.password.validator';
@@ -669,7 +674,7 @@ export class FormularioComponent implements OnInit {
 ```
 
 ##### No arquivo src/app/main/disciplina/formulario/formulario.module.ts
-``` typescrypt
+``` typescript
 <div  fxLayout="column">
   <form [formGroup]="form"  fxLayout="column">
     <div fxFlex="100" fxLayout="row">  
