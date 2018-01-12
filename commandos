@@ -1519,6 +1519,13 @@ export class AppRoutingModule { }
 Pronto agora quando entrarmos no site, deve aparece nossa tela de login atualmente somente com texto padrão:
 http://localhost:4200
 
+
+Antes de criarmos nosso HTML vamos adicionar o módulo para utilizar o fxFlex em (login.module.ts);
+import { FlexLayoutModule } from "@angular/flex-layout";
+imports: [..
+ FlexLayoutModule
+..]
+
 Vamos então criar nosso HTML, que será nosso login.
 
 

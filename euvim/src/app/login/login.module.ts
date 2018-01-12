@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login.component';
 import { LoginRouting } from './login.routing';
 import { RouterModule } from "@angular/router";
+import { FlexLayoutModule } from "@angular/flex-layout";
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { LoginService } from './login.service';
 
@@ -11,7 +12,8 @@ import { LoginService } from './login.service';
     CommonModule,
     RouterModule,
     LoginRouting,
-    HttpClientModule
+    HttpClientModule,
+    FlexLayoutModule
   ],
   declarations: [LoginComponent],
   providers: [HttpClient, LoginService ]
