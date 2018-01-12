@@ -5,7 +5,7 @@ Sumário
 =======
 
 * [Conceitos](#conceitos)
-  * [Datas](#datas)
+  * [Injeção de Dependências](#injeção-de-dependencias)
 * [Hands-on](#hands-on)
   * [Refatorando Módulos e Rotas](#refatorando-módulos-e-rotas)
   * [Adicionando Rota de Disciplina](#adicionando-rota-de-disciplina)
@@ -18,20 +18,74 @@ Conceitos
 
 [Componentes Angular Material](https://material.angular.io/components)
 
-Datas
+Injeção de Dependências
 --------
-``` typescript
-import { MAT_DATE_LOCALE } from '@angular/material';
 
-providers: [
-    {provide: MAT_DATE_LOCALE, useValue: 'pt-br'}    
-  ]
-  
-{{element.data  | date:'dd/MM/yyyy'}} 
-```
+https://angular-2-training-book.rangle.io/handout/di/angular2/inject_and_injectable.html
 
 Hands-on
 ========
 
-Refatorando Módulos e Rotas
----------------------------
+Adicionando Popup de Professores
+--------------------------------
+
+##### No diretrio src/app/main/disciplina
+``` typescript
+ng g component professor
+```
+
+##### No arquivo src/app/main/disciplina
+``` typescript
+
+```
+
+``` typescript
+
+```
+
+##### No arquivo src/app/main/disciplina
+``` typescript
+
+```
+
+``` typescript
+
+```
+
+##### No arquivo src/app/main/disciplina
+``` typescript
+
+```
+
+``` typescript
+
+```
+
+##### No arquivo src/app/main/disciplina
+``` typescript
+
+```
+
+``` typescript
+
+```
+
+##### No arquivo src/app/main/disciplina
+``` typescript
+
+```
+
+``` typescript
+
+```
+
+##### No arquivo src/app/main/disciplina
+``` typescript
+
+```
+
+``` typescript
+
+```
+
+
