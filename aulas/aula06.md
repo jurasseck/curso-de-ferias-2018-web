@@ -12,9 +12,11 @@ Sumário
 * [Hands-on](#hands-on)
   * [Refatorando Módulos e Rotas](#refatorando-módulos-e-rotas)
   * [Adicionando Rota de Edição de Usuário](#adicionando-rota-de-edição-de-usuário)
-  * [Utilizando Serviço na Consulta de Usuário](#utilizando-serviço-na-consulta-de-usuário)
-  * [Utilizando Serviço no Formulário de Usuário](#utilizando-serviço-no-formulário-de-usuário)
-  * [Consumindo APIs REST](#consumindo-apis-rest)
+  * [Adicionando Disciplina](#adicionando-disciplina)
+  * [Adicionando Rota de Disciplina](#adicionando-rota-de-disciplina)
+  * [Adicionando Consulta de Disciplina](#adicionando-consulta-de-disciplina)
+  * [Adicionando Serviço de Professor](#adicionando-serviço-de-professor)
+  * [Adicionando Formulário de Disciplina](#adicionando-formulário-de-disciplina)
   
 Conceitos
 =========
