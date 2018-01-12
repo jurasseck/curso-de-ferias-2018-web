@@ -344,8 +344,8 @@ export class ConsultaComponent implements OnInit {
 </div>
 ```
 
-Adicionando Consulta de Disciplina
-----------------------------------
+Adicionando Serviço de Professor
+--------------------------------
 
 ##### No arquivo src/app/main/disciplina/disciplina.module.ts
 ``` typescript
