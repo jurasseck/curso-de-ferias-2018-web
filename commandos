@@ -1525,9 +1525,197 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 imports: [..
  FlexLayoutModule
 ..]
+https://github.com/angular/flex-layout/wiki/Responsive-API
 
-Vamos então criar nosso HTML, que será nosso login.
+Vamos então criar nosso HTML, que será nosso login, caso utilizemos components do angular material não esqueça de importá-los em sue módulo =]
+<div fxFlexFill fxLayout="column" fxLayoutAlign="center"> 
+  <div fxLayout="row" fxLayoutWrap fxLayoutAlign="center"> 
+    <div fxFlex="500px" fxFlex.xs="90">
+      <mat-card class="mat-elevation-z7">
+          <mat-card-header fxLayoutAlign="center">
+            <mat-card-title> <img src="./assets/img/logo.png"/> </mat-card-title>
+            <mat-card-subtitle fxLayoutAlign="center">Autenticação Necessária</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <form fxLayout="column">
+              <mat-form-field>
+                  <input matInput placeholder="Usuário" value="">
+              </mat-form-field>
+              <mat-form-field>
+                  <input matInput placeholder="Senha" value="" type="password">
+              </mat-form-field>
+              <button mat-raised-button (click)="login = true" type="button" color="primary">Login</button>
+            </form>
+          </mat-card-content>
+        </mat-card>
+        <mat-progress-bar *ngIf="login" mode="indeterminate"> </mat-progress-bar>
+    </div> 
+  </div>
+</div>
 
+Porém nosso html ainda não tem faz nenhuma chamada para o ts, e estamos usando uma logo, que será criado na pasta assets uma pasta /img/logo.png
+
+
+Agora vamos ajustar nosso login.component.ts, para que possamos incluir comportamentos na tela de login, campos obrigatórios, disabilitar botão, mensagem de erro. entre outros.
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
+  encapsulation: ViewEncapsulation.None
+})
+export class LoginComponent implements OnInit {
+
+  public form:FormGroup;
+  public login:boolean = false;
+
+  constructor(private _form:FormBuilder) {
+    this.form  = _form.group({
+      "usuario": [null, Validators.compose([Validators.required, Validators.email])],
+      "senha"  : [null, Validators.required]
+    })
+   }
+
+  ngOnInit() {
+  }
+
+  realizarLogin(){
+    this.login = true;
+  }
+}
+
+Porém para realizar a criação do formulário precisamos importar os módulos, e seu provider, então ficando da seguinte form o login.module.ts
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { LoginComponent } from './login.component';
+import { LoginRouting } from './login.routing';
+import { RouterModule } from "@angular/router";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { LoginService } from './login.service';
+import { MatCardModule, MatInputModule, MatButtonModule, MatProgressBarModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    RouterModule,
+    LoginRouting,
+    HttpClientModule,
+    FlexLayoutModule,
+    MatCardModule,
+    MatInputModule,
+    MatButtonModule,
+    MatProgressBarModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
+  declarations: [LoginComponent],
+  providers: [HttpClient, LoginService, FormBuilder ]
+})
+export class LoginModule { }
+
+
+Agora vamos incluir, nosso form, as labels de erro, evento do botão de realizar o login no arquivo, login.component.html:
+<div fxFlexFill fxLayout="column" fxLayoutAlign="center"> 
+  <div fxLayout="row" fxLayoutWrap fxLayoutAlign="center" class="overflowScroll"> 
+      <div fxFlex="500px" fxFlex.xs="90">
+        <mat-card class="mat-elevation-z7">
+            <mat-card-header fxLayoutAlign="center">
+              <mat-card-title> <img src="./assets/img/logo.png"/> </mat-card-title>
+              <mat-card-subtitle fxLayoutAlign="center">Autenticação Necessária</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <form fxLayout="column" [formGroup]="form">
+                <mat-form-field>
+                    <input matInput formControlName="usuario" placeholder="Usuário" value="">
+                    <mat-error *ngIf="form.controls['usuario'].hasError('required')">
+                        Campo obrigatório
+                    </mat-error>
+                    <mat-error *ngIf="!form.controls['usuario'].hasError('required') && form.controls['usuario'].hasError('email')">
+                        E-mail Inválido
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput formControlName="senha" placeholder="Senha" value="" type="password">
+                    <mat-error *ngIf="form.controls['senha'].hasError('required')">
+                        Campo obrigatório
+                    </mat-error>
+                </mat-form-field>
+                <br/>
+                <button mat-raised-button [disabled]="!form.valid" (click)="realizarLogin()" type="button" color="primary">Login</button>
+              </form>
+            </mat-card-content>
+          </mat-card>
+          <mat-progress-bar *ngIf="login" mode="indeterminate"> </mat-progress-bar>
+      </div> 
+  </div>
+</div>
+
+Após isto vamos precisar criar, um service, que irá realizar o login, no nosso mock, e atribuir, a uma sessionStorage / LocalStorage o token de acesso do usuário:
+Então na pasta login, vamos adicionar 2 chamadas no nosso login.service.ts para realizar o login e logout:
+import { Injectable } from '@angular/core';
+import { environment }  from '../../environments/environment'
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { Promise } from 'q';
+
+@Injectable()
+export class LoginService {
+
+  private urlLogin = environment.URL+"login";
+
+  constructor(private _httpCliente: HttpClient, private _router:Router) { }
+
+  public login(dados) {
+    return this._httpCliente.post(this.urlLogin,dados);
+ }
+
+  public deslogar(){
+    sessionStorage.removeItem("access");
+    this._router.navigate(["/login"]);
+  }
+
+}
+
+
+Agora, vamos fazer com que nosso login chame (login.component.ts), nossa autenticação, e incluirmos no onInit, a atribuição de false do loading;
+E vamos ajustar nossa chamada de login para realizar a inclusão dos dados so sessionStorage
+
+  public form:FormGroup;
+  public login:boolean = false;
+  public erro;
+
+ ngOnInit() {
+    this.erro = null;
+    this.login = false;
+  }
+  
+ realizarLogin(){
+    this.login = true;
+    this._loginService.login(this.form.value).subscribe(suc=>{
+      sessionStorage.setItem("access", JSON.stringifysuc));
+      this._router.navigate(["/main"]);
+      this.login = false;
+    },err=>{
+      this.login = false;
+      this.erro = err;
+    })
+  }
+
+Para o redicionamento temos que injetar o Router
+constructor(private _form:FormBuilder, private _loginService : LoginService, private _router:Router) {
+
+- Agora já estamos realizando o login e adicionando o token do nosso user na sessionStorage, agora vamos criar um AuthGuard, para validar se temos esse token, e caso não tenha ir para tela de login;
+Porém, esse AuthGuard só terá efeito na rotas do main, onde de fato precisamos de acesso com token;
+
+
+
+
+- Agora vamos criar um interceptor para adicionar o token em, toda request;
 
 
 

@@ -8,7 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 })
 export class QrCodeDialogComponent {
 
-  private urlQrCode = null;
+  public urlQrCode = null;
 
   constructor(
     public dialogRef: MatDialogRef<QrCodeDialogComponent>,

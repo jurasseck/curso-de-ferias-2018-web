@@ -6,6 +6,8 @@ import { RouterModule } from "@angular/router";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { LoginService } from './login.service';
+import { MatCardModule, MatInputModule, MatButtonModule, MatProgressBarModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -13,9 +15,15 @@ import { LoginService } from './login.service';
     RouterModule,
     LoginRouting,
     HttpClientModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatCardModule,
+    MatInputModule,
+    MatButtonModule,
+    MatProgressBarModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [LoginComponent],
-  providers: [HttpClient, LoginService ]
+  providers: [HttpClient, LoginService, FormBuilder ]
 })
 export class LoginModule { }
