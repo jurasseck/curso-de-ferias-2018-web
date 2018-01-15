@@ -940,11 +940,54 @@ constructor(private _form:FormBuilder, private _loginService : LoginService, pri
 
 - Agora já estamos realizando o login e adicionando o token do nosso user na sessionStorage, agora vamos criar um AuthGuard, para validar se temos esse token, e caso não tenha ir para tela de login;
 Porém, esse AuthGuard só terá efeito na rotas do main, onde de fato precisamos de acesso com token;
+Vamos então dentro da pasta main, digitar o seguinte comando:
+ng generate guard Auth
+
+Após isto vamos incluir no módulo, o AuthGuard do main.module.ts
+import { AuthGuard } from './auth.guard';
+providers: [AuthGuard]
+
+Depois vamos importálo nas rotas, main.routing.ts
+import { AuthGuard } from './auth.guard';
+path: 'main', 
+canActivate: [AuthGuard],
 
 
+Após isto vamos ajustar nossso authguard para validar o token no sessionStorage:
+import { Injectable } from '@angular/core';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+
+@Injectable()
+export class AuthGuard implements CanActivate {
+  constructor(private _router:Router){
+
+  }
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+      let item = JSON.parse(sessionStorage.getItem("access"));
+      let validacao = item && item.token != null;
+      if(!validacao){
+        this._router.navigate(["/login"]);
+      }
+      return validacao;
+  }
+}
 
 
-- Agora vamos criar um interceptor para adicionar o token em, toda request;
+Vamos atualizar o login component para na hora de incialização ele limpe o sessionStorage, para quando tiver o redicionamento do auth;
+  ngOnInit() {
+    sessionStorage.clear();
+    this.erro = null;
+    this.login = false;
+  }
+
+Pronto, finalizamos o AuthGuard, o que acontece, ele faz essa validação antes de abrir a rota, caso acesse, ele manda o user para tela de login.
+
+Agora vamos criar um interceptor para adicionar o token em, toda request:
+
+
 
 
 
