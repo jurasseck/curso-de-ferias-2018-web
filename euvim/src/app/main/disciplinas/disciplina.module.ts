@@ -9,9 +9,10 @@ import { DisciplinaService } from '../../services/disciplina.service';
 import { ProfessorService } from './professor.service';
 import { DisciplinaRouting } from './disciplina.routing';
 import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ProfessorDialogComponent } from './consulta/professor-dialog/professor-dialog.component';
 import { QrCodeDialogComponent } from './consulta/qr-code-dialog/qr-code-dialog.component';
+import { AuthInterceptor } from '../../services/auth.interceptor';
 
 @NgModule({
   imports: [
@@ -37,6 +38,12 @@ import { QrCodeDialogComponent } from './consulta/qr-code-dialog/qr-code-dialog.
   ],
   entryComponents: [ProfessorDialogComponent, QrCodeDialogComponent],
   declarations: [ConsultaComponent, FormularioComponent, ProfessorDialogComponent, QrCodeDialogComponent],
-  providers: [HttpClient,DisciplinaService,ProfessorService, FormBuilder, {provide: MAT_DATE_LOCALE, useValue: 'pt-br'}]
+  providers: [HttpClient,DisciplinaService,ProfessorService, FormBuilder, {provide: MAT_DATE_LOCALE, useValue: 'pt-br'},
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }
+]
 })
 export class DisciplinaModule { }

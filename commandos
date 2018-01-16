@@ -985,12 +985,45 @@ Vamos atualizar o login component para na hora de incialização ele limpe o ses
 
 Pronto, finalizamos o AuthGuard, o que acontece, ele faz essa validação antes de abrir a rota, caso acesse, ele manda o user para tela de login.
 
-Agora vamos criar um interceptor para adicionar o token em, toda request:
+Agora, temos que inserir o token em todas requisições de nossos módulos, então vamos editar os headers 1 a 1... #sqn
+Vamos criar um interceptor para adicionar o token em, toda request, entãona pasta services vamos criar um service chamado auth.interceptor:
+import { Injectable } from '@angular/core';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
 
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
 
+  constructor() { }
+  
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    let item = JSON.parse(sessionStorage.getItem("access"));
+    let validacao = item && item.token != null;
+    if(validacao){
+      request = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${item.token}`
+        }
+      });
+      return next.handle(request);
+    }
+  }
+}
 
+E vamos importálo em todo módulo que vamos usar, que são eles, relatorio.module.ts, usuario.module.ts e disciplinas.module.ts:
+providers: [
+  ....
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }
+]
+
+Pronto assim todas nossas request deste módulos terão o conteúdo headers com o Authorization e o token;
 
 
 Aula 09 - Interceptor de error, criar loading, Model
+
 
 

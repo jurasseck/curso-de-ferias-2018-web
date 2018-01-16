@@ -6,10 +6,11 @@ import { RelatorioRouting } from "./relatorio.routing";
 import { MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatTooltipModule, MatSelectModule, MatOptionModule, MatDatepickerModule, MatNativeDateModule, MatListModule, MatDialogModule, MAT_DATE_LOCALE, MatExpansionModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule, FormsModule, FormBuilder } from '@angular/forms';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DisciplinaService } from '../../services/disciplina.service';
 import { RelatorioService } from './relatorio.service';
 import { ItemPresencaComponent } from './presenca/item-presenca/item-presenca.component';
+import { AuthInterceptor } from '../../services/auth.interceptor';
 
 @NgModule({
   imports: [
@@ -34,6 +35,12 @@ import { ItemPresencaComponent } from './presenca/item-presenca/item-presenca.co
     HttpClientModule
   ],
   declarations: [PresencaComponent, ItemPresencaComponent],
-  providers: [HttpClient,FormBuilder, DisciplinaService, RelatorioService , {provide: MAT_DATE_LOCALE, useValue: 'pt-br'}]
+  providers: [HttpClient,FormBuilder, DisciplinaService, RelatorioService , {provide: MAT_DATE_LOCALE, useValue: 'pt-br'},
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }
+]
 })
 export class RelatorioModule { }
