@@ -39,6 +39,7 @@ export class ConsultaComponent implements OnInit {
   }
 
   private getListDisciplinas(){
+    this._loadingService.callNextStatus(true);
     this._disciplinaService.listar().subscribe(suc => {
         this.noResults$ = suc.length == 0;
         this.dataSource = new MatTableDataSource(suc);
