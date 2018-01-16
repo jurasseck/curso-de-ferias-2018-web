@@ -1235,9 +1235,6 @@ Agora vamos ajustar nosso main.component.html para ter antes do conteudo esta pr
 Não iremos importar nos módulos internos, o service, para não haver sobescrita do serviço para mantermos na mesma variável o status
 
 Agora onde precisaremos do loading, vamos importar o serviço, LoadingService privado no contrutor, e chamarmos a função callNextStatus();
-E vamos inserindo os loadings na aplicação onde acharmos necessário:
+E vamos inserindo os loadings na aplicação onde acharmos necessário...
 
-
-
-
-
+Agora vamos criar modelos... para nossos chamadas? o que é modelo. Model
