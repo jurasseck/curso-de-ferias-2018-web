@@ -8,6 +8,7 @@ import { Navigation } from 'selenium-webdriver';
 import { ProfessorDialogComponent } from "./professor-dialog/professor-dialog.component";
 import { QrCodeDialogComponent } from "./qr-code-dialog/qr-code-dialog.component";
 import { DisciplinaService } from '../../../services/disciplina.service';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-consulta',
@@ -22,16 +23,18 @@ export class ConsultaComponent implements OnInit {
   public dataSource;
   public noResults$ = false;
 
-  constructor(private _disciplinaService:DisciplinaService, private _router: Router, public dialog: MatDialog) { }
+  constructor(private _disciplinaService:DisciplinaService, private _router: Router, public dialog: MatDialog ,
+              private _loadingService:LoadingService) { }
 
   ngOnInit() {
     this.getListDisciplinas();
   }
 
   remover(identifer){
+    this._loadingService.callNextStatus(true);
     this._disciplinaService.excluir(identifer).subscribe(suc=>{
       this.getListDisciplinas();
-    });
+    },err=>{this._loadingService.callNextStatus(false);});
     
   }
 
@@ -39,7 +42,8 @@ export class ConsultaComponent implements OnInit {
     this._disciplinaService.listar().subscribe(suc => {
         this.noResults$ = suc.length == 0;
         this.dataSource = new MatTableDataSource(suc);
-      }
+        this._loadingService.callNextStatus(false);
+      },err=>{this._loadingService.callNextStatus(false);}
     );
   }
 

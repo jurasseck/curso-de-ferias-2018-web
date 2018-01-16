@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ProfessorService } from '../professor.service';
 import { FormArray } from '@angular/forms/src/model';
 import { MinLengthValidator } from '@angular/forms/src/directives/validators';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-formulario',
@@ -30,7 +31,8 @@ export class FormularioComponent implements OnInit {
               private fb: FormBuilder, 
               private _router: Router,
               private _activateRoute: ActivatedRoute,
-              private _professorService: ProfessorService  
+              private _professorService: ProfessorService,
+              private _loadingService:LoadingService
             ) {
 
     this.form = fb.group({
@@ -53,6 +55,7 @@ export class FormularioComponent implements OnInit {
       this.professores = suc;
     })
     if(this.identifier){
+      this._loadingService.callNextStatus(true);
       this._disciplinaService.getItem(this.identifier).subscribe(suc=>{
         var item = suc;
         this.form.setValue({
@@ -71,7 +74,8 @@ export class FormularioComponent implements OnInit {
             this.addProfessor();
           }
         });
-      });
+        this._loadingService.callNextStatus(false);
+      },err=>{this._loadingService.callNextStatus(false);});
     }
   }
 
@@ -81,12 +85,14 @@ export class FormularioComponent implements OnInit {
         this._disciplinaService.editar(this.form.value).subscribe(suc=>{
           this.form.reset();
           this._router.navigate(['/main/disciplina/consulta']);
-        })
+          this._loadingService.callNextStatus(false);
+        },err=>{this._loadingService.callNextStatus(false);})
       } else {
         this._disciplinaService.adicionar(this.form.value).subscribe(suc=>{
             this.form.reset();
             this._router.navigate(['/main/disciplina/consulta']);
-          }
+            this._loadingService.callNextStatus(false);
+          },err=>{this._loadingService.callNextStatus(false);}
         )
       }
     }

@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material';
 import { UsuarioService } from '../usuario.service';
 import { Router } from '@angular/router';
 import { Navigation } from 'selenium-webdriver';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-consulta',
@@ -20,7 +21,7 @@ export class ConsultaComponent implements OnInit {
   public dataSource;
   public noResults$ = false;
 
-  constructor(private usuarioService:UsuarioService, private _router: Router) { }
+  constructor(private usuarioService:UsuarioService,private _loadingService:LoadingService, private _router: Router) { }
 
   ngOnInit() {
     this.getListUsers();
@@ -34,10 +35,12 @@ export class ConsultaComponent implements OnInit {
   }
 
   private getListUsers(){
+    this._loadingService.callNextStatus(true);
     this.usuarioService.listar().subscribe(suc => {
         this.noResults$ = suc.length == 0;
         this.dataSource = new MatTableDataSource(suc);
-      }
+        this._loadingService.callNextStatus(false);
+      },err=>{this._loadingService.callNextStatus(false);}
     );
   }
 

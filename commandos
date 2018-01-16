@@ -1161,4 +1161,83 @@ export class ErrorInterceptor implements HttpInterceptor {
 Vamos manter dessa forma até vinculamos de fato aos nossos serviços ai podemos ajustar nossa dialog de erro melhor, conforme as responses do servidor.
 
 
-Com isto já temos nossa tratativa de erros, vamos agora criar um loading na tela main, para quando esteja executando alguma request;
+Com isto já temos nossa tratativa de erros, vamos agora criar um loading na tela main, para chamarmos quando necessário;
+Há inumeras formas de fazer, por um Modulo de Loading, por um service com subscription, vou abordar da seguinte forma, vou incluir um novo service comum chamado
+loading.service.ts onde vai ter a chamada que mudar o valor de sua variável e o component main, vai ficar escutando esta variável para mostrar o loading;
+Então na pasta service, vou criar o loading.service.ts
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+
+@Injectable()
+export class LoadingService {
+  public isLoading = false;
+  public isLoadingChange = new Subject<Boolean>();
+  constructor() { }
+  public callNextStatus(status:boolean){
+    this.isLoading = status;
+    this.isLoadingChange.next(this.isLoading);
+  }  
+}
+
+Agora vamos ajustar nosso main.module.ts para importar este provider, e também vamos importar o módulo referente ao progressBar
+import {LoadingService} from '../services/loading.service'
+
+import:[
+    ...
+    MatProgressBarModule
+    ...
+]
+providers: [AuthGuard, LoadingService]
+
+Agora vamos criar a subscription no main.component.ts para ficar observando essa váriavel do service.
+import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { LoadingService } from '../services/loading.service';
+import { Subscription } from 'rxjs/Subscription';
+
+@Component({
+  selector: 'app-main',
+  templateUrl: './main.component.html',
+  styleUrls: ['./main.component.scss'],
+  encapsulation: ViewEncapsulation.None
+})
+export class MainComponent implements OnInit,  OnDestroy {
+ 
+  private isLoadingSubscription: Subscription;
+  public loading:Boolean;
+
+  constructor(private _loadingService:LoadingService) { }
+
+  ngOnInit() {
+    this.loading = this._loadingService.isLoading;
+    this.isLoadingSubscription = this._loadingService.getLoading().subscribe(valor=>{      
+       setTimeout(()=>{
+        this.loading = valor;  
+      },1);
+    });
+  }
+
+
+  ngOnDestroy(){
+    if(this.isLoadingSubscription) {
+      this.isLoadingSubscription.unsubscribe();
+    }
+  }
+
+}
+
+
+Agora vamos ajustar nosso main.component.html para ter antes do conteudo esta progressBar:
+<mat-progress-bar *ngIf="loading" color="warn" mode="indeterminate"></mat-progress-bar>
+<mat-card id="content">
+  <router-outlet></router-outlet>
+</mat-card>
+
+Não iremos importar nos módulos internos, o service, para não haver sobescrita do serviço para mantermos na mesma variável o status
+
+Agora onde precisaremos do loading, vamos importar o serviço, LoadingService privado no contrutor, e chamarmos a função callNextStatus();
+E vamos inserindo os loadings na aplicação onde acharmos necessário:
+
+
+
+
+

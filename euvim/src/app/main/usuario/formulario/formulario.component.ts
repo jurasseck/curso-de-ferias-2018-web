@@ -3,6 +3,7 @@ import { UsuarioService } from '../usuario.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EqualPasswordsValidator } from '../../../validators/equalPasswords.validator';
 import { Router, ActivatedRoute } from '@angular/router';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-formulario',
@@ -22,7 +23,7 @@ export class FormularioComponent implements OnInit {
   form: FormGroup;
   identifier = null;
 
-  constructor(private _usuarioService: UsuarioService, fb: FormBuilder, private _router: Router,private _activateRoute: ActivatedRoute) {
+  constructor(private _usuarioService: UsuarioService, fb: FormBuilder, private _router: Router,private _activateRoute: ActivatedRoute, private _loadingService:LoadingService) {
 
     this.form = fb.group({
       id: [null],
@@ -39,6 +40,7 @@ export class FormularioComponent implements OnInit {
   
 
   ngOnInit() {
+    this._loadingService.callNextStatus(true);
     this.identifier = null;    
     this._activateRoute.params.subscribe(params=>{
       this.identifier = params['id'];
@@ -52,22 +54,26 @@ export class FormularioComponent implements OnInit {
         this.form.get("senha").setValidators(null);
         this.form.get("confirmacao").setValidators(null);
         this.form.setValue(item);
-      });
+        this._loadingService.callNextStatus(false);
+      },err=>{this._loadingService.callNextStatus(false);});
     }
   }
 
   salvar() {
     if(this.form.valid){
+      this._loadingService.callNextStatus(true);
       if(this.identifier){
         this._usuarioService.editar(this.form.value).subscribe(suc=>{
           this.form.reset();
           this._router.navigate(['/main/usuario/consulta']);
-        })
+          this._loadingService.callNextStatus(false);
+        },err=>{this._loadingService.callNextStatus(false);})
       } else {
         this._usuarioService.adicionar(this.form.value).subscribe(suc=>{
             this.form.reset();
             this._router.navigate(['/main/usuario/consulta']);
-          }
+            this._loadingService.callNextStatus(false);
+          },err=>{this._loadingService.callNextStatus(false);}
         )
       }
     }
