@@ -5,7 +5,7 @@ Sumário
 =======
 
 * [Conceitos](#conceitos)
-  * [Injeção de Dependências](#injeção-de-dependencias)
+  * [Injeção de Dependências](#injeção-de-dependencias)
 * [Hands-on](#hands-on)
   * [Refatorando Módulos e Rotas](#refatorando-módulos-e-rotas)
   * [Adicionando Rota de Disciplina](#adicionando-rota-de-disciplina)
