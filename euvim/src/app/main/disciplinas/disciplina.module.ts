@@ -13,6 +13,7 @@ import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common
 import { ProfessorDialogComponent } from './consulta/professor-dialog/professor-dialog.component';
 import { QrCodeDialogComponent } from './consulta/qr-code-dialog/qr-code-dialog.component';
 import { AuthInterceptor } from '../../services/auth.interceptor';
+import {RequestErrorModule} from '../../request-error/request-error.module'
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import { AuthInterceptor } from '../../services/auth.interceptor';
     MatNativeDateModule,
     MatListModule,
     MatDialogModule,
-    HttpClientModule
+    HttpClientModule,
+    RequestErrorModule
   ],
   entryComponents: [ProfessorDialogComponent, QrCodeDialogComponent],
   declarations: [ConsultaComponent, FormularioComponent, ProfessorDialogComponent, QrCodeDialogComponent],
@@ -47,3 +49,4 @@ import { AuthInterceptor } from '../../services/auth.interceptor';
 ]
 })
 export class DisciplinaModule { }
+

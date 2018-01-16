@@ -11,6 +11,7 @@ import { DisciplinaService } from '../../services/disciplina.service';
 import { RelatorioService } from './relatorio.service';
 import { ItemPresencaComponent } from './presenca/item-presenca/item-presenca.component';
 import { AuthInterceptor } from '../../services/auth.interceptor';
+import {RequestErrorModule} from '../../request-error/request-error.module';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { AuthInterceptor } from '../../services/auth.interceptor';
     MatListModule,
     MatDialogModule,
     MatExpansionModule,
-    HttpClientModule
+    HttpClientModule,
+    RequestErrorModule
   ],
   declarations: [PresencaComponent, ItemPresencaComponent],
   providers: [HttpClient,FormBuilder, DisciplinaService, RelatorioService , {provide: MAT_DATE_LOCALE, useValue: 'pt-br'},

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { LoginService } from './login.service';
 import { Router } from '@angular/router';
-
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   public form:FormGroup;
   public login:boolean = false;
   public erro;
-
+  
   constructor(private _form:FormBuilder, private _loginService : LoginService, private _router:Router) {
     this.form  = _form.group({
       "usuario": [null, Validators.compose([Validators.required, Validators.email])],

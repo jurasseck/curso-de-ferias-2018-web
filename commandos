@@ -1025,5 +1025,140 @@ Pronto assim todas nossas request deste módulos terão o conteúdo headers com 
 
 Aula 09 - Interceptor de error, criar loading, Model
 
+E agora nossa aplicação não tem pop-up referente a erros, como podemos ajustar isto, vamos criar um interceptor para mostrar o pop-up de erro caso haja, e se for sem autorização mostrar o pop-up e o redirecionar, para o login;
+Para não precisarmos fazer várias importações de components em módulos onde não mostra dialog, vamos criar um módulo dentro da pasta "app" chamdo messageDialog, 
+então dentro da pasta app vamos digitar os seguitnes comandos:
+ng g module requestError
+ng g component requestError
+
+Antes vamos precisar criar um interceptor, por hora com uma validação simples de erro, só para testarmos nosso módulo:
+import { Injectable } from '@angular/core';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/do';
+import { RequestErrorComponent } from './request-error.component';
+import { MatDialog } from '@angular/material';
+
+@Injectable()
+export class ErrorInterceptor implements HttpInterceptor {
+
+  constructor(private dialog:MatDialog) { }
+  
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    
+    return next.handle(request).do((event: HttpEvent<any>) => {}, (err: any) => {
+      if (err instanceof HttpErrorResponse) {
+        this.openDialog({});
+        if (err.status === 401) {
+          this.openDialog({});
+        }
+      }else{
+
+      }
+    });
+  }
+
+  private openDialog(info){
+    this.dialog.open(RequestErrorComponent, {
+      data: info
+    });
+  }
+
+}
+
+Agora vamos realizar a importação do nosso interceptor em nosso módulo, request-error.module.ts, e realizar os ajustes para utilização do pop-up, entryComponents....
+
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RequestErrorComponent } from './request-error.component';
+import { MatDialogModule } from '@angular/material';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ErrorInterceptor } from './error.interceptor';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    MatDialogModule
+  ],
+  declarations: [RequestErrorComponent],
+  entryComponents: [RequestErrorComponent],
+  exports: [RequestErrorComponent, MatDialogModule],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true
+    }
+  ]
+})
+export class RequestErrorModule { }
+
+Como podem ver foi exportado nosso component para acessibilidade, sem importação explicita, e sua dependencia do Material.
+
+Agora vamos ajustar nosso request-error.component.ts para utilizarmos o contrutor data:
+import { Component, OnInit, ViewEncapsulation, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material';
+
+@Component({
+  selector: 'app-request-error',
+  templateUrl: './request-error.component.html',
+  styleUrls: ['./request-error.component.scss'],
+  encapsulation: ViewEncapsulation.None
+})
+export class RequestErrorComponent {
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
+
+}
+
+Agora vamos importar nos módulos, disciplina.module.ts, usuario.module.ts, relatorio.module.ts nosso módulo 
+import {RequestErrorModule} from '../../request-error/request-error.module';
+
+Com isto caso haja um erro de request, ele já mostrará nosso pop-up, desabilite o cors, e veja.
+
+Agora vamos deixar nosso pop-up mais agradável inserindo a mensagem de erro, um título, entre outras informações em nosso HTML,
+Mas lembrese, esse objeto terá que ser ajustando em nosso error.interceptor.ts
+<h2 mat-dialog-title>Ops, ocorreu um erro</h2>
+<mat-dialog-content> <b>{{data.code}}</b> - {{data.message}}</mat-dialog-content>
+
+Agora vamos ajustar nosso error.interceptor.ts para criar o objeto com as 2 propriedades:
+import { Injectable } from '@angular/core';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/do';
+import { RequestErrorComponent } from './request-error.component';
+import { MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
+
+@Injectable()
+export class ErrorInterceptor implements HttpInterceptor {
+
+  constructor(private dialog:MatDialog, private _router:Router) { }
+  
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    
+    return next.handle(request).do((event: HttpEvent<any>) => {}, (err: any) => {
+      if (err instanceof HttpErrorResponse) {
+        if (err.status === 401) {
+          this.openDialog({code:401, message:"Sessão expirada"});
+          this._router.navigate(["/login"]);
+        }
+        this.openDialog({code:err.status, message:err.message})
+      }else{
+        this.openDialog({code:"Indisponível", message:"Não foi possível validar a causa do erro"})
+      }
+    });
+  }
+
+  private openDialog(info){
+    this.dialog.open(RequestErrorComponent, {
+      data: info
+    });
+  }
+
+}
+
+Vamos manter dessa forma até vinculamos de fato aos nossos serviços ai podemos ajustar nossa dialog de erro melhor, conforme as responses do servidor.
 
 
+Com isto já temos nossa tratativa de erros, vamos agora criar um loading na tela main, para quando esteja executando alguma request;

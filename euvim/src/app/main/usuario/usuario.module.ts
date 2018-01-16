@@ -10,6 +10,7 @@ import { UsuarioRouting } from './usuario.routing';
 import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../../services/auth.interceptor';
+import {RequestErrorModule} from '../../request-error/request-error.module';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { AuthInterceptor } from '../../services/auth.interceptor';
     MatOptionModule,
     ReactiveFormsModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    RequestErrorModule
   ],
   declarations: [ConsultaComponent, FormularioComponent],
   providers: [HttpClient,UsuarioService, FormBuilder,
