@@ -56,6 +56,8 @@ export class FormularioComponent implements OnInit {
         this.form.setValue(item);
         this._loadingService.callNextStatus(false);
       },err=>{this._loadingService.callNextStatus(false);});
+    }else{
+      this._loadingService.callNextStatus(false);
     }
   }
 
