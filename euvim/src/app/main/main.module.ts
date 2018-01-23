@@ -14,6 +14,8 @@ import {
 import { MainComponent } from './main.component';
 import { MainRouting } from './main.routing';
 import { UsuarioComponent } from './usuario/usuario.component';
+import { ConsultaComponent } from './usuario/consulta/consulta.component';
+import { FormularioComponent } from './usuario/formulario/formulario.component';
 
 @NgModule({
   imports: [
@@ -27,7 +29,7 @@ import { UsuarioComponent } from './usuario/usuario.component';
     MatToolbarModule,
     MatIconModule
   ],
-  declarations: [MainComponent, UsuarioComponent]
+  declarations: [MainComponent, UsuarioComponent, ConsultaComponent, FormularioComponent]
 })
 
 export class MainModule { }
