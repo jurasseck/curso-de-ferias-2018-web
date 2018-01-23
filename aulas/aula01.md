@@ -254,6 +254,7 @@ npm install --save @angular/material
 npm install --save @angular/cdk
 npm install --save @angular/animations
 npm install --save hammerjs
+npm install --save-dev @angular-devkit/core
 ```
 
 ##### Executando o projeto
