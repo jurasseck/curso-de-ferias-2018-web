@@ -8,7 +8,8 @@ import {
   MatListModule,
   MatToolbarModule,
   MatCardModule,
-  MatIconModule
+  MatIconModule,
+  MatTableModule
 } from '@angular/material';
 
 import { MainComponent } from './main.component';
@@ -27,9 +28,15 @@ import { FormularioComponent } from './usuario/formulario/formulario.component';
     MatCardModule,
     MatListModule,
     MatToolbarModule,
-    MatIconModule
+    MatIconModule,
+    MatTableModule
   ],
-  declarations: [MainComponent, UsuarioComponent, ConsultaComponent, FormularioComponent]
+  declarations: [
+    MainComponent,
+    UsuarioComponent,
+    ConsultaComponent,
+    FormularioComponent
+  ]
 })
 
 export class MainModule { }
