@@ -9,3 +9,13 @@
   overflow: auto;
   max-height: 500px;
 }
+
+.editButton {
+  background: linear-gradient(45deg, #123456, #009688);
+  color: #fff;
+}
+
+.deleteButton {
+  background: linear-gradient(45deg, red, darkred);
+  color: #fff;
+}
