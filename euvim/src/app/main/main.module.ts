@@ -9,7 +9,8 @@ import {
   MatToolbarModule,
   MatCardModule,
   MatIconModule,
-  MatTableModule
+  MatTableModule,
+  MatTooltipModule
 } from '@angular/material';
 
 import { MainComponent } from './main.component';
@@ -29,7 +30,8 @@ import { FormularioComponent } from './usuario/formulario/formulario.component';
     MatListModule,
     MatToolbarModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    MatTooltipModule
   ],
   declarations: [
     MainComponent,

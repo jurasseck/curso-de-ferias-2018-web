@@ -9,8 +9,8 @@ import { MatTableDataSource } from '@angular/material';
 
 export class ConsultaComponent implements OnInit {
 
-  displayedColumns = ['nome', 'login', 'email', 'perfil', 'id'];
-  dataSource = new MatTableDataSource<Usuario>(ELEMENT_DATA);
+  tableColumns = ['nome', 'login', 'email', 'perfil', 'id'];
+  userDataSource = new MatTableDataSource<Usuario>(USER_DATA);
 
   constructor() { }
 
@@ -31,8 +31,8 @@ export interface Usuario {
   perfil: string;
 }
 
-const ELEMENT_DATA: Usuario[] = [
-  { id: 1, nome: 'Vinícius Rufine', login: 'vrufine', email: 'vsrufine@gmail.com', perfil: '@vsrufine' },
-  { id: 2, nome: 'Heitor Dobeis', login: 'hdobeis', email: 'heitordobeis@gmail.com', perfil: '@hdobeis' },
-  { id: 3, nome: 'Danilo Dias', login: 'ddias', email: 'ddias@gmail.com', perfil: '@ddias' }
+const USER_DATA: Usuario[] = [
+  { id: 1, nome: 'Vinícius Rufine', login: 'vrufine', email: 'vsrufine@gmail.com', perfil: 'ADMIN' },
+  { id: 2, nome: 'Heitor Dobeis', login: 'hdobeis', email: 'heitordobeis@gmail.com', perfil: 'ADMIN' },
+  { id: 3, nome: 'Danilo Dias', login: 'ddias', email: 'ddias@gmail.com', perfil: 'ADMIN' }
 ];
