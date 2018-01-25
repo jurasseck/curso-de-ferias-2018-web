@@ -36,7 +36,11 @@
     <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
   </mat-table>
-  <button id="buttonAddUser" matTooltip='Incluir usuário' mat-fab color="primary">
+  <button
+    routerLink="/main/usuario/adicionar"
+    id="buttonAddUser"
+    matTooltip='Incluir usuário'
+    mat-fab color="primary">
     <mat-icon aria-label="Adicionar">add</mat-icon>
   </button>
 </div>
